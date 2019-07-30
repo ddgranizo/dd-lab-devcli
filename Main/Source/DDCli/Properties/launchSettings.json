@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DDCli": {
+      "commandName": "Project",
+      "commandLineArgs": "openvisualstudio"
+    }
+  }
+}

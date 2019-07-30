@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli", "Source\DDCli\DDCli.csproj", "{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli-Installer", "Source\DDCli-Installer\DDCli-Installer.csproj", "{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
