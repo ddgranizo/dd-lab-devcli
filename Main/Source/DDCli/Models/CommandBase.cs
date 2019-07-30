@@ -130,5 +130,32 @@ namespace DDCli.Models
             }
             return false;
         }
+
+
+        public string GetStringParameterValue(List<CommandParameter> parameters, string name, string defaultValue = default)
+        {
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueString : defaultValue;
+        }
+
+        public bool GetBoolParameterValue(List<CommandParameter> parameters, string name, bool defaultValue = default)
+        {
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueBool : defaultValue;
+        }
+
+        public int GetIntParameterValue(List<CommandParameter> parameters, string name, int defaultValue = default)
+        {
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueInt : defaultValue;
+        }
+
+        public decimal GetDecimalParameterValue(List<CommandParameter> parameters, string name, decimal defaultValue = default)
+        {
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueDecimal : defaultValue;
+        }
+
+        public Guid GetGuidParameterValue(List<CommandParameter> parameters, string name, Guid defaultValue = default)
+        {
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueGuid : defaultValue;
+        }
+
     }
 }

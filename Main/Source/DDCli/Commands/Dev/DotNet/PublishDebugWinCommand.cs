@@ -27,9 +27,8 @@ namespace DDCli.Commands.Dev.DotNet
         {
             if (!CheckAndExecuteHelpCommand(parameters))
             {
-                PromptCommandManager manager = new PromptCommandManager();
-                manager.OnCommandPromptOutput += PromptCommandManager_OnCommandPromptOutput;
-                manager.Run("dotnet publish -c Debug -r win10-x64");
+                //PromptCommandManager manager = new PromptCommandManager();
+                //manager.Run("dotnet publish -c Debug -r win10-x64",);
             }
             
         }

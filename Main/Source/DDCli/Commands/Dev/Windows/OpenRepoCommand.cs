@@ -8,13 +8,14 @@ namespace DDCli.Commands.Dev.Windows
 {
     public class OpenRepoCommand : CommandBase
     {
+        private const string SearchPath = @"C:\Users\daniel.diazg\MyRepos";
         private const string HelpDefinition = @"find and open repo in path C:\Users\daniel.diazg\MyRepos";
 
 
         public CommandParameterDefinition NameParameter { get; set; }
 
         public OpenRepoCommand()
-            :base(typeof(OpenRepoCommand).Namespace, nameof(OpenRepoCommand), HelpDefinition)
+            : base(typeof(OpenRepoCommand).Namespace, nameof(OpenRepoCommand), HelpDefinition)
         {
             NameParameter = new CommandParameterDefinition(
                 "name",
@@ -33,9 +34,55 @@ namespace DDCli.Commands.Dev.Windows
         {
             if (!CheckAndExecuteHelpCommand(parameters))
             {
-                PromptCommandManager manager = new PromptCommandManager();
-                var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
-                manager.RunAs(PathUtilities.GetCurrentPath(), fileName, PathUtilities.GetCurrentPath());
+                var name = GetStringParameterValue(parameters, NameParameter.Name);
+                var directories = DirectoryUtilities.SearchDirectories(SearchPath, name, true);
+                foreach (var item in directories)
+                {
+                    Log($"{directories.IndexOf(item) + 1} - {item}");
+                };
+
+                string indexString = Console.ReadLine();
+                if (!int.TryParse(indexString, out int index))
+                {
+                    throw new InvalidCastException();
+                }
+
+                if (index < 1 || index > directories.Count)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                var path = directories[index - 1];
+                Log($"1 - Open in explorer");
+                Log($"2 - Open in new cmd");
+                Log($"3 - Open in new conEmu");
+                Log($"4 - Copy path to clipboard");
+
+                indexString = Console.ReadLine();
+                if (!int.TryParse(indexString, out index))
+                {
+                    throw new InvalidCastException();
+                }
+
+                if (index < 1 || index > 4)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                if (index == 1)
+                {
+                    PromptCommandManager.OpenExplorer(path);
+                }
+                else if (index == 2)
+                {
+                    PromptCommandManager.Run(path, @"cmd.exe", null, false, true);
+                }
+                else if (index == 3)
+                {
+                    PromptCommandManager.Run(path , @"C:\Program Files\ConEmu\ConEmu64.exe", null, false, true);
+                }
+                else if (index == 4)
+                {
+                    ClipboardManager.CopyToClipboard(path);
+                }
             }
         }
 
