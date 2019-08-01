@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli-Installer", "Source\D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EE4C20E7-5C04-4757-9EFE-D3910D0DD538}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli.Test", "Test\DDCli.Test\DDCli.Test.csproj", "{76E2D9A5-164C-425E-A7B0-B02B8B771D20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli.Test2", "Test\DDCli.Test2\DDCli.Test2.csproj", "{11807D0F-A828-4A18-A3C3-87AB616773F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,16 +25,16 @@ Global
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76E2D9A5-164C-425E-A7B0-B02B8B771D20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76E2D9A5-164C-425E-A7B0-B02B8B771D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76E2D9A5-164C-425E-A7B0-B02B8B771D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76E2D9A5-164C-425E-A7B0-B02B8B771D20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11807D0F-A828-4A18-A3C3-87AB616773F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11807D0F-A828-4A18-A3C3-87AB616773F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11807D0F-A828-4A18-A3C3-87AB616773F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11807D0F-A828-4A18-A3C3-87AB616773F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{76E2D9A5-164C-425E-A7B0-B02B8B771D20} = {EE4C20E7-5C04-4757-9EFE-D3910D0DD538}
+		{11807D0F-A828-4A18-A3C3-87AB616773F8} = {EE4C20E7-5C04-4757-9EFE-D3910D0DD538}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDA9DD21-D55A-4961-84BF-76410EDEF0B1}
