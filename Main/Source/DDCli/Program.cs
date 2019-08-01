@@ -59,6 +59,7 @@ namespace DDCli
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand());
             Register(new Commands.Dev.Windows.OpenRepoCommand());
+            Register(new Commands.Dev.Utils.SetAlias());
         }
 
         private static void Register(CommandBase command)

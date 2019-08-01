@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli", "Source\DDCli\DDCli.csproj", "{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli", "Source\DDCli\DDCli.csproj", "{CB92AC34-5601-4F96-9EC8-2D4EC7A5B6CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli-Installer", "Source\DDCli-Installer\DDCli-Installer.csproj", "{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli-Installer", "Source\DDCli-Installer\DDCli-Installer.csproj", "{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EE4C20E7-5C04-4757-9EFE-D3910D0DD538}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli.Test", "Test\DDCli.Test\DDCli.Test.csproj", "{955BEFEC-3209-409A-BAAB-CDD217BEBC65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B29F4F9-D415-40F7-8459-CFF8D3A820CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955BEFEC-3209-409A-BAAB-CDD217BEBC65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955BEFEC-3209-409A-BAAB-CDD217BEBC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955BEFEC-3209-409A-BAAB-CDD217BEBC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955BEFEC-3209-409A-BAAB-CDD217BEBC65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{955BEFEC-3209-409A-BAAB-CDD217BEBC65} = {EE4C20E7-5C04-4757-9EFE-D3910D0DD538}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDA9DD21-D55A-4961-84BF-76410EDEF0B1}

@@ -30,10 +30,9 @@ namespace DDCli.Commands.Dev.DotNet
             if (!CheckAndExecuteHelpCommand(parameters))
             {
                 var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
-
                 bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
-
-                PromptCommandManager.Run(DirectoryUtilities.GetCurrentPath(), fileName, DirectoryUtilities.GetCurrentPath(), runAsAdministrator, true);
+                PromptCommandManager
+                    .Run(DirectoryUtilities.GetCurrentPath(), fileName, DirectoryUtilities.GetCurrentPath(), runAsAdministrator, true);
             }
         }
 

@@ -176,7 +176,7 @@ namespace DDCli
             data.AppendLine("Available commands:");
             foreach (var item in Commands.OrderBy(k => k.GetInvocationCommandName()))
             {
-                data.AppendLine($"\t#{item.GetInvocationCommandName()}: {item.Description}");
+                data.AppendLine($"\t#{item.GetInvocationCommandName()}");
             }
             return data.ToString();
         }
