@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Xunit;
 
 namespace DDCli.Test.Commands
@@ -7,8 +7,6 @@ namespace DDCli.Test.Commands
     
     public class CommandManagerTest
     {
-
-
         public CommandManagerTest()
         {
 
