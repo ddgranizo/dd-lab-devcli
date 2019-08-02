@@ -8,7 +8,6 @@ using DDCli.Test.Mock;
 namespace DDCli.Test
 {
 
-    [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
     public class CommandManagerTest
     {
 
@@ -18,6 +17,7 @@ namespace DDCli.Test
         }
 
         [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterInvalidCommand_CommandManager_ShouldThrowException()
         {
             var instance = new CommandManager();
@@ -33,6 +33,7 @@ namespace DDCli.Test
 
 
         [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterCommand_CommandManager_CommandShouldBeAddedWithinTheList()
         {
             var instance = new CommandManager();
@@ -49,6 +50,7 @@ namespace DDCli.Test
 
 
         [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenInstanceOfCommandManager_CommandManager_ShouldInitializeCommandsList()
         {
             var instance = new CommandManager();
