@@ -32,6 +32,13 @@ namespace DDCli.Models
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
-        
+
+        public string GetInvokeName()
+        {
+            return $"--{this.Name.ToLowerInvariant()}";
+        }
+
+      
+
     }
 }

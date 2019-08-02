@@ -48,10 +48,15 @@ namespace DDCli
             {
                 Console.WriteLine($"Invalid command name '{ex.Message}'");
             }
+            catch (AliasRepeatedException ex)
+            {
+                Console.WriteLine($"Alias '{ex.Message}' is already used.");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
             }
+
         }
 
         private static void CommandManager_OnLog(object sender, Events.LogEventArgs e)
@@ -73,6 +78,10 @@ namespace DDCli
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
             Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
             Register(new Commands.Dev.Utils.SetAlias());
+
+
+            //Last commands for register
+            Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
         }
 
         private static void Register(CommandBase command)

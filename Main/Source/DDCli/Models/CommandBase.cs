@@ -48,6 +48,12 @@ namespace DDCli.Models
         }
 
 
+        public void RegisterCommandParameter(CommandParameterDefinition parameter)
+        {
+            this.CommandParametersDefinition.Add(parameter);
+        }
+
+
         public void ImplementHelpCommand()
         {
             var helpCommand = new CommandParameterDefinition("help", CommandParameterDefinition.TypeValue.Boolean, "Details about the command and it's available parameters");
