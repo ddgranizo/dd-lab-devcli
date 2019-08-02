@@ -17,6 +17,19 @@ namespace DDCli.Test
 
         }
 
+        [Fact]
+        public void WhenRegisterInvalidCommand_CommandManager_ShouldThrowException()
+        {
+            var instance = new CommandManager();
+            const string commandName = "MyCommandName";
+            var nameSpace = string.Empty;
+            var description = string.Empty;
+
+            Assert.Throws<NotImplementedException>(() =>
+            {
+                instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
+            });
+        }
 
 
         [Fact]
