@@ -32,10 +32,6 @@ namespace DDCli.Utilities
             throw new Exception();
         }
 
-
-
-
-
         public static void SaveStoredCliData(StoredCliData data)
         {
             if (data == null)
@@ -70,7 +66,6 @@ namespace DDCli.Utilities
                 File.Copy(GetFilePath(), GetFilePath(true));
             }
         }
-
 
         private static void CheckIfExistsFolder()
         {

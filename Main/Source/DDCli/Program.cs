@@ -1,11 +1,14 @@
 ﻿using DDCli.Exceptions;
+using DDCli.Interfaces;
 using DDCli.Models;
+using DDCli.Services;
 using System;
 
 namespace DDCli
 {
     class Program
     {
+
         private static CommandManager commandManager;
         static void Main(string[] args)
         {
@@ -54,11 +57,18 @@ namespace DDCli
 
         private static void RegisterCommands()
         {
-            Register(new Commands.Dev.Git.CSharpGitIgnoreCommand());
+            IClipboardService clipboardService = new ClipboardService();
+            IDirectoryService directoryService = new DirectoryService();
+            IPromptCommandService promptCommandService = new PromptCommandService();
+            IWebService webService = new WebService();
+
+
+
+            Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
-            Register(new Commands.Dev.DotNet.OpenVisualStudioCommand());
-            Register(new Commands.Dev.Windows.OpenRepoCommand());
+            Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
+            Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
             Register(new Commands.Dev.Utils.SetAlias());
         }
 

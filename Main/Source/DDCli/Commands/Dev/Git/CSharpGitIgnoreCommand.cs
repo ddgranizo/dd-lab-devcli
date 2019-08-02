@@ -1,4 +1,5 @@
-﻿using DDCli.Models;
+﻿using DDCli.Interfaces;
+using DDCli.Models;
 using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,20 @@ namespace DDCli.Commands.Dev.Git
     {
         private const string GitIgnoreUrl = "https://raw.githubusercontent.com/ddgranizo/dd-lab-devcli/master/Public/Dev/Git/DefaultC%23Gitignore/.gitignore";
         private const string HelpDefinition = "Downloads the file stored in https://raw.githubusercontent.com/ddgranizo/dd-lab-devcli/master/Public/Dev/Git/DefaultC%23Gitignore/.gitignore in the current path";
-        public CSharpGitIgnoreCommand()
+
+        public IWebService WebService { get; }
+
+        public CSharpGitIgnoreCommand(IWebService webService)
             : base(typeof(CSharpGitIgnoreCommand).Namespace, nameof(CSharpGitIgnoreCommand), HelpDefinition)
         {
-
+            WebService = webService ?? throw new ArgumentNullException(nameof(webService));
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
             if (!CheckAndExecuteHelpCommand(parameters))
             {
-                WebUtilities.DownloadFile(GitIgnoreUrl);
+                WebService.DownloadFile(GitIgnoreUrl);
             }
         }
 

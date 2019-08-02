@@ -1,4 +1,5 @@
-﻿using DDCli.Models;
+﻿using DDCli.Interfaces;
+using DDCli.Models;
 using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,14 @@ namespace DDCli.Commands.Dev.Windows
 
 
         public CommandParameterDefinition NameParameter { get; set; }
+        public IDirectoryService DirectoryService { get; }
+        public IPromptCommandService PromptCommandService { get; }
+        public IClipboardService ClipboardService { get; }
 
-        public OpenRepoCommand()
+        public OpenRepoCommand(
+            IDirectoryService directoryService,
+            IPromptCommandService promptCommandService,
+            IClipboardService clipboardService)
             : base(typeof(OpenRepoCommand).Namespace, nameof(OpenRepoCommand), HelpDefinition)
         {
             NameParameter = new CommandParameterDefinition(
@@ -23,6 +30,9 @@ namespace DDCli.Commands.Dev.Windows
                 "Indicates the name or part of it for search and open this folder");
 
             CommandParametersDefinition.Add(NameParameter);
+            DirectoryService = directoryService ?? throw new ArgumentNullException(nameof(directoryService));
+            PromptCommandService = promptCommandService ?? throw new ArgumentNullException(nameof(promptCommandService));
+            ClipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)
@@ -35,7 +45,7 @@ namespace DDCli.Commands.Dev.Windows
             if (!CheckAndExecuteHelpCommand(parameters))
             {
                 var name = GetStringParameterValue(parameters, NameParameter.Name);
-                var directories = DirectoryUtilities.SearchDirectories(SearchPath, name, true);
+                var directories = DirectoryService.SearchDirectories(SearchPath, name, true);
                 foreach (var item in directories)
                 {
                     Log($"{directories.IndexOf(item) + 1} - {item}");
@@ -69,19 +79,19 @@ namespace DDCli.Commands.Dev.Windows
                 }
                 if (index == 1)
                 {
-                    PromptCommandManager.OpenExplorer(path);
+                    PromptCommandService.OpenExplorer(path);
                 }
                 else if (index == 2)
                 {
-                    PromptCommandManager.Run(path, @"cmd.exe", null, false, true);
+                    PromptCommandService.Run(path, @"cmd.exe", null, false, true);
                 }
                 else if (index == 3)
                 {
-                    PromptCommandManager.Run(path , @"C:\Program Files\ConEmu\ConEmu64.exe", null, false, true);
+                    PromptCommandService.Run(path , @"C:\Program Files\ConEmu\ConEmu64.exe", null, false, true);
                 }
                 else if (index == 4)
                 {
-                    ClipboardManager.CopyToClipboard(path);
+                    ClipboardService.CopyToClipboard(path);
                 }
             }
         }

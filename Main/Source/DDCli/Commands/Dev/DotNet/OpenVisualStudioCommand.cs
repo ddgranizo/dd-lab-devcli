@@ -1,4 +1,5 @@
-﻿using DDCli.Models;
+﻿using DDCli.Interfaces;
+using DDCli.Models;
 using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,20 @@ namespace DDCli.Commands.Dev.DotNet
         private const string HelpDefinition = "open visual studio 2019 as administrator in current folder";
 
         public CommandParameterDefinition RootParameter { get; set; }
-        public OpenVisualStudioCommand()
+        public IPromptCommandService PromptCommandService { get; }
+        public IDirectoryService DirectoryService { get; }
+
+        public OpenVisualStudioCommand(
+            IPromptCommandService promptCommandService,
+            IDirectoryService directoryService)
             :base(typeof(OpenVisualStudioCommand).Namespace, nameof(OpenVisualStudioCommand), HelpDefinition)
         {
             RootParameter = new CommandParameterDefinition(
                 "root",
                 CommandParameterDefinition.TypeValue.Boolean,
                 "Indicates if open the program as administrator");
+            PromptCommandService = promptCommandService ?? throw new ArgumentNullException(nameof(promptCommandService));
+            DirectoryService = directoryService ?? throw new ArgumentNullException(nameof(directoryService));
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)
@@ -31,8 +39,8 @@ namespace DDCli.Commands.Dev.DotNet
             {
                 var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
                 bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
-                PromptCommandManager
-                    .Run(DirectoryUtilities.GetCurrentPath(), fileName, DirectoryUtilities.GetCurrentPath(), runAsAdministrator, true);
+                PromptCommandService
+                    .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
             }
         }
 

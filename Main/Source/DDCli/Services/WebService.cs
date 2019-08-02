@@ -1,14 +1,18 @@
-﻿using System;
+﻿using DDCli.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace DDCli.Utilities
+namespace DDCli.Services
 {
-    public static class WebUtilities
+    public class WebService : IWebService
     {
+        public WebService()
+        {
+        }
 
-        public static void DownloadFile(string url)
+        public void DownloadFile(string url)
         {
             Uri uri = new Uri(url);
             if (uri.IsFile)
