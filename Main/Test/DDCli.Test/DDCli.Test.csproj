@@ -33,4 +33,12 @@
     <ProjectReference Include="..\..\Source\DDCli\DDCli.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\DD\" />
+    <Folder Include="Commands\Dev\DotNet\" />
+    <Folder Include="Commands\Dev\Git\" />
+    <Folder Include="Commands\Dev\Windows\" />
+    <Folder Include="Commands\Dev\Utils\" />
+  </ItemGroup>
+
 </Project>

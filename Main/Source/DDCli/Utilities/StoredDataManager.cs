@@ -40,7 +40,6 @@ namespace DDCli.Utilities
             }
 
             CheckIfExistsFolder();
-            CheckIfFileFolder();
             MakeFileBackup();
 
             try

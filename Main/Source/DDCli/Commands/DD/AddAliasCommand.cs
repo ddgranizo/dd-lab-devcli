@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DDCli.Commands.DD
 {
-    class AddAliasCommand
+    public class AddAliasCommand
     {
     }
 }

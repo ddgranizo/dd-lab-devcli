@@ -2,6 +2,7 @@
 using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Services;
+using DDCli.Utilities;
 using System;
 
 namespace DDCli
@@ -14,7 +15,10 @@ namespace DDCli
         {
             commandManager = new CommandManager();
             commandManager.OnLog += CommandManager_OnLog;
-            RegisterCommands();
+
+            var storedData = StoredDataManager.GetStoredData();
+
+            RegisterCommands(storedData);
             try
             {
                 var inputCommand = new InputRequest(args);
@@ -55,14 +59,13 @@ namespace DDCli
             Console.WriteLine(e.Log);
         }
 
-        private static void RegisterCommands()
+        private static void RegisterCommands(StoredCliData storedData)
         {
             IClipboardService clipboardService = new ClipboardService();
             IDirectoryService directoryService = new DirectoryService();
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
-
-
+            IStoredDataService storedDataService = new StoredDataService(storedData);
 
             Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
