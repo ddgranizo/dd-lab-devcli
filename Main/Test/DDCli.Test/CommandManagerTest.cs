@@ -4,6 +4,9 @@ using DDCli;
 using DDCli.Models;
 using Moq;
 using DDCli.Test.Mock;
+using DDCli.Commands;
+using DDCli.Exceptions;
+using System.Collections.Generic;
 
 namespace DDCli.Test
 {
@@ -11,9 +14,379 @@ namespace DDCli.Test
     public class CommandManagerTest
     {
 
+        const string GenericCompleteCommandName = "MyCommandNameCommand";
+        const string GenericCommandName = "MyCommandName";
+        const string HelpCommandName = "Help";
+        const string WrongCommandName = "MyCommandNameComm$and";
+        const string GenericNameSpace = "MyNamespace";
+        const string GenericDescription = "MyDescription";
+        const string GenericParameterName = "MyParameter";
+        const string GenericParameterDescription = "MyParameterDescription";
+        public string LastLog { get; set; }
+
         public CommandManagerTest()
         {
 
+        }
+
+
+        private void Instance_OnLog(object sender, Events.LogEventArgs e)
+        {
+            LastLog = e.Log;
+        }
+
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandInvalidGuidParameter_CommandManager_ShouldExecuteCommand()
+        {
+            var executedVerificationValue = Guid.Empty;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetGuidParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionGuid());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const string myInvalidGuidParamValue = "hellomoto";
+            var inputRequest = GetGenericInputRequest(myInvalidGuidParamValue);
+
+
+            Assert.Throws<InvalidCastException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+
+
+        }
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidGuidParameter_CommandManager_ShouldExecuteCommand()
+        {
+            var executedVerificationValue = Guid.Empty;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetGuidParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionGuid());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            Guid myIntParamValue = Guid.NewGuid();
+            var inputRequest = GetGenericInputRequest(myIntParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = myIntParamValue;
+            var actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandInvalidDecimalParameter_CommandManager_ShouldExecuteCommand()
+        {
+            decimal executedVerificationValue = -1M;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetDecimalParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const string myIntParamValue = "hellomoto";
+            var inputRequest = GetGenericInputRequest(myIntParamValue);
+
+
+            Assert.Throws<InvalidCastException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+
+
+        }
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidDecimalParameter_CommandManager_ShouldExecuteCommand()
+        {
+            decimal executedVerificationValue = -1M;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetDecimalParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const decimal myIntParamValue = 1.3M;
+            var inputRequest = GetGenericInputRequest(myIntParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = myIntParamValue;
+            var actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandInvalidIntParameter_CommandManager_ShouldThrowCastException()
+        {
+            int executedVerificationValue = -1;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetIntParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const string myInvalidIntParamValue = "hellomoto";
+            var inputRequest = GetGenericInputRequest(myInvalidIntParamValue);
+
+
+            Assert.Throws<InvalidCastException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+
+        }
+
+     
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidIntParameter_CommandManager_ShouldExecuteCommand()
+        {
+            int executedVerificationValue = -1;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetIntParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const int myIntParamValue = 1;
+            var inputRequest = GetGenericInputRequest(myIntParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = myIntParamValue;
+            var actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidAliasBoolParameter_CommandManager_ShouldExecuteCommand()
+        {
+            bool executedVerificationValue = false;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetBoolParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const string myBoolParamValue = "yes";
+            var inputRequest = GetGenericInputRequest(myBoolParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = true;
+            bool actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+     
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidBoolParameter_CommandManager_ShouldExecuteCommand()
+        {
+
+            
+            bool executedVerificationValue = false;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetBoolParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const bool myBoolParamValue = true;
+            var inputRequest = GetGenericInputRequest(myBoolParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = myBoolParamValue;
+            bool actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandValidStringParameter_CommandManager_ShouldExecuteCommand()
+        {
+
+            var executedVerificationValue = string.Empty;
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.ExecuteAction = (inputParameters) =>
+            {
+                var parameterContent = commandDefinition.GetStringParameterValue(inputParameters, GenericParameterName.ToLowerInvariant());
+                executedVerificationValue = parameterContent;
+            };
+
+            commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionString());
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+            const string myStringParamValue = "MyParamValue";
+            var inputRequest = GetGenericInputRequest(myStringParamValue);
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = myStringParamValue;
+            var actual = executedVerificationValue;
+
+            Assert.Equal(expected, actual);
+
+        }
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecuteCommandWithNotValidParameters_CommandManager_ShouldThrowException()
+        {
+
+            var commandDefinition = GetCommandWithGenericParameter();
+            commandDefinition.CommandParametersDefinition.Add(new CommandParameterDefinition(
+                        GenericParameterName.ToLowerInvariant(),
+                        CommandParameterDefinition.TypeValue.String,
+                        GenericParameterDescription));
+
+            var instance = new CommandManager();
+            instance.RegisterCommand(commandDefinition);
+
+
+            var inputRequest = new InputRequest(
+                GenericCommandName.ToLowerInvariant(),
+                $"--{GenericParameterName.ToLowerInvariant()}different",
+                "MyParamValue");
+
+            Assert.Throws<InvalidParamsException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+
+        }
+
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecutedCommandNotRegistered_CommandManager_ShouldThrowNotFoundException()
+        {
+            const string differentCommandName = "NotRegisteredCommand";
+            var instance = new CommandManager();
+            instance.RegisterCommand(new MockCommand(GenericNameSpace, differentCommandName, GenericDescription));
+            var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
+
+            Assert.Throws<CommandNotFoundException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+        }
+
+
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecutedCommandWithSameNamespace_CommandManager_ShouldThrowDuplicateException()
+        {
+            var instance = new CommandManager();
+            instance.RegisterCommand(new MockCommand($"{GenericNameSpace}1", GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new MockCommand($"{GenericNameSpace}2", GenericCompleteCommandName, GenericDescription));
+            var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
+
+            Assert.Throws<DuplicateCommandException>(() =>
+            {
+                instance.ExecuteInputRequest(inputRequest);
+            });
+        }
+
+        [Fact]
+        [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
+        public void WhenExecutedCommandHelp_CommandManager_ShouldReturnHelpData()
+        {
+            var instance = new CommandManager();
+            instance.RegisterCommand(new MockCommand(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
+            var inputRequest = new InputRequest(HelpCommandName.ToLowerInvariant());
+
+            instance.OnLog += Instance_OnLog;
+
+            instance.ExecuteInputRequest(inputRequest);
+
+            var expected = "Available commands:\r\n\t#mynamespace-mycommandname\r\n";
+            var actual = LastLog;
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -37,12 +410,10 @@ namespace DDCli.Test
         public void WhenRegisterCommand_CommandManager_CommandShouldBeAddedWithinTheList()
         {
             var instance = new CommandManager();
-            const string commandName = "MyCommandNameCommand";
-            const string nameSpace = "MyNamespace";
-            const string description = "MyDescription";
-            instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
 
-            var expected = commandName;
+            instance.RegisterCommand(new MockCommand(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
+
+            var expected = GenericCompleteCommandName;
             var actual = instance.Commands[0].CommandName;
 
             Assert.Equal(expected, actual);
@@ -55,6 +426,68 @@ namespace DDCli.Test
         {
             var instance = new CommandManager();
             Assert.NotNull(instance.Commands);
+        }
+
+
+        private static CommandParameterDefinition GetGenericParameterDefinitionBoolean()
+        {
+            return new CommandParameterDefinition(
+                                    GenericParameterName.ToLowerInvariant(),
+                                    CommandParameterDefinition.TypeValue.Boolean,
+                                    GenericParameterDescription);
+        }
+        private static CommandParameterDefinition GetGenericParameterDefinitionString()
+        {
+            return new CommandParameterDefinition(
+                                    GenericParameterName.ToLowerInvariant(),
+                                    CommandParameterDefinition.TypeValue.String,
+                                    GenericParameterDescription);
+        }
+
+        private static CommandParameterDefinition GetGenericParameterDefinitionInteger()
+        {
+            return new CommandParameterDefinition(
+                                    GenericParameterName.ToLowerInvariant(),
+                                    CommandParameterDefinition.TypeValue.Integer,
+                                    GenericParameterDescription);
+        }
+
+        private static CommandParameterDefinition GetGenericParameterDefinitionDecimal()
+        {
+            return new CommandParameterDefinition(
+                                    GenericParameterName.ToLowerInvariant(),
+                                    CommandParameterDefinition.TypeValue.Decimal,
+                                    GenericParameterDescription);
+        }
+
+        private static CommandParameterDefinition GetGenericParameterDefinitionGuid()
+        {
+            return new CommandParameterDefinition(
+                                    GenericParameterName.ToLowerInvariant(),
+                                    CommandParameterDefinition.TypeValue.Guid,
+                                    GenericParameterDescription);
+        }
+
+        private static MockCommand GetCommandWithGenericParameter()
+        {
+            var commandDefinition = new MockCommand(
+                            GenericNameSpace,
+                            GenericCompleteCommandName,
+                            GenericDescription);
+            commandDefinition.CanExecuteFunction = (inputParameters) =>
+            {
+                return commandDefinition.IsParamOk(inputParameters, GenericParameterName.ToLowerInvariant());
+            };
+            return commandDefinition;
+        }
+
+
+        private static InputRequest GetGenericInputRequest(object myInvalidIntParamValue)
+        {
+            return new InputRequest(
+                            GenericCommandName.ToLowerInvariant(),
+                            $"--{GenericParameterName.ToLowerInvariant()}",
+                            myInvalidIntParamValue.ToString());
         }
     }
 }

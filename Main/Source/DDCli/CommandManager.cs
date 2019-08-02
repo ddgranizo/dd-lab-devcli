@@ -87,7 +87,6 @@ namespace DDCli
                 {
                     command.OnLog -= Command_OnLog;
                 }
-
             }
             else
             {
