@@ -25,7 +25,7 @@ namespace DDCli.Test
             var nameSpace = string.Empty;
             var description = string.Empty;
 
-            Assert.Throws<NotImplementedException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
             });
