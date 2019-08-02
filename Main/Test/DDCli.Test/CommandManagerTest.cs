@@ -27,7 +27,7 @@ namespace DDCli.Test
 
             Assert.Throws<ArgumentException>(() =>
             {
-                instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
+                //instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
             });
         }
 
