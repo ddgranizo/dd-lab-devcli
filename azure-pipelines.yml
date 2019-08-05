@@ -14,8 +14,15 @@ variables:
   testResultsPath: 'TestResults/'
   coverageFolderPath : '/TestResults/Coverage/'
   buildConfiguration: 'Debug'
+  coreCliVersion: 2.1.300
 
 steps:
+
+- task: DotNetCoreInstaller@1
+  displayName: 'Installing version $(coreCliVersion)...'
+  inputs:
+    version: $(coreCliVersion)
+
 - task: DotNetCoreCLI@2
   displayName: 'Restoring packages...'
   inputs:
@@ -41,13 +48,15 @@ steps:
       dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
   displayName: 'Calculating code coverage...'
 
-#- task: PublishTestResults@2
-#  inputs:
-#    testResultsFiles: '**/*.rdx'
-#    testResultsFormat: XUnit
-    
-
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publishing...'
+  inputs:
+    command: publish
+    minorVersion: $(Build.BuildNumber)
+    configuration: $(buildConfiguration)
+    zipAfterPublish: true
