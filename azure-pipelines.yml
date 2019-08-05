@@ -39,7 +39,7 @@ steps:
 - script: |
     dir
     dotnet publish -c Debug -r win10-x64
-  workingDirectory: "$(Agent.BuildDirectory)/Main/Source/DDCli"
+  workingDirectory: "$(Agent.BuildDirectory)"
 
 - script: |
     mkdir - task: ArchiveFiles@2
