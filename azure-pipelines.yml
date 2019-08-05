@@ -37,6 +37,7 @@ steps:
 ############### PUBLISH 
 
 - script: |
+    dir
     dotnet publish -c Debug -r win10-x64
   workingDirectory: "$(Agent.BuildDirectory)/Main/Source/DDCli"
 
