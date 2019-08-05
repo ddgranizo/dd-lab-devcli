@@ -86,3 +86,4 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'Assembly'
     publishLocation: Container
+    
