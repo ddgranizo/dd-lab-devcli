@@ -57,7 +57,4 @@ steps:
 
 #- task: PublishBuildArtifacts@1
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publishing...'
-  inputs:
-    custom: publish '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj' -c $(buildConfiguration) -r $(runTime)
+- script: dotnet publish '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj' -c $(buildConfiguration) -r $(runTime)
