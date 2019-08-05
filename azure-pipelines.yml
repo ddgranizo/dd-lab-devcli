@@ -1,6 +1,92 @@
-template:
-  name: dot-net-core-template.yaml
-  parameters:
-    buildProjects: "**/*.sln"
-    buildConfiguration: "Debug"
-    testProjects: "test/**/*.csproj"
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  solutionTarget: 'Main/dd-lab-devcli.sln'
+  testResultsPath: 'TestResults/'
+  coverageFolderPath : '/TestResults/Coverage/'
+  buildConfiguration: 'Release'
+  coreCliVersion: 2.2.105
+  runTime: 'win10-x64'
+
+steps:
+
+#- task: DotNetCoreCLI@2
+#  displayName: 'Publishing...'
+#  inputs:
+#    command: 'publish'
+#    publishWebProjects: false
+#    projects: '**/*.csproj'
+#    configuration: 'Release'
+#    minorVersion: $(Build.BuildId)
+
+- task: DotNetCoreInstaller@1
+  displayName: 'Installing version $(coreCliVersion)...'
+  inputs:
+    version: $(coreCliVersion)
+
+
+############### PUBLISH 
+#
+
+- script: |
+    mkdir Output
+  displayName: "Making output directory"
+
+- script: |
+    dotnet publish -c Release -r win10-x64
+  workingDirectory: "Main/Source/DDCli"
+
+- task: ArchiveFiles@2
+  displayName: 'Packing into zip...'
+  inputs:
+    rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: 'Output/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+    verbose: true
+
+#- task: PublishBuildArtifacts@1
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restoring packages...'
+  inputs:
+    command: restore
+    projects: '**/*.sln'
+- task: DotNetCoreCLI@2
+  displayName: 'Building...'
+  inputs:
+    command: build
+    projects: '**/*.sln'
+    configuration: $(buildConfiguration)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Unit tests...'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    publishTestResults: true
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
+  displayName: 'Calculating code coverage...'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
+
+
+
