@@ -48,7 +48,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Packing into zip...'
   inputs:
-    rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/publish/'
+    rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: 'Output/$(Build.BuildId).zip'
