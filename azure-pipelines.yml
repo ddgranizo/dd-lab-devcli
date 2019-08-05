@@ -52,7 +52,7 @@ steps:
     rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: 'Output/$(Build.BuildId).zip'
+    archiveFile: $(Build.ArtifactStagingDirectory)
     replaceExistingArchive: true
     verbose: true
 
