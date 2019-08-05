@@ -5,10 +5,12 @@
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <AssemblyName>DD</AssemblyName>
     <AssemblyVersion>1.0.0.*</AssemblyVersion>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
-
+  
 
   <ItemGroup>
+     
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
