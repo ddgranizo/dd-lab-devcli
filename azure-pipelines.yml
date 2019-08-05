@@ -60,4 +60,4 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Publishing...'
   inputs:
-    custom: dotnet publish '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj' -c $(buildConfiguration) -r $(runTime)
+    custom: publish '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj' -c $(buildConfiguration) -r $(runTime)
