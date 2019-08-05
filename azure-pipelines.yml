@@ -53,11 +53,14 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
 
+
+#- task: PublishBuildArtifacts@1
+
 - task: DotNetCoreCLI@2
   displayName: 'Publishing...'
   inputs:
     command: publish
-    projects: '**/DDCli.csproj'
+    projects: '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj'
     minorVersion: $(Build.BuildNumber)
     configuration: $(buildConfiguration)
     zipAfterPublish: true
