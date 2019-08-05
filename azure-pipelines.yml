@@ -13,7 +13,7 @@ variables:
   solutionTarget: 'Main/dd-lab-devcli.sln'
   testResultsPath: 'TestResults/'
   coverageFolderPath : '/TestResults/Coverage/'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'Debug'
 
 
 
@@ -28,14 +28,14 @@ steps:
   inputs:
     command: build
     projects: '**/*.sln'
-
+    configuration: $(buildConfiguration)
 
 
 - task: CmdLine@2
   inputs:
     script: |
-      mkdir $(Build.SourcesDirectory)\results
-      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
+      mkdir '$(Agent.BuildDirectory)\results'
+      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)\results' 
   displayName: 'Unit tests'
 
 
@@ -63,4 +63,4 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: $(Build.SourcesDirectory)sresults.cobertura.xml
+    summaryFileLocation: $(Agent.BuildDirectory)results/results.cobertura.xml
