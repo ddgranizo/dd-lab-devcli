@@ -63,4 +63,4 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    pathToSources: '**/*.conbertura.xml'
+    summaryFileLocation: $(Build.SourcesDirectory)
