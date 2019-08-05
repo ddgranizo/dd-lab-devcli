@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  solutionTarget: 'Main\dd-lab-devcli.sln'
+  solutionTarget: 'Main/dd-lab-devcli.sln'
   buildConfiguration: 'Release'
 
 steps:
