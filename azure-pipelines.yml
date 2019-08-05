@@ -22,4 +22,6 @@ steps:
   displayName: 'Building...'
 - script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
   displayName: 'Executing tests...'
-
+- task: DotNetCoreCLI@2
+  inputs:
+    restoreDirectory: 'TestResults'
