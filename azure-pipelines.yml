@@ -34,6 +34,7 @@ steps:
     command: test
     projects: '**/*.sln'
     publishTestResults: true
+    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
 
 - task: PublishTestResults@2
   inputs:
