@@ -20,6 +20,6 @@ steps:
   displayName: 'Restoring packages...'
 - script: dotnet build $(solutionTarget)
   displayName: 'Building...'
-- script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath) /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=$(coverageFolderPath)
+- script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
   displayName: 'Executing tests...'
 
