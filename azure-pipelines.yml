@@ -11,11 +11,15 @@ pool:
 
 variables:
   solutionTarget: 'Main/dd-lab-devcli.sln'
+  testResultsPath: 'TestResults/Results.trx'
+  coverageFolderPath : '/TestResults/Coverage/'
   buildConfiguration: 'Release'
 
 steps:
 - script: dotnet restore $(solutionTarget)
-  displayName: 'restoring'
+  displayName: 'Restoring packages...'
 - script: dotnet build $(solutionTarget)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'Building...'
+- script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath) /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=$(coverageFolderPath)
+  displayName: 'Executing tests...'
 
