@@ -20,12 +20,14 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publishing...'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*.csproj'
     modifyOutputPath: false
     minorVersion: $(Agent.BuildNumber)
+    zipAfterPublish: true
 
 
 - task: DotNetCoreInstaller@1
