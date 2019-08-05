@@ -49,7 +49,6 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
-    testResultsFiles: '**/*.trx'
 
 - task: PublishCodeCoverageResults@1
   inputs:
