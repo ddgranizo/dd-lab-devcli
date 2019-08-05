@@ -11,7 +11,7 @@ pool:
 
 variables:
   solutionTarget: 'Main/dd-lab-devcli.sln'
-  testResultsPath: 'TestResults/Results.trx'
+  testResultsPath: 'TestResults/'
   coverageFolderPath : '/TestResults/Coverage/'
   buildConfiguration: 'Release'
 
@@ -25,8 +25,8 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
-    testResultsFiles: $(testResultsPath)
-    #searchFolder: '$(System.DefaultWorkingDirectory)' # Optional
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(testResultsPath)'
     #mergeTestResults: false # Optional
     #failTaskOnFailedTests: false # Optional
     #testRunTitle: # Optional
