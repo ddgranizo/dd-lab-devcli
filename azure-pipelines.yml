@@ -81,3 +81,8 @@ steps:
     replaceExistingArchive: true
     verbose: true
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Assembly'
+    publishLocation: Container
