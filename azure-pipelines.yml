@@ -26,14 +26,20 @@ steps:
     publishWebProjects: false
     projects: '**/*.csproj'
     modifyOutputPath: false
+    configuration: Release
     minorVersion: $(Agent.BuildNumber)
-    zipAfterPublish: true
 
+
+- script: |
+    mkdir $(Agent.BuildDirectory)/Output
 
 - task: DotNetCoreInstaller@1
   displayName: 'Installing version $(coreCliVersion)...'
   inputs:
     version: $(coreCliVersion)
+
+
+
 
 - task: DotNetCoreCLI@2
   displayName: 'Restoring packages...'
