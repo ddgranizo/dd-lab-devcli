@@ -371,8 +371,8 @@ namespace DDCli.Test
 
             instance.ExecuteInputRequest(inputRequest);
 
-            var expected = "Available commands:\r\n\t#mynamespace-mycommandname\r\n";
-            var actual = LastLog;
+            var expected = "Available commands:\r\n\t#mynamespace-mycommandname\r\n".Trim();
+            var actual = LastLog.Trim();
             Assert.Equal(expected, actual);
         }
 
