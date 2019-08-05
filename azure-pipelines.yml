@@ -34,6 +34,27 @@ steps:
     version: $(coreCliVersion)
 
 
+############### PUBLISH 
+
+- script: |
+    dotnet publish -c Debug -r win10-x64
+  workingDirectory: "$(Agent.BuildDirectory)/Main/Source/DDCli"
+
+- script: |
+    mkdir - task: ArchiveFiles@2
+  displayName: "Making output directory"
+
+- task: ArchiveFiles@2
+  displayName: 'Packing into zip...'
+  inputs:
+    rootFolderOrFile: '$(Build.BuildDirectory)/Main/Source/DDCli/bin/Debug/netcoreapp2.0/publish/'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Agent.BuildDirectory)/Output/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+    verbose: true
+
+#- task: PublishBuildArtifacts@1
 
 
 - task: DotNetCoreCLI@2
@@ -67,25 +88,4 @@ steps:
     summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
 
 
-
-############### PUBLISH 
-
-- script: |
-    dotnet publish "$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj" -c Debug -r win10-x64
-
-- script: |
-    mkdir - task: ArchiveFiles@2
-  displayName: "Making output directory"
-
-- task: ArchiveFiles@2
-  displayName: 'Packing into zip...'
-  inputs:
-    rootFolderOrFile: '$(Build.BuildDirectory)/Main/Source/DDCli/bin/Debug/netcoreapp2.0/publish/'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Agent.BuildDirectory)/Output/$(Build.BuildId).zip'
-    replaceExistingArchive: true
-    verbose: true
-
-#- task: PublishBuildArtifacts@1
 
