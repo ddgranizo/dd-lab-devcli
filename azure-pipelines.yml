@@ -35,11 +35,11 @@ steps:
 
 
 ############### PUBLISH 
-
+#dotnet publish -c Debug -r win10-x64
 - script: |
+    echo dirrrrrrrrrrrr
     dir
-    dotnet publish -c Debug -r win10-x64
-  workingDirectory: "$(Agent.BuildDirectory)"
+#  workingDirectory: "$(Agent.BuildDirectory)"
 
 - script: |
     mkdir - task: ArchiveFiles@2
