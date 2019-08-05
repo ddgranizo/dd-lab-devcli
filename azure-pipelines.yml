@@ -37,12 +37,11 @@ steps:
     command: test
     projects: '**/*.sln'
     publishTestResults: true
-    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
 
 - task: CmdLine@2
   inputs:
     script: |
-      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)\results' 
+      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
   displayName: 'Calculating code coverage...'
 
 
