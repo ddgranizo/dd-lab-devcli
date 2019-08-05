@@ -35,7 +35,7 @@ steps:
   inputs:
     script: |
       mkdir $(Build.SourcesDirectory)\results
-      dotnet test $(solutionTarget) -l:trx;LogFileName='$(Build.SourcesDirectory)\results\TestsResults.trx'  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
+      dotnet test $(solutionTarget) -l:trx;LogFileName='$(Build.SourcesDirectory)\results\TestsResults.trx' /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
   displayName: 'Unit tests'
 
 
