@@ -36,7 +36,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Packing into zip...'
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    rootFolderOrFile: '$(Build.BuildDirectory)/Main/Source/DDCli/bin/Debug/netcoreapp2.0/publish/'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: '$(Agent.BuildDirectory)/Output/$(Build.BuildId).zip'
