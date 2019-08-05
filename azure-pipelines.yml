@@ -31,22 +31,21 @@ steps:
     configuration: $(buildConfiguration)
 
 
+- task: DotNetCoreCLI@2
+  displayName: 'Unit tests...'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    publishTestResults: true
+    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
+
 - task: CmdLine@2
   inputs:
     script: |
       mkdir '$(Agent.BuildDirectory)\results'
       dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)\results' 
-  displayName: 'Unit tests'
+  displayName: 'Calculating code coverage...'
 
-
-
-#- task: DotNetCoreCLI@2
-#  displayName: 'Executing tests...'
-#  inputs:
-#    command: test
-#    projects: '**/*.sln'
-#    publishTestResults: true
-#    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
 
 - task: PublishTestResults@2
   inputs:
@@ -63,4 +62,4 @@ steps:
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)results/results.cobertura.xml
+    summaryFileLocation: $(Agent.BuildDirectory)results.cobertura.xml
