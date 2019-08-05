@@ -53,4 +53,5 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   inputs:
+    codeCoverageTool: Cobertura
     summaryFileLocation: $(Agent.BuildDirectory)\results.cobertura.xml
