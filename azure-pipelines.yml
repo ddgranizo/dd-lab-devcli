@@ -10,8 +10,12 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  solutionTarget: 'Main\dd-lab-devcli.sln'
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration) "Main/dd-lab-devcli.sln"
+- script: dotnet restore $(solutionTarget)
+  displayName: 'restoring'
+- script: dotnet build $(solutionTarget)
   displayName: 'dotnet build $(buildConfiguration)'
+
