@@ -22,14 +22,19 @@ steps:
   displayName: 'Restoring packages...'
   inputs:
     command: restore
-    projects: '**/*.csproj'
+    projects: '**/*.sln'
 - task: DotNetCoreCLI@2
   displayName: 'Building...'
   inputs:
     command: build
     projects: '**/*.sln'
-- script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
+- task: DotNetCoreCLI@2
   displayName: 'Executing tests...'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    publishTestResults: true
+
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
