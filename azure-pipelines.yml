@@ -23,7 +23,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj'
+    projects: '**/*.csproj'
     modifyOutputPath: false
     minorVersion: $(Agent.BuildNumber)
 
