@@ -35,7 +35,7 @@ steps:
   inputs:
     script: |
       mkdir $(Build.SourcesDirectory)\results
-      dotnet test $(solutionTarget)  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
+      dotnet test $(solutionTarget) -l:trx;LogFileName=$(Build.SourcesDirectory)\results\TestsResults.trx  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
   displayName: 'Unit tests'
 
 
@@ -59,3 +59,8 @@ steps:
     #buildPlatform: # Optional
     #buildConfiguration: # Optional
     #publishRunAttachments: true # Optional
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    pathToSources: '**/*.conbertura.xml'
