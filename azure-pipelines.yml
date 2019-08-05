@@ -19,14 +19,7 @@ variables:
 
 steps:
 
-#- task: DotNetCoreCLI@2
-#  displayName: 'Publishing...'
-#  inputs:
-#    command: 'publish'
-#    publishWebProjects: false
-#    projects: '**/*.csproj'
-#    configuration: 'Release'
-#    minorVersion: $(Build.BuildId)
+##### INSTALL DOTNET #######
 
 - task: DotNetCoreInstaller@1
   displayName: 'Installing version $(coreCliVersion)...'
@@ -34,8 +27,40 @@ steps:
     version: $(coreCliVersion)
 
 
-############### PUBLISH 
-#
+##### BUILD SOLUTION #######
+
+- task: DotNetCoreCLI@2
+  displayName: 'Building...'
+  inputs:
+    command: build
+    projects: '**/*.sln'
+    configuration: $(buildConfiguration)
+
+###### UNIT TEST ########
+
+- task: DotNetCoreCLI@2
+  displayName: 'Unit tests...'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    publishTestResults: true
+
+###### CODE COVERAGE ########
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
+  displayName: 'Calculating code coverage...'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
+
+
+
+###### PUBLISH ######
 
 - script: |
     mkdir Output
@@ -52,42 +77,13 @@ steps:
     rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: 'Output/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
     verbose: true
 
-#- task: PublishBuildArtifacts@1
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restoring packages...'
+- task: PublishBuildArtifacts@1
   inputs:
-    command: restore
-    projects: '**/*.sln'
-- task: DotNetCoreCLI@2
-  displayName: 'Building...'
-  inputs:
-    command: build
-    projects: '**/*.sln'
-    configuration: $(buildConfiguration)
-
-- task: DotNetCoreCLI@2
-  displayName: 'Unit tests...'
-  inputs:
-    command: test
-    projects: '**/*.sln'
-    publishTestResults: true
-
-- task: CmdLine@2
-  inputs:
-    script: |
-      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
-  displayName: 'Calculating code coverage...'
-
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
-
-
-
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Assembly'
+    publishLocation: Container
+    
