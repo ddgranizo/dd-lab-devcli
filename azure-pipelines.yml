@@ -28,13 +28,25 @@ steps:
   inputs:
     command: build
     projects: '**/*.sln'
-- task: DotNetCoreCLI@2
-  displayName: 'Executing tests...'
+
+
+
+- task: CmdLine@2
   inputs:
-    command: test
-    projects: '**/*.sln'
-    publishTestResults: true
-    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
+    script: |
+      mkdir $(Build.SourcesDirectory)\results
+      dotnet test '**/*.sln'  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results 
+  displayName: 'Unit tests'
+
+
+
+#- task: DotNetCoreCLI@2
+#  displayName: 'Executing tests...'
+#  inputs:
+#    command: test
+#    projects: '**/*.sln'
+#    publishTestResults: true
+#    configuration: $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\
 
 - task: PublishTestResults@2
   inputs:
