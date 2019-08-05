@@ -42,7 +42,6 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      mkdir '$(Agent.BuildDirectory)\results'
       dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)\results' 
   displayName: 'Calculating code coverage...'
 
@@ -51,15 +50,7 @@ steps:
   inputs:
     testResultsFormat: XUnit
     testResultsFiles: '**/*.trx'
-    #searchFolder: '$(System.DefaultWorkingDirectory)'
-    #mergeTestResults: false # Optional
-    #failTaskOnFailedTests: false # Optional
-    #testRunTitle: # Optional
-    #buildPlatform: # Optional
-    #buildConfiguration: # Optional
-    #publishRunAttachments: true # Optional
 
 - task: PublishCodeCoverageResults@1
   inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)results.cobertura.xml
+    summaryFileLocation: $(Agent.BuildDirectory)\results.cobertura.xml
