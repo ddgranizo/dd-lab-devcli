@@ -46,11 +46,3 @@ steps:
   displayName: 'Calculating code coverage...'
 
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: XUnit
-
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)\results.cobertura.xml
