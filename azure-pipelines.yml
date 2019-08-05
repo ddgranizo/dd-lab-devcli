@@ -15,6 +15,7 @@ variables:
   coverageFolderPath : '/TestResults/Coverage/'
   buildConfiguration: 'Debug'
   coreCliVersion: 2.2.105
+  runTime: 'win10-x64'
 
 steps:
 
@@ -59,8 +60,4 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Publishing...'
   inputs:
-    command: publish
-    projects: '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj'
-    minorVersion: $(Build.BuildNumber)
-    configuration: $(buildConfiguration)
-    zipAfterPublish: true
+    custom: dotnet publish '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj' -c $(buildConfiguration) -r $(runTime)
