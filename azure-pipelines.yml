@@ -25,7 +25,7 @@ steps:
   displayName: 'Restoring packages...'
   inputs:
     command: restore
-    projects: '**/*.csporj'
+    projects: '**/*.csproj'
 - script: dotnet build $(solutionTarget)
   displayName: 'Building...'
 - script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
