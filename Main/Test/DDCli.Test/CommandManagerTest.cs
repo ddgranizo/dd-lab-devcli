@@ -6,6 +6,7 @@ using DDCli.Test.Mock;
 using DDCli.Commands;
 using DDCli.Exceptions;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace DDCli.Test
 {
@@ -233,14 +234,14 @@ namespace DDCli.Test
 
         }
 
-     
+
 
         [Fact]
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenExecuteCommandValidBoolParameter_CommandManager_ShouldExecuteCommand()
         {
 
-            
+
             bool executedVerificationValue = false;
             var commandDefinition = GetCommandWithGenericParameter();
             commandDefinition.ExecuteAction = (inputParameters) =>
@@ -370,9 +371,10 @@ namespace DDCli.Test
             instance.OnLog += Instance_OnLog;
 
             instance.ExecuteInputRequest(inputRequest);
+            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 
-            var expected = "Available commands:\r\n\t#mynamespace-mycommandname\r\n".Trim();
-            var actual = LastLog.Trim();
+            var expected = rgx.Replace("Available commands:\r\n\t#mynamespace-mycommandname\r\n", ""); ;
+            var actual = rgx.Replace(LastLog, "");
             Assert.Equal(expected, actual);
         }
 
