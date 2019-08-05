@@ -26,7 +26,7 @@ steps:
   inputs:
     testResultsFormat: XUnit
     testResultsFiles: 'TestResults/*.trx'
-    #searchFolder: '$(testResultsPath)'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
     #mergeTestResults: false # Optional
     #failTaskOnFailedTests: false # Optional
     #testRunTitle: # Optional
