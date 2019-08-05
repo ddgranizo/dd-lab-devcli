@@ -1,6 +1,43 @@
-template:
-  name: dot-net-core-template.yaml
-  parameters:
-    buildProjects: "**/*.sln"
-    buildConfiguration: "Debug"
-    testProjects: "test/**/*.csproj"
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  solutionTarget: 'Main/dd-lab-devcli.sln'
+  testResultsPath: 'TestResults/'
+  coverageFolderPath : '/TestResults/Coverage/'
+  buildConfiguration: 'Release'
+
+
+
+
+
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restoring packages...'
+  inputs:
+    command: restore
+    projects: '**/*.csporj'
+- script: dotnet build $(solutionTarget)
+  displayName: 'Building...'
+- script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
+  displayName: 'Executing tests...'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: XUnit
+    testResultsFiles: '**/*.trx'
+    #searchFolder: '$(System.DefaultWorkingDirectory)'
+    #mergeTestResults: false # Optional
+    #failTaskOnFailedTests: false # Optional
+    #testRunTitle: # Optional
+    #buildPlatform: # Optional
+    #buildConfiguration: # Optional
+    #publishRunAttachments: true # Optional
