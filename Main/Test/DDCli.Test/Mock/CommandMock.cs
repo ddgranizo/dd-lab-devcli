@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DDCli.Test.Mock
 {
-    public class MockCommand : CommandBase
+    public class CommandMock : CommandBase
     {
 
         public Func<List<CommandParameter>, bool> CanExecuteFunction { get; set; }
@@ -14,18 +14,18 @@ namespace DDCli.Test.Mock
         public Action<List<CommandParameter>> ExecuteAction { get; set; }
 
 
-        public MockCommand(string nameSpace, string commandName, string decription) : base(nameSpace, commandName, decription) { }
+        public CommandMock(string nameSpace, string commandName, string decription) : base(nameSpace, commandName, decription) { }
 
 
-        public MockCommand(string nameSpace, string commandName, string decription, bool canExecuteReturn) 
+        public CommandMock(string nameSpace, string commandName, string decription, bool canExecuteReturn) 
             : base(nameSpace, commandName, decription)
         { CanExecuteReturn = canExecuteReturn; }
 
-        public MockCommand(string nameSpace, string commandName, string decription, Func<List<CommandParameter>, bool> canExecuteFunction) 
+        public CommandMock(string nameSpace, string commandName, string decription, Func<List<CommandParameter>, bool> canExecuteFunction) 
             : base(nameSpace, commandName, decription)
         { CanExecuteFunction = canExecuteFunction; }
 
-        public MockCommand(string nameSpace, string commandName, string decription, Action<List<CommandParameter>> executeAction) 
+        public CommandMock(string nameSpace, string commandName, string decription, Action<List<CommandParameter>> executeAction) 
             : base(nameSpace, commandName, decription)
         { ExecuteAction = executeAction; }
 

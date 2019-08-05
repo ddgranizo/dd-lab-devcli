@@ -3,11 +3,11 @@ using DDCli.Exceptions;
 using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Test.Mock;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+
 
 namespace DDCli.Test.Commands.DD
 {
@@ -32,17 +32,13 @@ namespace DDCli.Test.Commands.DD
             string commandNamespace = "name.space";
             string commandDescription = "description";
 
-            var storedDataService = new Mock<IStoredDataService>();
+            var storedDataService = new StoredDataServiceMock(false);
 
-            var storedAlias = false;
-
-            storedDataService.Setup(k => k.ExistsAlias(aliasName)).Returns(false);
-            storedDataService.Setup(k => k.AddAlias(commandName, aliasName)).Callback(() => { storedAlias = true; });
 
             var instance = new CommandManager();
-            instance.RegisterCommand(new MockCommand(commandNamespace, commandName, commandDescription));
+            instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
 
-            var commandDefinition = new AddAliasCommand(storedDataService.Object, instance.Commands);
+            var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
             instance.RegisterCommand(commandDefinition);
 
 
@@ -54,6 +50,8 @@ namespace DDCli.Test.Commands.DD
                 aliasName);
 
             instance.ExecuteInputRequest(inputRequest);
+
+            var storedAlias = storedDataService.AddedCommand == commandName;
 
             var actual = storedAlias;
             Assert.True(actual);
@@ -70,12 +68,11 @@ namespace DDCli.Test.Commands.DD
         {
             string aliasName = "myalias";
             string commandName = "mycommand";
-            var storedDataService = new Mock<IStoredDataService>();
-            storedDataService.Setup(k => k.ExistsAlias(aliasName)).Returns(true);
+            var storedDataService = new StoredDataServiceMock(true);
 
             var instance = new CommandManager();
 
-            var commandDefinition = new AddAliasCommand(storedDataService.Object, instance.Commands);
+            var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
             instance.RegisterCommand(commandDefinition);
 
 
@@ -104,15 +101,14 @@ namespace DDCli.Test.Commands.DD
             string commandName = "mycommand";
             string commandNamespace = "name.space";
             string commandDescription = "description";
-            var storedDataService = new Mock<IStoredDataService>();
-            storedDataService.Setup(k => k.ExistsAlias(aliasName)).Returns(true);
+            var storedDataService = new StoredDataServiceMock(true);
 
 
             var instance = new CommandManager();
-            instance.RegisterCommand(new MockCommand(commandNamespace, commandName, commandDescription));
+            instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
 
 
-            var commandDefinition = new AddAliasCommand(storedDataService.Object, instance.Commands);
+            var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
             instance.RegisterCommand(commandDefinition);
 
 
@@ -139,9 +135,9 @@ namespace DDCli.Test.Commands.DD
 
             string commandName = "mycommand";
 
-            var storedDataService = new Mock<IStoredDataService>();
+            var storedDataService = new  StoredDataServiceMock(false);
             var registeredCommands = new List<CommandBase>();
-            var commandDefinition = new AddAliasCommand(storedDataService.Object, registeredCommands);
+            var commandDefinition = new AddAliasCommand(storedDataService, registeredCommands);
 
             var instance = new CommandManager();
             instance.RegisterCommand(commandDefinition);
@@ -167,9 +163,9 @@ namespace DDCli.Test.Commands.DD
 
             string aliasName = "myalias";
 
-            var storedDataService = new Mock<IStoredDataService>();
+            var storedDataService = new StoredDataServiceMock(false);
             var registeredCommands = new List<CommandBase>();
-            var commandDefinition = new AddAliasCommand(storedDataService.Object, registeredCommands);
+            var commandDefinition = new AddAliasCommand(storedDataService, registeredCommands);
 
             var instance = new CommandManager();
             instance.RegisterCommand(commandDefinition);

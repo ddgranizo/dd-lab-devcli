@@ -138,29 +138,29 @@ namespace DDCli.Models
         }
 
 
-        public string GetStringParameterValue(List<CommandParameter> parameters, string name, string defaultValue = default)
+        public string GetStringParameterValue(List<CommandParameter> parameters, string name, string defaultValue = "")
         {
             return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueString : defaultValue;
         }
 
-        public bool GetBoolParameterValue(List<CommandParameter> parameters, string name, bool defaultValue = default)
+        public bool GetBoolParameterValue(List<CommandParameter> parameters, string name, bool defaultValue = false)
         {
             return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueBool : defaultValue;
         }
 
-        public int GetIntParameterValue(List<CommandParameter> parameters, string name, int defaultValue = default)
+        public int GetIntParameterValue(List<CommandParameter> parameters, string name, int defaultValue = 0)
         {
             return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueInt : defaultValue;
         }
 
-        public decimal GetDecimalParameterValue(List<CommandParameter> parameters, string name, decimal defaultValue = default)
+        public decimal GetDecimalParameterValue(List<CommandParameter> parameters, string name, decimal defaultValue = 0)
         {
             return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueDecimal : defaultValue;
         }
 
-        public Guid GetGuidParameterValue(List<CommandParameter> parameters, string name, Guid defaultValue = default)
+        public Guid GetGuidParameterValue(List<CommandParameter> parameters, string name)
         {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueGuid : defaultValue;
+            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueGuid : Guid.Empty;
         }
 
     }

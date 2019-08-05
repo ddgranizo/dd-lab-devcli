@@ -2,7 +2,6 @@ using System;
 using Xunit;
 using DDCli;
 using DDCli.Models;
-using Moq;
 using DDCli.Test.Mock;
 using DDCli.Commands;
 using DDCli.Exceptions;
@@ -29,12 +28,10 @@ namespace DDCli.Test
 
         }
 
-
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
         {
             LastLog = e.Log;
         }
-
 
 
         [Fact]
@@ -57,13 +54,10 @@ namespace DDCli.Test
             const string myInvalidGuidParamValue = "hellomoto";
             var inputRequest = GetGenericInputRequest(myInvalidGuidParamValue);
 
-
             Assert.Throws<InvalidCastException>(() =>
             {
                 instance.ExecuteInputRequest(inputRequest);
             });
-
-
         }
 
         [Fact]
@@ -92,9 +86,7 @@ namespace DDCli.Test
             var actual = executedVerificationValue;
 
             Assert.Equal(expected, actual);
-
         }
-
 
 
         [Fact]
@@ -117,13 +109,10 @@ namespace DDCli.Test
             const string myIntParamValue = "hellomoto";
             var inputRequest = GetGenericInputRequest(myIntParamValue);
 
-
             Assert.Throws<InvalidCastException>(() =>
             {
                 instance.ExecuteInputRequest(inputRequest);
             });
-
-
         }
 
         [Fact]
@@ -181,10 +170,8 @@ namespace DDCli.Test
             {
                 instance.ExecuteInputRequest(inputRequest);
             });
-
         }
 
-     
 
 
         [Fact]
@@ -346,7 +333,7 @@ namespace DDCli.Test
         {
             const string differentCommandName = "NotRegisteredCommand";
             var instance = new CommandManager();
-            instance.RegisterCommand(new MockCommand(GenericNameSpace, differentCommandName, GenericDescription));
+            instance.RegisterCommand(new CommandMock(GenericNameSpace, differentCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
 
             Assert.Throws<CommandNotFoundException>(() =>
@@ -362,8 +349,8 @@ namespace DDCli.Test
         public void WhenExecutedCommandWithSameNamespace_CommandManager_ShouldThrowDuplicateException()
         {
             var instance = new CommandManager();
-            instance.RegisterCommand(new MockCommand($"{GenericNameSpace}1", GenericCompleteCommandName, GenericDescription));
-            instance.RegisterCommand(new MockCommand($"{GenericNameSpace}2", GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new CommandMock($"{GenericNameSpace}1", GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new CommandMock($"{GenericNameSpace}2", GenericCompleteCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
 
             Assert.Throws<DuplicateCommandException>(() =>
@@ -377,7 +364,7 @@ namespace DDCli.Test
         public void WhenExecutedCommandHelp_CommandManager_ShouldReturnHelpData()
         {
             var instance = new CommandManager();
-            instance.RegisterCommand(new MockCommand(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
             var inputRequest = new InputRequest(HelpCommandName.ToLowerInvariant());
 
             instance.OnLog += Instance_OnLog;
@@ -400,7 +387,7 @@ namespace DDCli.Test
 
             Assert.Throws<ArgumentException>(() =>
             {
-                instance.RegisterCommand(new MockCommand(nameSpace, commandName, description));
+                instance.RegisterCommand(new CommandMock(nameSpace, commandName, description));
             });
         }
 
@@ -411,7 +398,7 @@ namespace DDCli.Test
         {
             var instance = new CommandManager();
 
-            instance.RegisterCommand(new MockCommand(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
 
             var expected = GenericCompleteCommandName;
             var actual = instance.Commands[0].CommandName;
@@ -468,9 +455,9 @@ namespace DDCli.Test
                                     GenericParameterDescription);
         }
 
-        private static MockCommand GetCommandWithGenericParameter()
+        private static CommandMock GetCommandWithGenericParameter()
         {
-            var commandDefinition = new MockCommand(
+            var commandDefinition = new CommandMock(
                             GenericNameSpace,
                             GenericCompleteCommandName,
                             GenericDescription);
