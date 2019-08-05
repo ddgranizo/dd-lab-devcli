@@ -19,15 +19,16 @@ variables:
 
 steps:
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publishing...'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
-    configuration: 'Release'
-    minorVersion: $(Agent.BuildNumber)
-
+#- task: DotNetCoreCLI@2
+#  displayName: 'Publishing...'
+#  inputs:
+#    command: 'publish'
+#    publishWebProjects: false
+#    projects: '**/*.csproj'
+#    configuration: 'Release'
+#    minorVersion: $(Build.BuildId)
+- script: |
+    dotnet publish "$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj" -c Debug -r win10-x64
 
 - script: |
     mkdir - task: ArchiveFiles@2
