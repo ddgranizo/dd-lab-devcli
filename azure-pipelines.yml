@@ -17,17 +17,17 @@ variables:
 
 
 
-
-
-
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Restoring packages...'
   inputs:
     command: restore
     projects: '**/*.csproj'
-- script: dotnet build $(solutionTarget)
+- task: DotNetCoreCLI@2
   displayName: 'Building...'
+  inputs:
+    command: build
+    projects: '**/*.sln'
 - script: dotnet test $(solutionTarget) --logger trx;LogFileName=$(testResultsPath)
   displayName: 'Executing tests...'
 - task: PublishTestResults@2
