@@ -25,8 +25,8 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
-    testResultsFiles: 'TestResults/*.trx'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
+    testResultsFiles: '**/*.trx'
+    #searchFolder: '$(System.DefaultWorkingDirectory)'
     #mergeTestResults: false # Optional
     #failTaskOnFailedTests: false # Optional
     #testRunTitle: # Optional
