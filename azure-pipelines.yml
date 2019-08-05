@@ -19,6 +19,16 @@ variables:
 
 steps:
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(Agent.BuildDirectory)/Main/Source/DDCli/DDCli.csproj'
+    modifyOutputPath: false
+
+
+- script: dotnet publish --configuration Release --runtime win10-x64
+
 - task: DotNetCoreInstaller@1
   displayName: 'Installing version $(coreCliVersion)...'
   inputs:
@@ -57,4 +67,3 @@ steps:
 
 #- task: PublishBuildArtifacts@1
 
-- script: dotnet publish --configuration Release --runtime win10-x64
