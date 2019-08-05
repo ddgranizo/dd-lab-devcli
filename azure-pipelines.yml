@@ -42,8 +42,9 @@ steps:
   displayName: "Making output directory"
 
 - script: |
-    dotnet publish -c Release -r win10-x64
+    dotnet publish -c Release -r win10-x64 --no-restore --version-suffix $(Build.BuildId)
   workingDirectory: "Main/Source/DDCli"
+  displayName: 'Publishing exe...'
 
 - task: ArchiveFiles@2
   displayName: 'Packing into zip...'
