@@ -42,57 +42,55 @@ namespace DDCli.Commands.Dev.Windows
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            if (!CheckAndExecuteHelpCommand(parameters))
+
+            var name = GetStringParameterValue(parameters, NameParameter.Name);
+            var directories = DirectoryService.SearchDirectories(SearchPath, name, true);
+            foreach (var item in directories)
             {
-                var name = GetStringParameterValue(parameters, NameParameter.Name);
-                var directories = DirectoryService.SearchDirectories(SearchPath, name, true);
-                foreach (var item in directories)
-                {
-                    Log($"{directories.IndexOf(item) + 1} - {item}");
-                };
+                Log($"{directories.IndexOf(item) + 1} - {item}");
+            };
 
-                string indexString = Console.ReadLine();
-                if (!int.TryParse(indexString, out int index))
-                {
-                    throw new InvalidCastException();
-                }
+            string indexString = Console.ReadLine();
+            if (!int.TryParse(indexString, out int index))
+            {
+                throw new InvalidCastException();
+            }
 
-                if (index < 1 || index > directories.Count)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                var path = directories[index - 1];
-                Log($"1 - Open in explorer");
-                Log($"2 - Open in new cmd");
-                Log($"3 - Open in new conEmu");
-                Log($"4 - Copy path to clipboard");
+            if (index < 1 || index > directories.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            var path = directories[index - 1];
+            Log($"1 - Open in explorer");
+            Log($"2 - Open in new cmd");
+            Log($"3 - Open in new conEmu");
+            Log($"4 - Copy path to clipboard");
 
-                indexString = Console.ReadLine();
-                if (!int.TryParse(indexString, out index))
-                {
-                    throw new InvalidCastException();
-                }
+            indexString = Console.ReadLine();
+            if (!int.TryParse(indexString, out index))
+            {
+                throw new InvalidCastException();
+            }
 
-                if (index < 1 || index > 4)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                if (index == 1)
-                {
-                    PromptCommandService.OpenExplorer(path);
-                }
-                else if (index == 2)
-                {
-                    PromptCommandService.Run(path, @"cmd.exe", null, false, true);
-                }
-                else if (index == 3)
-                {
-                    PromptCommandService.Run(path , @"C:\Program Files\ConEmu\ConEmu64.exe", null, false, true);
-                }
-                else if (index == 4)
-                {
-                    ClipboardService.CopyToClipboard(path);
-                }
+            if (index < 1 || index > 4)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (index == 1)
+            {
+                PromptCommandService.OpenExplorer(path);
+            }
+            else if (index == 2)
+            {
+                PromptCommandService.Run(path, @"cmd.exe", null, false, true);
+            }
+            else if (index == 3)
+            {
+                PromptCommandService.Run(path, @"C:\Program Files\ConEmu\ConEmu64.exe", null, false, true);
+            }
+            else if (index == 4)
+            {
+                ClipboardService.CopyToClipboard(path);
             }
         }
 

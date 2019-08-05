@@ -22,10 +22,8 @@ namespace DDCli.Commands.Dev.Git
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            if (!CheckAndExecuteHelpCommand(parameters))
-            {
+            
                 WebService.DownloadFile(GitIgnoreUrl);
-            }
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)

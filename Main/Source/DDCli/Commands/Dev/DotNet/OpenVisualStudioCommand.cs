@@ -18,7 +18,7 @@ namespace DDCli.Commands.Dev.DotNet
         public OpenVisualStudioCommand(
             IPromptCommandService promptCommandService,
             IDirectoryService directoryService)
-            :base(typeof(OpenVisualStudioCommand).Namespace, nameof(OpenVisualStudioCommand), HelpDefinition)
+            : base(typeof(OpenVisualStudioCommand).Namespace, nameof(OpenVisualStudioCommand), HelpDefinition)
         {
             RootParameter = new CommandParameterDefinition(
                 "root",
@@ -35,13 +35,11 @@ namespace DDCli.Commands.Dev.DotNet
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            if (!CheckAndExecuteHelpCommand(parameters))
-            {
-                var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
-                bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
-                PromptCommandService
-                    .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
-            }
+
+            var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+            bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
+            PromptCommandService
+                .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
         }
 
         private void PromptCommandManager_OnCommandPromptOutput(string output)

@@ -21,10 +21,7 @@ namespace DDCli.Commands.Dev.Utils
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            if (!CheckAndExecuteHelpCommand(parameters))
-            {
-               
-            }
+           
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)

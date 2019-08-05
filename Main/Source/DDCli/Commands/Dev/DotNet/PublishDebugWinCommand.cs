@@ -25,11 +25,9 @@ namespace DDCli.Commands.Dev.DotNet
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            if (!CheckAndExecuteHelpCommand(parameters))
-            {
+            
                 //PromptCommandManager manager = new PromptCommandManager();
                 //manager.Run("dotnet publish -c Debug -r win10-x64",);
-            }
             
         }
 
