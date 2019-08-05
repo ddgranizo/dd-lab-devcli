@@ -15,8 +15,6 @@ variables:
   coverageFolderPath : '/TestResults/Coverage/'
   buildConfiguration: 'Debug'
 
-
-
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Restoring packages...'
@@ -29,7 +27,6 @@ steps:
     command: build
     projects: '**/*.sln'
     configuration: $(buildConfiguration)
-
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit tests...'
@@ -44,4 +41,13 @@ steps:
       dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
   displayName: 'Calculating code coverage...'
 
+#- task: PublishTestResults@2
+#  inputs:
+#    testResultsFiles: '**/*.rdx'
+#    testResultsFormat: XUnit
+    
 
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
