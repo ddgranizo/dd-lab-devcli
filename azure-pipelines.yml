@@ -87,3 +87,12 @@ steps:
     ArtifactName: 'Assembly'
     publishLocation: Container
     
+
+- task: FtpUpload@1
+  inputs:
+    username: 'dynamic1'
+    password: $(DynamicsDDFtpPassword)
+    serverUrl: 'ftp.dynamicsdd.com'
+    rootDirectory: '/public_html/azure_pipelines/dd-lab-devcli'
+    filePatterns: '$(Build.ArtifactStagingDirectory)/*.zip'
+    overwrite: true
