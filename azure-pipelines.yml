@@ -88,6 +88,8 @@ steps:
     publishLocation: Container
     
 - task: FtpUpload@2
+  displayName: 'Uploading zip to ftp...'
+  continueOnError: true
   inputs:
     credentialsOption: 'serviceEndpoint'
     serverEndpoint: 'DynamicsDD Ftp Connection'
