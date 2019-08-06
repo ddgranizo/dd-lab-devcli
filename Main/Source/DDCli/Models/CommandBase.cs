@@ -61,14 +61,14 @@ namespace DDCli.Models
         }
 
 
-        public bool CheckAndExecuteHelpCommand(List<CommandParameter> parameters)
+        public bool IsHelpCommand(List<CommandParameter> parameters)
         {
-            if (parameters.Count == 1 && parameters[0].ParameterName == "help")
-            {
-                ExecuteHelp();
-                return true;
-            }
-            return false;
+            return parameters.Count == 1 && parameters[0].ParameterName == "help";
+        }
+
+        public void ExecuteHelpCommand(List<CommandParameter> parameters)
+        {
+            ExecuteHelp();
         }
 
         public string GetInvocationCommandName()
@@ -93,7 +93,13 @@ namespace DDCli.Models
             data.AppendLine("Parameters:");
             foreach (var item in CommandParametersDefinition)
             {
-                data.AppendLine($"\t--{item.Name}, Type value: {item.Type.ToString()}, Description: {item.Description}");
+                data.Append($"\t--{item.Name}");
+                if (item.ShortCut != null)
+                {
+                    data.Append($" [-{item.ShortCut}]");
+                }
+                data.Append($", Type value: {item.Type.ToString()}, Description: {item.Description}");
+                data.AppendLine();
             }
             Log(data.ToString());
         }
@@ -111,7 +117,7 @@ namespace DDCli.Models
                 throw new KeyNotFoundException($"Parameter with name '{name}' doesnt exist in the definition of '{GetInvocationCommandName()}'");
             }
             var parameter = parameters.FirstOrDefault(k => k.ParameterName == name);
-            if (parameter!= null)
+            if (parameter != null)
             {
                 if (paremeterDefinition.Type == CommandParameterDefinition.TypeValue.Boolean)
                 {

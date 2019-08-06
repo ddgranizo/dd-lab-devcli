@@ -44,7 +44,7 @@ namespace DDCli
                 .Where(k =>
                     k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
                     .ToList();
-            if (commands.Count>1)
+            if (commands.Count > 1)
             {
                 throw new DuplicateCommandException(commands.Select(k => k.GetInvocationCommandName()).ToList());
             }
@@ -67,17 +67,22 @@ namespace DDCli
                 }
             }
 
-            if (command.CanExecute(commandsParameters))
+            if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))
             {
                 try
                 {
-                    var timer = new Stopwatch(); timer.Start();
                     command.OnLog += Command_OnLog;
-                    if (!command.CheckAndExecuteHelpCommand(commandsParameters))
+                    if (command.CanExecute(commandsParameters))
                     {
+                        var timer = new Stopwatch(); timer.Start();
                         command.Execute(commandsParameters);
+                        Log($"Executed command in {timer.ElapsedMilliseconds}ms");
                     }
-                    Log($"Executed command in {timer.ElapsedMilliseconds}ms");
+                    else
+                    {
+                        command.ExecuteHelp();
+                    }
+
                 }
                 catch (Exception)
                 {
