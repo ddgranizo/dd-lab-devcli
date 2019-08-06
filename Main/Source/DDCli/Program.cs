@@ -77,7 +77,7 @@ namespace DDCli
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
             Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
-            Register(new Commands.Dev.Utils.SetAlias());
+            
 
 
             //Last commands for register

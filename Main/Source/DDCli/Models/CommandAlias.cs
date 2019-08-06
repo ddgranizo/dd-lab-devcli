@@ -6,6 +6,10 @@ namespace DDCli.Models
 {
     public class CommandAlias
     {
+        public CommandAlias()
+        {
+
+        }
         public CommandAlias(string commandName, string alias)
         {
             if (string.IsNullOrEmpty(commandName))

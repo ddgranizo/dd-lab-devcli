@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{094A30EA-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli.Test", "Test\DDCli.Test\DDCli.Test.csproj", "{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli.Installer", "Source\DDCli.Installer\DDCli.Installer.csproj", "{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
