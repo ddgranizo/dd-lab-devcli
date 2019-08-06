@@ -87,16 +87,3 @@ steps:
     ArtifactName: 'Assembly'
     publishLocation: Container
     
-- task: FtpUpload@2
-  displayName: 'Uploading zip to ftp...'
-  continueOnError: true
-  inputs:
-    credentialsOption: 'serviceEndpoint'
-    serverEndpoint: 'DynamicsDD Ftp Connection'
-    rootDirectory: '$(Build.ArtifactStagingDirectory)'
-    filePatterns: '$(Build.BuildId).zip'
-    remoteDirectory: '/public_html/azure_pipelines/dd-lab-devcli'
-    clean: false
-    cleanContents: false
-    preservePaths: false
-    trustSSL: false
