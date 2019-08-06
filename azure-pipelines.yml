@@ -92,7 +92,7 @@ steps:
   inputs:
     username: 'dynamic1'
     password: $(DynamicsDDFtpPassword)
-    serverUrl: 'ftp.dynamicsdd.com'
+    serverEndpoint: 'ftp.dynamicsdd.com'
     rootDirectory: '/public_html/azure_pipelines/dd-lab-devcli'
     filePatterns: '$(Build.ArtifactStagingDirectory)/*.zip'
     overwrite: true
