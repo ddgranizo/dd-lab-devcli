@@ -16,7 +16,7 @@ namespace DDCli.Commands.DD
         public CommandParameterDefinition CommandNameParameter { get; set; }
 
         public CommandParameterDefinition CommandAliasParameter { get; set; }
-        public static string HelpDefinition { get; private set; } = "Add alias for invoce command";
+        public static string HelpDefinition { get; private set; } = "Add alias for command";
         public IStoredDataService StoredDataService { get; }
         public List<CommandBase> RegisteredCommands { get; }
 
@@ -27,11 +27,11 @@ namespace DDCli.Commands.DD
         {
             CommandNameParameter = new CommandParameterDefinition("command",
                 CommandParameterDefinition.TypeValue.String,
-                "Command name for the alias");
+                "Command name for the alias", "c");
 
             CommandAliasParameter = new CommandParameterDefinition("alias",
                 CommandParameterDefinition.TypeValue.String,
-                "Alias for the command");
+                "Alias for the command", "a");
 
             RegisterCommandParameter(CommandNameParameter);
             RegisterCommandParameter(CommandAliasParameter);

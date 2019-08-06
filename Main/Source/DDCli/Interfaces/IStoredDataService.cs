@@ -10,5 +10,8 @@ namespace DDCli.Interfaces
         bool ExistsAlias(string alias);
 
         void AddAlias(string command, string alias);
+
+
+        void DeleteAlias(string alias);
     }
 }

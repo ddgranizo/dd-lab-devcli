@@ -19,9 +19,12 @@ namespace DDCli.Models
 
         public TypeValue Type { get; set; }
         public string Description { get; }
+        public string ShortCut { get; }
         public string Name { get; }
 
-        public CommandParameterDefinition(string name, TypeValue type, string description)
+
+
+        public CommandParameterDefinition(string name, TypeValue type, string description, string shortCut = null)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -30,6 +33,7 @@ namespace DDCli.Models
             Name = name;
             Type = type;
             Description = description ?? throw new ArgumentNullException(nameof(description));
+            ShortCut = shortCut;
         }
 
 

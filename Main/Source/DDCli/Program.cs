@@ -52,6 +52,10 @@ namespace DDCli
             {
                 Console.WriteLine($"Alias '{ex.Message}' is already used.");
             }
+            catch (AliasNotFoundException ex)
+            {
+                Console.WriteLine($"Alias '{ex.Message}' is not registered.");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
@@ -77,9 +81,8 @@ namespace DDCli
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
             Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
-            
 
-
+            Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
         }

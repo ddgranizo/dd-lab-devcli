@@ -10,6 +10,8 @@ namespace DDCli.Test.Mock
 
         public string AddedCommand { get; set; }
 
+        public string DeletedAlias { get; set; }
+
         public StoredDataServiceMock(bool returnBoolExistsAlias)
         {
             ReturnBoolExistsAlias = returnBoolExistsAlias;
@@ -17,6 +19,11 @@ namespace DDCli.Test.Mock
 
         public bool ReturnBoolExistsAlias { get; }
 
+
+        public void DeleteAlias(string alias)
+        {
+            DeletedAlias = alias;
+        }
         public void AddAlias(string command, string alias)
         {
             AddedCommand = command;

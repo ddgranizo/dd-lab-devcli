@@ -56,14 +56,20 @@ namespace DDCli.Installer
                 .FirstOrDefault();
 
             Console.WriteLine("Downloading zip from artifactor...");
+
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+            CreateNewDirectory(ArtifactorExtractionFolder);
+            CreateNewDirectory(AssemblyExtractionFolder);
+
             Stream zipStream = devOpsService.GetArtifact(lastBuild.Id, ArtifactName).Result;
             using (FileStream zipFile = new FileStream(FilePath, FileMode.Append))
             {
                 zipStream.CopyTo(zipFile);
             }
-
-            CreateNewDirectory(ArtifactorExtractionFolder);
-            CreateNewDirectory(AssemblyExtractionFolder);
+            
 
             Console.WriteLine("Unzipping artifactor...");
             ZipFile.ExtractToDirectory(FilePath, ArtifactorExtractionFolder);

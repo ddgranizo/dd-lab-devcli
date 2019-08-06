@@ -31,8 +31,18 @@ namespace DDCli.Services
         public void AddAlias(string command, string alias)
         {
             StoredCliData.CommandAlias.Add(new CommandAlias(command, alias));
+
+            SaveContext();
         }
 
+        public void DeleteAlias(string alias)
+        {
+            var aliasCommand = 
+                StoredCliData.CommandAlias.FirstOrDefault(k => k.Alias == alias);
+            StoredCliData.CommandAlias.Remove(aliasCommand);
+
+            SaveContext();
+        }
 
         private void SaveContext()
         {
