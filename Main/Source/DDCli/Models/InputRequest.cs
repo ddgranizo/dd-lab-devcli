@@ -45,18 +45,25 @@ namespace DDCli.Models
                 if (!nextIsValue)
                 {
                     bool isValidParam = IsParamNameValid(parameter);
-                    if (!isValidParam)
+                    bool isValidShortCut = isValidParam 
+                        ? false : 
+                        IsParamShortCutValid(parameter);
+                    if (!isValidParam && !isValidShortCut)
                     {
                         throw new InvalidParamNameException(parameter);
                     }
                     string paramValue = null;
-                    string parameterTrimmed = parameter.Substring("--".Length);
-                    if (i < parameterArr.Length - 1 && !IsParamNameValid(parameterArr[i + 1]))
+                    string parameterTrimmed = isValidShortCut
+                            ? parameter.Substring("-".Length)
+                            : parameter.Substring("--".Length);
+                    if (i < parameterArr.Length - 1 
+                            && !IsParamNameValid(parameterArr[i + 1]) 
+                            && !IsParamShortCutValid(parameterArr[i + 1]))
                     {
                         paramValue = parameterArr[i + 1];
                         nextIsValue = true;
                     }
-                    parameters.Add(new InputParameter(parameterTrimmed, paramValue));
+                    parameters.Add(new InputParameter(parameterTrimmed, paramValue, isValidShortCut));
                 }
                 else
                 {
@@ -75,6 +82,11 @@ namespace DDCli.Models
         private string GetCommandName(string commandRawName)
         {
             return string.Format("{0}command", commandRawName.Split('-').ToList().Last());
+        }
+
+        private bool IsParamShortCutValid(string parameter)
+        {
+            return !string.IsNullOrEmpty(parameter) && parameter.Length > 1 && parameter.Substring(0, 1) == "-";
         }
 
         private bool IsParamNameValid(string parameter)

@@ -57,15 +57,12 @@ namespace DDCli
             var command = commands[0];
 
             var commandsParameters = new List<CommandParameter>();
-            foreach (var itemDefinition in command.CommandParametersDefinition)
+            foreach (var parameterDefinition in command.CommandParametersDefinition)
             {
-                var parameterName = itemDefinition.Name;
-                var itemInput = inputRequest
-                        .InputParameters
-                        .FirstOrDefault(k => k.ParameterName == parameterName);
+                var itemInput = GetImputParameterFromRequest(inputRequest, parameterDefinition);
                 if (itemInput != null)
                 {
-                    var parameter = GetParsedCommandParameter(command, itemDefinition, itemInput);
+                    var parameter = GetParsedCommandParameter(command, parameterDefinition, itemInput);
                     commandsParameters.Add(parameter);
                 }
             }
@@ -97,6 +94,20 @@ namespace DDCli
             }
         }
 
+        private static InputParameter GetImputParameterFromRequest(InputRequest inputRequest, CommandParameterDefinition parameter)
+        {
+            var inputByName = inputRequest
+                    .InputParameters
+                    .FirstOrDefault(k => k.ParameterName == parameter.Name && !k.IsShortCut);
+            if (inputByName != null)
+            {
+                return inputByName;
+            }
+            var inputByShortCut = inputRequest
+                    .InputParameters
+                    .FirstOrDefault(k => k.ParameterName == parameter.ShortCut && k.IsShortCut);
+            return inputByShortCut;
+        }
 
         public void Log(string log)
         {

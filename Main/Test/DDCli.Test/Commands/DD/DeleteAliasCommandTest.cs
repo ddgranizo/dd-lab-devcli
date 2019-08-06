@@ -19,7 +19,6 @@ namespace DDCli.Test.Commands.DD
         }
 
 
-
         [Fact]
         [Trait("TestCategory", "UnitTest"),
             Trait("TestCategory", "CommandTest"),
@@ -34,13 +33,11 @@ namespace DDCli.Test.Commands.DD
 
             var storedDataService = new StoredDataServiceMock(true);
 
-
             var instance = new CommandManager();
             instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
 
             var commandDefinition = new DeleteAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
-
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
@@ -54,9 +51,6 @@ namespace DDCli.Test.Commands.DD
             var actual = storedAlias == aliasName;
             Assert.True(actual);
         }
-
-      
-
 
         [Fact]
         [Trait("TestCategory", "UnitTest"),
@@ -84,7 +78,6 @@ namespace DDCli.Test.Commands.DD
                 instance.ExecuteInputRequest(inputRequest);
             });
         }
-
       
 
         [Fact]
@@ -94,7 +87,6 @@ namespace DDCli.Test.Commands.DD
             Trait("TestCategory", "DeleteAliasCommandTest")]
         public void WhenExecuteCommandWithoutAliasParameter_CommandManager_ShouldThrowException()
         {
-
             var storedDataService = new StoredDataServiceMock(false);
             var commandDefinition = new DeleteAliasCommand(storedDataService);
 
@@ -103,7 +95,6 @@ namespace DDCli.Test.Commands.DD
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName());
-
 
             Assert.Throws<InvalidParamsException>(() =>
             {

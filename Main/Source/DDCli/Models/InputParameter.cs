@@ -9,7 +9,10 @@ namespace DDCli.Models
 
         public bool HasValue { get; set; }
         public string RawStringValue { get; set; }
-        public InputParameter(string parameter, string rawStringValue)
+        public string ParameterName { get; }
+        public bool IsShortCut { get; set; }
+
+        public InputParameter(string parameter, string rawStringValue, bool isShortCut = false)
         {
             if (string.IsNullOrEmpty(parameter))
             {
@@ -17,10 +20,10 @@ namespace DDCli.Models
             }
 
             RawStringValue = rawStringValue;
+            IsShortCut = isShortCut;
             ParameterName = parameter;
             HasValue = !string.IsNullOrEmpty(rawStringValue);
         }
 
-        public string ParameterName { get; }
     }
 }
