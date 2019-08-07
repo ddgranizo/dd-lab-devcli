@@ -17,11 +17,6 @@ namespace DDCli.Services
         }
 
 
-        public string GetStoredKey()
-        {
-            return string.Empty;
-        }
-
         public bool ExistsAlias(string alias)
         {
             return StoredCliData.CommandAlias.FirstOrDefault(k => k.Alias == alias) != null;
@@ -47,6 +42,16 @@ namespace DDCli.Services
         private void SaveContext()
         {
             StoredDataManager.SaveStoredCliData(StoredCliData);
+        }
+
+        public List<string> GetAliasWithCommand()
+        {
+            return StoredCliData.CommandAlias.Select(k => string.Format("{0} => {1}", k.Alias, k.CommandName)).ToList();
+        }
+
+        public List<string> GetAlias()
+        {
+            return StoredCliData.CommandAlias.Select(k =>  k.Alias).ToList();
         }
     }
 }

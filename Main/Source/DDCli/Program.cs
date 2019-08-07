@@ -83,6 +83,7 @@ namespace DDCli
             Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
 
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
+            Register(new Commands.DD.ShowAliasCommand(storedDataService));
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
         }

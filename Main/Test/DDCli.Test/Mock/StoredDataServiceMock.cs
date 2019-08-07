@@ -17,8 +17,14 @@ namespace DDCli.Test.Mock
             ReturnBoolExistsAlias = returnBoolExistsAlias;
         }
 
-        public bool ReturnBoolExistsAlias { get; }
+        public StoredDataServiceMock(List<string> aliasForReturn)
+        {
+            AliasForReturn = aliasForReturn ?? throw new ArgumentNullException(nameof(aliasForReturn));
+        }
 
+
+        public bool ReturnBoolExistsAlias { get; }
+        public List<string> AliasForReturn { get; }
 
         public void DeleteAlias(string alias)
         {
@@ -37,6 +43,16 @@ namespace DDCli.Test.Mock
         public string GetStoredKey()
         {
             return null;
+        }
+
+        public List<string> GetAliasWithCommand()
+        {
+            return AliasForReturn;
+        }
+
+        public List<string> GetAlias()
+        {
+            throw new NotImplementedException();
         }
     }
 }

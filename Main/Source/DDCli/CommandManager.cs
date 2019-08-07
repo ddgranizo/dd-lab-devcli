@@ -76,7 +76,7 @@ namespace DDCli
                     {
                         var timer = new Stopwatch(); timer.Start();
                         command.Execute(commandsParameters);
-                        Log($"Executed command in {timer.ElapsedMilliseconds}ms");
+                        Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
                     }
                     else
                     {

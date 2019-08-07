@@ -7,6 +7,37 @@ namespace DDCli.Extensions
     public static class EnumerableExtensions
     {
 
+        public static string ToDisplayList(
+            this IEnumerable<string> source,
+            string header,
+            string lineInitialzierChar = "-")
+        {
+            return ToDisplayList(source, (item) => { return item; }, header, lineInitialzierChar);
+        }
+        public static string ToDisplayList<T>(
+            this IEnumerable<T> source, 
+            Func<T, string> func, 
+            string header, 
+            string lineInitialzierChar = "-")
+        {
+            StringBuilder sb = new StringBuilder(header);
+            bool enumerated = false;
+            if (lineInitialzierChar.ToLowerInvariant() == "i")
+            {
+                enumerated = true;
+            }
+
+            int counter = 1;
+            foreach (var item in source)
+            {
+                StringBuilder sbLine = new StringBuilder("\t");
+                sbLine.Append(enumerated ? counter++.ToString() : lineInitialzierChar);
+                sbLine.Append(func(item));
+                sb.AppendLine(sbLine.ToString());
+            }
+            return sb.ToString();
+        }
+
         public static IEnumerable<T> TakeAllButFirst<T>(this IEnumerable<T> source)
         {
             var it = source.GetEnumerator();
