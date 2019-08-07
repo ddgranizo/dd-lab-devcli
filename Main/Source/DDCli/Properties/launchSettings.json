@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "showalias"
+      "commandLineArgs": "addalias -c dev-windows-openrepo -a repo"
     }
   }
 }

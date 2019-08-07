@@ -34,9 +34,9 @@ namespace DDCli.Test.Commands.DD
 
             var storedDataService = new StoredDataServiceMock(false);
 
-
+            var mockCommand = new CommandMock(commandNamespace, commandName, commandDescription);
             var instance = new CommandManager();
-            instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
+            instance.RegisterCommand(mockCommand);
 
             var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
             instance.RegisterCommand(commandDefinition);
@@ -45,13 +45,13 @@ namespace DDCli.Test.Commands.DD
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
                 commandDefinition.CommandNameParameter.GetInvokeName(),
-                commandName,
+                mockCommand.GetInvocationCommandName(),
                 commandDefinition.CommandAliasParameter.GetInvokeName(),
                 aliasName);
 
             instance.ExecuteInputRequest(inputRequest);
 
-            var storedAlias = storedDataService.AddedCommand == commandName;
+            var storedAlias = storedDataService.AddedCommand == mockCommand.GetInvocationCommandName();
 
             var actual = storedAlias;
             Assert.True(actual);
@@ -103,9 +103,9 @@ namespace DDCli.Test.Commands.DD
             string commandDescription = "description";
             var storedDataService = new StoredDataServiceMock(true);
 
-
+            var mockCommand = new CommandMock(commandNamespace, commandName, commandDescription);
             var instance = new CommandManager();
-            instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
+            instance.RegisterCommand(mockCommand);
 
 
             var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
@@ -115,7 +115,7 @@ namespace DDCli.Test.Commands.DD
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
                 commandDefinition.CommandNameParameter.GetInvokeName(),
-                commandName,
+                mockCommand.GetInvocationCommandName(),
                 commandDefinition.CommandAliasParameter.GetInvokeName(),
                 aliasName);
 

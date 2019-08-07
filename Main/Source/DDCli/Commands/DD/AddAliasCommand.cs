@@ -53,7 +53,7 @@ namespace DDCli.Commands.DD
             var aliasName = GetStringParameterValue(parameters, CommandAliasParameter.Name);
 
             var commandAliased = RegisteredCommands
-                .FirstOrDefault(k => k.CommandName.ToLowerInvariant() == commandName);
+                .FirstOrDefault(k => k.GetInvocationCommandName() == commandName);
 
             if (commandAliased == null)
             {
