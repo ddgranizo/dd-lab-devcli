@@ -27,7 +27,8 @@ namespace DDCli.Commands.Dev.Windows
             NameParameter = new CommandParameterDefinition(
                 "name",
                 CommandParameterDefinition.TypeValue.String,
-                "Indicates the name or part of it for search and open this folder");
+                "Indicates the name or part of it for search and open this folder",
+                "n");
 
             CommandParametersDefinition.Add(NameParameter);
             DirectoryService = directoryService ?? throw new ArgumentNullException(nameof(directoryService));
