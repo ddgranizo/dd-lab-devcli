@@ -55,14 +55,13 @@ namespace DDCli.Utilities
             {
                 throw;
             }
-
         }
 
         private static void MakeFileBackup()
         {
             if (File.Exists(GetFilePath()))
             {
-                File.Copy(GetFilePath(), GetFilePath(true));
+                File.Copy(GetFilePath(), GetFilePath(true), true);
             }
         }
 
@@ -86,7 +85,8 @@ namespace DDCli.Utilities
         public static string GetFilePath(bool backup = false)
         {
             string basePath = GetFolderPath();
-            return string.Format("{0}\\{1}", basePath, string.Format(CliAppDataFile, backup ? $"_Backup_{DateTime.Now.ToString()}" : string.Empty));
+            return string.Format("{0}\\{1}", basePath, 
+                string.Format(CliAppDataFile, backup ? $"_Backup_{DateTime.Now.ToString("yyyyMMddHHmmss")}" : string.Empty));
         }
 
         public static string GetFolderPath()
