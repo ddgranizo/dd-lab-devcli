@@ -62,7 +62,7 @@ namespace DDCli.Commands.DD
 
             StoredDataService.AddParameter(key, value, isEncrypted);
             var displayValue = isEncrypted ? "*****" : value;
-            Log($"Added parameter [[{key}]]={displayValue}");
+            Log($"Added parameter!");
         }
     }
 }

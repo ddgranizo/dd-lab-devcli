@@ -47,7 +47,7 @@ namespace DDCli.Commands.DD
 
             StoredDataService.DeleteAlias(aliasName);
            
-            Log($"Alias '{aliasName}' removed");
+            Log($"Removed alias!");
         }
     }
 }

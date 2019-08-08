@@ -97,7 +97,7 @@ namespace DDCli.Test.Mock
 
         public string GetParameterValue(string key)
         {
-            throw new NotImplementedException();
+            return string.Empty;
         }
 
         public void UpdateParameter(string key, string newValue)
@@ -113,7 +113,7 @@ namespace DDCli.Test.Mock
 
         public List<string> GetParameters()
         {
-            throw new NotImplementedException();
+            return new List<string>();
         }
     }
 }

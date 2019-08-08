@@ -67,7 +67,7 @@ namespace DDCli.Commands.DD
 
             StoredDataService.AddAlias(commandName, aliasName);
 
-            Log($"Alias '{aliasName}' stored for command '{commandName}'");
+            Log($"Alias stored!");
         }
     }
 }

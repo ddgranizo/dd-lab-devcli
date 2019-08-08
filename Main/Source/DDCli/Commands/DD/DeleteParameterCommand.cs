@@ -45,7 +45,7 @@ namespace DDCli.Commands.DD
             }
 
             StoredDataService.DeleteParameter(key);
-            Log($"Deleted parameter [[{key}]]");
+            Log($"Deleted parameter!");
         }
     }
 }

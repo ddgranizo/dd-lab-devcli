@@ -27,6 +27,7 @@ namespace DDCli
 
             try
             {
+
                 var inputCommand = new InputRequest(args);
                 commandManager.ExecuteInputRequest(inputCommand);
             }
@@ -69,6 +70,10 @@ namespace DDCli
             catch (ParameterNotFoundException ex)
             {
                 Console.WriteLine($"Parameter '{ex.Message}' is not registered");
+            }
+            catch (InvalidParamException ex)
+            {
+                Console.WriteLine($"Cannot resolver parameter {ex.Message}");
             }
             catch (Exception ex)
             {

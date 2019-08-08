@@ -2,6 +2,7 @@
 using DDCli.Exceptions;
 using DDCli.Interfaces;
 using DDCli.Models;
+using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,6 +78,10 @@ namespace DDCli
                     command.OnLog += Command_OnLog;
                     if (command.CanExecute(commandsParameters))
                     {
+
+                        var processedParameters = ParameterManager
+                            .ResolveParameters(StoredDataService, commandsParameters);
+
                         var timer = new Stopwatch(); timer.Start();
                         command.Execute(commandsParameters);
                         Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");

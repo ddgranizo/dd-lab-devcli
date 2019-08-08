@@ -22,8 +22,6 @@ namespace DDCli.Models
         public string ShortCut { get; }
         public string Name { get; }
 
-
-
         public CommandParameterDefinition(string name, TypeValue type, string description, string shortCut = null)
         {
             if (string.IsNullOrEmpty(name))

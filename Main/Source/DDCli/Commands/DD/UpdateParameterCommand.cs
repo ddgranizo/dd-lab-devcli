@@ -54,7 +54,7 @@ namespace DDCli.Commands.DD
             }
             StoredDataService.UpdateParameter(key, value);
 
-            Log($"Updated parameter [[{key}]]");
+            Log($"Updated parameter!");
         }
     }
 }
