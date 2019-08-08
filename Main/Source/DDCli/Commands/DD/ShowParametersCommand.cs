@@ -9,18 +9,17 @@ using System.Text;
 
 namespace DDCli.Commands.DD
 {
-    public class ShowAliasCommand : CommandBase
+    public class ShowParametersCommand : CommandBase
     {
-        public const string ZeroRegisteredMessage = "Zero registered alias";
-        public const string HeaderForListingAlias = "Stored alias:";
-        public const string FirstCharacterDefaultForListingAlias = "#";
-
-        public static string HelpDefinition { get; private set; } = "Show all registered alias";
+        public const string ParameterListHeaderDisplay = "Registered parameters:";
+        public const string ParameterListFirstCharLine = "#";
+        public const string ZeroRegisteredMessage = "Zero parameters registered";
+        public static string HelpDefinition { get; private set; } = "Show all registered parameters";
         public IStoredDataService StoredDataService { get; }
 
-        public ShowAliasCommand(
+        public ShowParametersCommand(
             IStoredDataService storedDataService)
-            : base(typeof(ShowAliasCommand).Namespace, nameof(ShowAliasCommand), HelpDefinition)
+            : base(typeof(ShowParametersCommand).Namespace, nameof(ShowParametersCommand), HelpDefinition)
         {
             StoredDataService = storedDataService
                 ?? throw new ArgumentNullException(nameof(storedDataService));
@@ -33,10 +32,10 @@ namespace DDCli.Commands.DD
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            var alias = StoredDataService.GetAliasWithCommand().OrderBy(k => k).ToList();
-            if (alias.Count>0)
+            var parametersRegistered = StoredDataService.GetParametersWithValues().OrderBy(k => k).ToList();
+            if (parametersRegistered.Count > 0)
             {
-                Log(alias.ToDisplayList(HeaderForListingAlias, FirstCharacterDefaultForListingAlias));
+                Log(parametersRegistered.ToDisplayList(ParameterListHeaderDisplay, ParameterListFirstCharLine));
             }
             else
             {

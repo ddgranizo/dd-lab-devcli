@@ -12,6 +12,28 @@ namespace DDCli.Test.Mock
 
         public string DeletedAlias { get; set; }
 
+
+
+        public bool ReturnBoolExistsAlias { get; }
+        public List<string> AliasForReturn { get; }
+
+        public string AddedParameterKey { get; set; }
+
+        public string AddedParameterValue { get; set; }
+
+        public bool ReturnBoolExistsParameter { get; set; }
+
+        public List<string> ParametersWithValueForReturn { get; set; }
+
+        public string DeletedParameter { get; set; }
+
+        public string UpdatedParameterKey { get; set; }
+        public string UpdatedParameterValue { get; set; }
+
+        public StoredDataServiceMock()
+        {
+
+        }
         public StoredDataServiceMock(bool returnBoolExistsAlias)
         {
             ReturnBoolExistsAlias = returnBoolExistsAlias;
@@ -22,9 +44,6 @@ namespace DDCli.Test.Mock
             AliasForReturn = aliasForReturn ?? throw new ArgumentNullException(nameof(aliasForReturn));
         }
 
-
-        public bool ReturnBoolExistsAlias { get; }
-        public List<string> AliasForReturn { get; }
 
         public void DeleteAlias(string alias)
         {
@@ -51,6 +70,48 @@ namespace DDCli.Test.Mock
         }
 
         public List<string> GetAlias()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetAliasedCommand(string alias)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ExistsParameter(string parameter)
+        {
+            return ReturnBoolExistsParameter;
+        }
+
+        public void AddParameter(string key, string value, bool isEncrypted)
+        {
+            AddedParameterKey = key;
+            AddedParameterValue = value;
+        }
+
+        public void DeleteParameter(string key)
+        {
+            DeletedParameter = key;
+        }
+
+        public string GetParameterValue(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateParameter(string key, string newValue)
+        {
+            UpdatedParameterValue = newValue;
+            UpdatedParameterKey = key;
+        }
+
+        public List<string> GetParametersWithValues()
+        {
+            return ParametersWithValueForReturn;
+        }
+
+        public List<string> GetParameters()
         {
             throw new NotImplementedException();
         }

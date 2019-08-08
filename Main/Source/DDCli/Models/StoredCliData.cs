@@ -8,9 +8,11 @@ namespace DDCli.Models
     {
         public List<CommandAlias> CommandAlias { get; set; }
 
+        public List<CliParameter> Parameters { get; set; }
         public StoredCliData()
         {
             CommandAlias = new List<CommandAlias>();
+            Parameters = new List<CliParameter>();
         }
     }
 }

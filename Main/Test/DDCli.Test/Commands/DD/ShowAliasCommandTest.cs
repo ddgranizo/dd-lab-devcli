@@ -16,11 +16,18 @@ namespace DDCli.Test.Commands.DD
     {
         public string LastLog { get; set; }
 
+        ICryptoService _cryptoServiceMock;
+        IRegistryService _registryServiceMock;
         public ShowAliasCommandTest()
         {
-
+            _cryptoServiceMock = new CryptoServiceMock();
+            _registryServiceMock = new RegistryServiceMock();
         }
 
+       
+
+
+  
 
         [Fact]
         [Trait("TestCategory", "UnitTest"),
@@ -35,7 +42,7 @@ namespace DDCli.Test.Commands.DD
             var aliasList = new List<string>() { myAliasDefinition1, myAliasDefinition2 };
             var storedDataService = new StoredDataServiceMock(aliasList);
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
             instance.OnLog += Instance_OnLog;
             var commandDefinition = new ShowAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
@@ -63,7 +70,7 @@ namespace DDCli.Test.Commands.DD
         {
             var storedDataService = new StoredDataServiceMock(new List<string>());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
             instance.OnLog += Instance_OnLog;
             var commandDefinition = new ShowAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);

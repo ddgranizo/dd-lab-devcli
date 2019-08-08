@@ -11,13 +11,13 @@ using Xunit;
 
 namespace DDCli.Test.Commands.DD
 {
-    public class DeleteAliasCommandTest
+    public class DeleteParameterCommandTest
     {
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
 
-        public DeleteAliasCommandTest()
+        public DeleteParameterCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
@@ -28,72 +28,70 @@ namespace DDCli.Test.Commands.DD
         [Trait("TestCategory", "UnitTest"),
             Trait("TestCategory", "CommandTest"),
             Trait("TestCategory", "DDCommandTest"),
-            Trait("TestCategory", "DeleteAliasCommandTest")]
-        public void WhenExecuteCommand_CommandManager_ShouldAddAlias()
+            Trait("TestCategory", "DeleteParameterCommandTest")]
+        public void WhenExecuteCommandWithParameter_CommandManager_ShouldDeleteParameter()
         {
-            string aliasName = "myalias";
-            string commandName = "mycommand";
-            string commandNamespace = "name.space";
-            string commandDescription = "description";
+            var key = "my.parameter";
 
-            var storedDataService = new StoredDataServiceMock(true);
+            var storedDataService = new StoredDataServiceMock() { ReturnBoolExistsParameter = true };
+            var commandDefinition = new DeleteParameterCommand(storedDataService);
 
             var instance = new CommandManager(storedDataService, _cryptoServiceMock);
-            instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
-
-            var commandDefinition = new DeleteAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
-                commandDefinition.CommandAliasParameter.GetInvokeName(),
-                aliasName);
+                commandDefinition.CommandKeyParameter.GetInvokeName(),
+                key);
 
             instance.ExecuteInputRequest(inputRequest);
 
-            var storedAlias = storedDataService.DeletedAlias;
+            var expected = key;
+            var actual = storedDataService.DeletedParameter;
 
-            var actual = storedAlias == aliasName;
-            Assert.True(actual);
+            Assert.Equal(expected, actual);
         }
+
+
 
         [Fact]
         [Trait("TestCategory", "UnitTest"),
             Trait("TestCategory", "CommandTest"),
             Trait("TestCategory", "DDCommandTest"),
-            Trait("TestCategory", "DeleteAliasCommandTest")]
-        public void WhenExecuteCommandWithNonExistingAliasParameter_CommandManager_ShouldThrowException()
+            Trait("TestCategory", "DeleteParameterCommandTest")]
+        public void WhenExecuteCommandWithNotRegisteredParameter_CommandManager_ShouldThrowException()
         {
-            string aliasName = "myalias";
-            var storedDataService = new StoredDataServiceMock(false);
+            var key = "my.parameter";
+
+            var storedDataService = new StoredDataServiceMock() { ReturnBoolExistsParameter = false };
+            var commandDefinition = new DeleteParameterCommand(storedDataService);
 
             var instance = new CommandManager(storedDataService, _cryptoServiceMock);
-
-            var commandDefinition = new DeleteAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
-
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
-                commandDefinition.CommandAliasParameter.GetInvokeName(),
-                aliasName);
+                commandDefinition.CommandKeyParameter.GetInvokeName(),
+                key);
 
-            Assert.Throws<AliasNotFoundException>(() =>
+            Assert.Throws<ParameterNotFoundException>(() =>
             {
                 instance.ExecuteInputRequest(inputRequest);
             });
         }
-      
+
 
         [Fact]
         [Trait("TestCategory", "UnitTest"),
             Trait("TestCategory", "CommandTest"),
             Trait("TestCategory", "DDCommandTest"),
-            Trait("TestCategory", "DeleteAliasCommandTest")]
-        public void WhenExecuteCommandWithoutAliasParameter_CommandManager_ShouldThrowException()
+            Trait("TestCategory", "DeleteParameterCommandTest")]
+        public void WhenExecuteCommandWithoutCommandKey_CommandManager_ShouldThrowException()
         {
-            var storedDataService = new StoredDataServiceMock(false);
-            var commandDefinition = new DeleteAliasCommand(storedDataService);
+
+
+            var storedDataService = new StoredDataServiceMock();
+            var commandDefinition = new DeleteParameterCommand(storedDataService);
 
             var instance = new CommandManager(storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);

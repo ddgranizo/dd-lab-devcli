@@ -1,5 +1,6 @@
 ﻿using DDCli.Events;
 using DDCli.Exceptions;
+using DDCli.Interfaces;
 using DDCli.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,14 @@ namespace DDCli
     {
         public event OnLogHnadler OnLog;
         public List<CommandBase> Commands { get; set; }
+        public IStoredDataService StoredDataService { get; }
+        public ICryptoService CryptoService { get; }
 
-        public CommandManager()
+        public CommandManager(IStoredDataService storedDataService, ICryptoService cryptoService)
         {
             Commands = new List<CommandBase>();
+            StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
+            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         }
 
 
@@ -40,10 +45,8 @@ namespace DDCli
                 return;
             }
 
-            var commands = Commands
-                .Where(k =>
-                    k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
-                    .ToList();
+            List<CommandBase> commands = SearchCommandAndAlias(inputRequest);
+
             if (commands.Count > 1)
             {
                 throw new DuplicateCommandException(commands.Select(k => k.GetInvocationCommandName()).ToList());
@@ -97,6 +100,30 @@ namespace DDCli
             {
                 throw new InvalidParamsException();
             }
+        }
+
+        private List<CommandBase> SearchCommandAndAlias(InputRequest inputRequest)
+        {
+            var commands = Commands
+                            .Where(k =>
+                                k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
+                                .ToList();
+
+            if (commands.Count == 0 && inputRequest.CommandName.Length > "command".Length)
+            {
+                var aliasName = inputRequest.CommandName.Substring(0, inputRequest.CommandName.Length - "command".Length);
+                var isAlias = StoredDataService.ExistsAlias(aliasName);
+                if (isAlias)
+                {
+                    var commandName = StoredDataService.GetAliasedCommand(aliasName);
+                    commands = Commands
+                                .Where(k =>
+                                    k.GetInvocationCommandName() == commandName)
+                                    .ToList();
+                }
+            }
+
+            return commands;
         }
 
         private static InputParameter GetImputParameterFromRequest(InputRequest inputRequest, CommandParameterDefinition parameter)

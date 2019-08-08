@@ -43,5 +43,31 @@ namespace DDCli.Interfaces
         /// </summary>
         /// <returns></returns>
         List<string> GetAlias();
+
+
+        /// <summary>
+        /// Get the command name behind an alias
+        /// </summary>
+        /// <returns></returns>
+        string GetAliasedCommand(string alias);
+
+
+
+
+        bool ExistsParameter(string parameter);
+
+        void AddParameter(string key, string value, bool isEncrypted);
+
+        void DeleteParameter(string key);
+
+        string GetParameterValue(string key);
+
+        void UpdateParameter(string key, string newValue);
+
+        List<string> GetParametersWithValues();
+
+        List<string> GetParameters();
+
+
     }
 }

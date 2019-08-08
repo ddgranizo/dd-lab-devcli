@@ -7,6 +7,7 @@ using DDCli.Commands;
 using DDCli.Exceptions;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using DDCli.Interfaces;
 
 namespace DDCli.Test
 {
@@ -24,9 +25,16 @@ namespace DDCli.Test
         const string GenericParameterDescription = "MyParameterDescription";
         public string LastLog { get; set; }
 
+
+
+        IStoredDataService _storedDataServiceMock;
+        ICryptoService _cryptoServiceMock;
+        IRegistryService _registryServiceMock;
         public CommandManagerTest()
         {
-
+            _storedDataServiceMock = new StoredDataServiceMock();
+            _cryptoServiceMock = new CryptoServiceMock();
+            _registryServiceMock = new RegistryServiceMock();
         }
 
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
@@ -49,7 +57,9 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionGuid());
 
-            var instance = new CommandManager();
+
+
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myInvalidGuidParamValue = "hellomoto";
@@ -75,7 +85,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionGuid());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             Guid myIntParamValue = Guid.NewGuid();
@@ -104,7 +114,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myIntParamValue = "hellomoto";
@@ -130,7 +140,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const decimal myIntParamValue = 1.3M;
@@ -160,7 +170,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myInvalidIntParamValue = "hellomoto";
@@ -189,7 +199,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const int myIntParamValue = 1;
@@ -219,7 +229,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myBoolParamValue = "yes";
@@ -252,7 +262,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const bool myBoolParamValue = true;
@@ -283,7 +293,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionString());
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myStringParamValue = "MyParamValue";
@@ -310,7 +320,7 @@ namespace DDCli.Test
                         CommandParameterDefinition.TypeValue.String,
                         GenericParameterDescription));
 
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
 
@@ -333,7 +343,7 @@ namespace DDCli.Test
         public void WhenExecutedCommandNotRegistered_CommandManager_ShouldThrowNotFoundException()
         {
             const string differentCommandName = "NotRegisteredCommand";
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(GenericNameSpace, differentCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
 
@@ -349,7 +359,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenExecutedCommandWithSameNamespace_CommandManager_ShouldThrowDuplicateException()
         {
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock($"{GenericNameSpace}1", GenericCompleteCommandName, GenericDescription));
             instance.RegisterCommand(new CommandMock($"{GenericNameSpace}2", GenericCompleteCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
@@ -364,7 +374,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenExecutedCommandHelp_CommandManager_ShouldReturnHelpData()
         {
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
             var inputRequest = new InputRequest(HelpCommandName.ToLowerInvariant());
 
@@ -382,7 +392,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterInvalidCommand_CommandManager_ShouldThrowException()
         {
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             const string commandName = "MyCommandName";
             var nameSpace = string.Empty;
             var description = string.Empty;
@@ -398,7 +408,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterCommand_CommandManager_CommandShouldBeAddedWithinTheList()
         {
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
 
             instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
 
@@ -413,7 +423,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenInstanceOfCommandManager_CommandManager_ShouldInitializeCommandsList()
         {
-            var instance = new CommandManager();
+            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             Assert.NotNull(instance.Commands);
         }
 

@@ -20,18 +20,18 @@ namespace DDCli.Extensions
             string header, 
             string lineInitialzierChar = "-")
         {
-            StringBuilder sb = new StringBuilder(header);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(header);
             bool enumerated = false;
             if (lineInitialzierChar.ToLowerInvariant() == "i")
             {
                 enumerated = true;
             }
-
             int counter = 1;
             foreach (var item in source)
             {
                 StringBuilder sbLine = new StringBuilder("\t");
-                sbLine.Append(enumerated ? counter++.ToString() : lineInitialzierChar);
+                sbLine.Append(enumerated ? $"{counter++.ToString()}- " : $"{lineInitialzierChar} ");
                 sbLine.Append(func(item));
                 sb.AppendLine(sbLine.ToString());
             }

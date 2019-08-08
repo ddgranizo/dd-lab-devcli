@@ -13,12 +13,18 @@ namespace DDCli
         private static CommandManager commandManager;
         static void Main(string[] args)
         {
-            commandManager = new CommandManager();
+            var storedData = StoredDataManager.GetStoredData();
+            
+            IRegistryService registryService = new RegistryService();
+            ICryptoService cryptoService = new CryptoService(registryService);
+            IStoredDataService storedDataService = new StoredDataService(storedData, cryptoService);
+
+
+            commandManager = new CommandManager(storedDataService, cryptoService);
             commandManager.OnLog += CommandManager_OnLog;
 
-            var storedData = StoredDataManager.GetStoredData();
+            RegisterCommands(storedData, storedDataService);
 
-            RegisterCommands(storedData);
             try
             {
                 var inputCommand = new InputRequest(args);
@@ -50,11 +56,19 @@ namespace DDCli
             }
             catch (AliasRepeatedException ex)
             {
-                Console.WriteLine($"Alias '{ex.Message}' is already used.");
+                Console.WriteLine($"Alias '{ex.Message}' is already used");
             }
             catch (AliasNotFoundException ex)
             {
-                Console.WriteLine($"Alias '{ex.Message}' is not registered.");
+                Console.WriteLine($"Alias '{ex.Message}' is not registered");
+            }
+            catch (ParameterRepeatedException ex)
+            {
+                Console.WriteLine($"Parameter '{ex.Message}' is already used");
+            }
+            catch (ParameterNotFoundException ex)
+            {
+                Console.WriteLine($"Parameter '{ex.Message}' is not registered");
             }
             catch (Exception ex)
             {
@@ -68,19 +82,25 @@ namespace DDCli
             Console.WriteLine(e.Log);
         }
 
-        private static void RegisterCommands(StoredCliData storedData)
+        private static void RegisterCommands(StoredCliData storedData, IStoredDataService storedDataService)
         {
             IClipboardService clipboardService = new ClipboardService();
             IDirectoryService directoryService = new DirectoryService();
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
-            IStoredDataService storedDataService = new StoredDataService(storedData);
+            
 
             Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
             Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
+            Register(new Commands.DD.AddParameterCommand(storedDataService));
+            Register(new Commands.DD.ShowParametersCommand(storedDataService));
+            Register(new Commands.DD.DeleteParameterCommand(storedDataService));
+            Register(new Commands.DD.UpdateParameterCommand(storedDataService));
+
+
 
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             Register(new Commands.DD.ShowAliasCommand(storedDataService));
