@@ -390,7 +390,6 @@ namespace DDCli.Test
                     .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#");
             var actual = string.Join("\r\n", LastLog.Split("\r\n").Skip(1).SkipLast(1));
 
-
             Assert.Equal(expected, actual);
         }
 
