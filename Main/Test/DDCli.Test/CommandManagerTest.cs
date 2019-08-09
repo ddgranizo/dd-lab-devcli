@@ -387,7 +387,10 @@ namespace DDCli.Test
 
             Console.WriteLine("Last logggggg:");
             Console.WriteLine(LastLog);
-
+            foreach (var item in LastLog.Split(Environment.NewLine))
+            {
+                Console.WriteLine("#-" + item);
+            }
             var expected = instance.Commands
                     .OrderBy(k => k.GetInvocationCommandName())
                     .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#");
