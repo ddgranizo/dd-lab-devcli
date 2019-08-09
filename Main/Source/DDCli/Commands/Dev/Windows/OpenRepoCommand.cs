@@ -66,7 +66,7 @@ namespace DDCli.Commands.Dev.Windows
             Log($"2 - Open in new cmd");
             Log($"3 - Open in new conEmu");
             Log($"4 - Copy path to clipboard");
-            Log($"5 - Copy path to clipboard");
+            Log($"5 - Open origin");
 
             indexString = Console.ReadLine();
             if (!int.TryParse(indexString, out index))

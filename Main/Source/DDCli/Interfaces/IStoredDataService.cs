@@ -66,7 +66,7 @@ namespace DDCli.Interfaces
 
         List<string> GetParametersWithValues();
 
-        List<string> GetParameters();
+        List<CliParameter> GetParameters();
 
 
     }

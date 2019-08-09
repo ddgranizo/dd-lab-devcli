@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "openrepo -n [[my.repo2]]"
+      "commandLineArgs": "repo -n [[mypassword]]"
     }
   }
 }

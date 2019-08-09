@@ -1,7 +1,7 @@
 ﻿using DDCli.Interfaces;
+using DDCli.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DDCli.Test.Mock
 {
@@ -114,6 +114,11 @@ namespace DDCli.Test.Mock
         public List<string> GetParameters()
         {
             return new List<string>();
+        }
+
+        List<CliParameter> IStoredDataService.GetParameters()
+        {
+            return new List<CliParameter>();
         }
     }
 }

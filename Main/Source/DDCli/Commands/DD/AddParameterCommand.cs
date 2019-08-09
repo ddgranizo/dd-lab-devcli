@@ -61,7 +61,7 @@ namespace DDCli.Commands.DD
             }
 
             StoredDataService.AddParameter(key, value, isEncrypted);
-            var displayValue = isEncrypted ? "*****" : value;
+            var displayValue = isEncrypted ? Definitions.PasswordOfuscator : value;
             Log($"Added parameter!");
         }
     }

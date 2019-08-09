@@ -95,13 +95,13 @@ namespace DDCli.Services
         {
             return StoredCliData.Parameters
                 .Select(k =>
-                    string.Format("[[{0}]] => {1}", k.Key, k.IsEncrypted ? "******" : k.Value))
+                    string.Format("[[{0}]] => {1}", k.Key, k.IsEncrypted ? Definitions.PasswordOfuscator : k.Value))
                 .ToList();
         }
 
-        public List<string> GetParameters()
+        public List<CliParameter> GetParameters()
         {
-            return StoredCliData.Parameters.Select(k => k.Key).ToList();
+            return StoredCliData.Parameters;
         }
     }
 }

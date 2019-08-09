@@ -19,11 +19,17 @@ namespace DDCli
         public IStoredDataService StoredDataService { get; }
         public ICryptoService CryptoService { get; }
 
+        private readonly ParameterManager _parameterManager;
+
+        public List<string> EncryptedResolved { get; set; }
         public CommandManager(IStoredDataService storedDataService, ICryptoService cryptoService)
         {
             Commands = new List<CommandBase>();
             StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
+
+            _parameterManager = new ParameterManager(CryptoService);
+            EncryptedResolved = new List<string>();
         }
 
 
@@ -78,10 +84,8 @@ namespace DDCli
                     command.OnLog += Command_OnLog;
                     if (command.CanExecute(commandsParameters))
                     {
-
-                        var processedParameters = ParameterManager
-                            .ResolveParameters(StoredDataService, commandsParameters);
-
+                        _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
+                        var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
                         var timer = new Stopwatch(); timer.Start();
                         command.Execute(commandsParameters);
                         Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
@@ -98,6 +102,7 @@ namespace DDCli
                 }
                 finally
                 {
+                    _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
                     command.OnLog -= Command_OnLog;
                 }
             }
@@ -107,12 +112,15 @@ namespace DDCli
             }
         }
 
+        private void _parameterManager_OnReplacedEncrypted(object sender, ReplacedEncryptedEventArgs args)
+        {
+            EncryptedResolved.Add(args.Encrypted);
+        }
+
         private List<CommandBase> SearchCommandAndAlias(InputRequest inputRequest)
         {
-            var commands = Commands
-                            .Where(k =>
-                                k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
-                                .ToList();
+            var commands = Commands.Where(k => k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
+                                    .ToList();
 
             if (commands.Count == 0 && inputRequest.CommandName.Length > "command".Length)
             {
@@ -121,10 +129,8 @@ namespace DDCli
                 if (isAlias)
                 {
                     var commandName = StoredDataService.GetAliasedCommand(aliasName);
-                    commands = Commands
-                                .Where(k =>
-                                    k.GetInvocationCommandName() == commandName)
-                                    .ToList();
+                    commands = Commands.Where(k => k.GetInvocationCommandName() == commandName)
+                                        .ToList();
                 }
             }
 
@@ -146,14 +152,22 @@ namespace DDCli
             return inputByShortCut;
         }
 
-        public void Log(string log)
-        {
-            OnLog?.Invoke(this, new LogEventArgs(log));
-        }
 
         private void Command_OnLog(object sender, LogEventArgs e)
         {
-            OnLog?.Invoke(sender, e);
+            var ofuscated = ObfuscateLogWithEncrypted(e.Log);
+            OnLog?.Invoke(sender, new LogEventArgs(ofuscated));
+        }
+
+
+        private string ObfuscateLogWithEncrypted(string log)
+        {
+            var replacedLog = log;
+            foreach (var item in EncryptedResolved)
+            {
+                replacedLog = replacedLog.Replace(item, Definitions.PasswordOfuscator);
+            }
+            return replacedLog;
         }
 
         private static CommandParameter GetParsedCommandParameter(CommandBase command, CommandParameterDefinition item, InputParameter itemInput)

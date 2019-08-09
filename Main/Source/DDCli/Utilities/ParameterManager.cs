@@ -1,4 +1,5 @@
-﻿using DDCli.Exceptions;
+﻿using DDCli.Events;
+using DDCli.Exceptions;
 using DDCli.Interfaces;
 using DDCli.Models;
 using System;
@@ -9,25 +10,36 @@ using System.Text.RegularExpressions;
 
 namespace DDCli.Utilities
 {
-    public static class ParameterManager
+
+    public delegate void OnReplacedEncryptedHandler(object sender, ReplacedEncryptedEventArgs args);
+    public class ParameterManager
     {
+        public event OnReplacedEncryptedHandler OnReplacedEncrypted; //TODO MAÑANA: cada vez que se reemplace un encriptado, avisar al command manager para que cualquier Log lo obfusque
+
         private const string ParameterPattern = "\\[\\[[^\\]]+\\][\\+$ugaxvhd\\^]*\\]";
 
-        public static List<CommandParameter> ResolveParameters(
+        public ICryptoService CryptoService { get; }
+
+        public ParameterManager(ICryptoService cryptoService)
+        {
+            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
+        }
+
+        public List<CommandParameter> ResolveParameters(
             IStoredDataService storedDataService,
             List<CommandParameter> parameters)
         {
-            var dictionaryKeyVaulues = GetDictionaryFromParameters(storedDataService);
+            var storedParameters = storedDataService.GetParameters();
             foreach (var parameter in parameters.Where(k => !string.IsNullOrEmpty(k.ValueString)))
             {
-                parameter.ValueString = ReplaceStringParameters(dictionaryKeyVaulues, parameter.ValueString);
+                parameter.ValueString = ReplaceStringParameters(storedParameters, parameter.ValueString);
             }
             return parameters;
         }
 
 
 
-        private static string ReplaceStringParameters(Dictionary<string, string> mappings, string rawString)
+        private string ReplaceStringParameters(List<CliParameter> storedParameters, string rawString)
         {
             var replaced = rawString;
             var regex = new Regex(ParameterPattern, RegexOptions.Compiled);
@@ -39,22 +51,22 @@ namespace DDCli.Utilities
                 if (success)
                 {
                     var parameter = match.Groups[0].Value;
-                    if (!mappings.ContainsKey(parameter))
+                    var storedParameter = storedParameters.FirstOrDefault(k => $"[[{k.Key}]]" == parameter);
+                    if (storedParameter == null)
                     {
                         throw new InvalidParamException(parameter);
                     }
-                    replaced = replaced.Replace(parameter, mappings[parameter]);
+                    var toReplaceParameterValue = storedParameter.IsEncrypted ? CryptoService.Decrypt(storedParameter.Value) : storedParameter.Value;
+                    replaced = replaced.Replace(parameter, toReplaceParameterValue);
+                    if (storedParameter.IsEncrypted)
+                    {
+                        OnReplacedEncrypted?.Invoke(this, new ReplacedEncryptedEventArgs(toReplaceParameterValue));
+                    }
                 }
             } while (success);
             return replaced;
         }
 
-        private static Dictionary<string, string> GetDictionaryFromParameters(IStoredDataService storedDataService)
-        {
-            var dictionaryKeyVaulues = new Dictionary<string, string>();
-            storedDataService.GetParameters()
-                .ForEach(k => { dictionaryKeyVaulues.Add($"[[{k}]]", storedDataService.GetParameterValue(k)); });
-            return dictionaryKeyVaulues;
-        }
+
     }
 }
