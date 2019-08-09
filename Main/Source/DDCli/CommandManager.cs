@@ -1,4 +1,5 @@
-﻿using DDCli.Events;
+﻿using DDCli.Commands;
+using DDCli.Events;
 using DDCli.Exceptions;
 using DDCli.Extensions;
 using DDCli.Interfaces;
@@ -47,12 +48,13 @@ namespace DDCli
 
         public void ExecuteInputRequest(InputRequest inputRequest)
         {
-
-            if (inputRequest.CommandNamespace == string.Empty && inputRequest.CommandName == "helpcommand")
-            {
-                Command_OnLog(this, new LogEventArgs(GetHelpMessage()));
-                return;
-            }
+            //var helpCommand = new HelpCommand(Commands);
+            //if (inputRequest.CommandNamespace == helpCommand.CommandNameSpace 
+            //    && inputRequest.CommandName == helpCommand.CommandName)
+            //{
+            //    ExecuteCommand(helpCommand, new List<CommandParameter>());
+            //    return;
+            //}
 
             List<CommandBase> commands = SearchCommandAndAlias(inputRequest);
 
@@ -81,36 +83,41 @@ namespace DDCli
 
             if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))
             {
-                try
-                {
-                    command.OnLog += Command_OnLog;
-                    if (command.CanExecute(commandsParameters))
-                    {
-                        _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
-                        var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
-                        var timer = new Stopwatch(); timer.Start();
-                        command.Execute(commandsParameters);
-                        Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
-                    }
-                    else
-                    {
-                        command.ExecuteHelp();
-                    }
-
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
-                    command.OnLog -= Command_OnLog;
-                }
+                ExecuteCommand(command, commandsParameters);
             }
             else
             {
                 throw new InvalidParamsException();
+            }
+        }
+
+        private void ExecuteCommand(CommandBase command, List<CommandParameter> commandsParameters)
+        {
+            try
+            {
+                command.OnLog += Command_OnLog;
+                if (command.CanExecute(commandsParameters))
+                {
+                    _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
+                    var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
+                    var timer = new Stopwatch(); timer.Start();
+                    command.Execute(commandsParameters);
+                    Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
+                }
+                else
+                {
+                    command.ExecuteHelp();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
+                command.OnLog -= Command_OnLog;
             }
         }
 

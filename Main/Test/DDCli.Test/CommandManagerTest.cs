@@ -378,12 +378,13 @@ namespace DDCli.Test
         {
             var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
+            instance.RegisterCommand(new HelpCommand(instance.Commands));
             var inputRequest = new InputRequest(HelpCommandName.ToLowerInvariant());
 
             instance.OnLog += Instance_OnLog;
 
             instance.ExecuteInputRequest(inputRequest);
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+
 
             var expected = instance.Commands
                     .OrderBy(k => k.GetInvocationCommandName())

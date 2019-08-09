@@ -1,6 +1,9 @@
-﻿using DDCli.Models;
+﻿using DDCli.Extensions;
+using DDCli.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace DDCli.Commands
@@ -11,16 +14,30 @@ namespace DDCli.Commands
 
         private const string HelpDefinition = "Shows all the available commands";
 
-        public HelpCommand()
-            : base(nameof(HelpCommand), typeof(HelpCommand).Namespace, HelpDefinition)
+        public List<CommandBase> Commands { get; }
+
+        public HelpCommand(List<CommandBase> commands)
+            : base(typeof(HelpCommand).Namespace, nameof(HelpCommand), HelpDefinition)
         {
-
+            Commands = commands ?? throw new ArgumentNullException(nameof(commands));
         }
-
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            
+            var data = GetMessage();
+            Log(data);
+        }
+
+        private string GetMessage()
+        {
+            var data = new StringBuilder();
+            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
+            data.AppendLine($"DDCli version {assemblyVersion.ToString()}");
+            data.AppendLine(
+                Commands
+                    .OrderBy(k => k.GetInvocationCommandName())
+                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#"));
+            return data.ToString();
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)

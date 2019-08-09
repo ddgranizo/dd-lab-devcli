@@ -108,6 +108,8 @@ namespace DDCli
 
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
+
+            Register(new Commands.HelpCommand(commandManager.Commands));
         }
 
         private static void Register(CommandBase command)
