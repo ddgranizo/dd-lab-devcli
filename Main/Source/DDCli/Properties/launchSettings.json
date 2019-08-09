@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "repo -n [[mypassword]]"
+      "commandLineArgs": "help"
     }
   }
 }

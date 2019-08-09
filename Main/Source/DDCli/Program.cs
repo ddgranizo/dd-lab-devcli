@@ -19,7 +19,6 @@ namespace DDCli
             ICryptoService cryptoService = new CryptoService(registryService);
             IStoredDataService storedDataService = new StoredDataService(storedData, cryptoService);
 
-
             commandManager = new CommandManager(storedDataService, cryptoService);
             commandManager.OnLog += CommandManager_OnLog;
 
@@ -27,7 +26,6 @@ namespace DDCli
 
             try
             {
-
                 var inputCommand = new InputRequest(args);
                 commandManager.ExecuteInputRequest(inputCommand);
             }
@@ -104,11 +102,10 @@ namespace DDCli
             Register(new Commands.DD.ShowParametersCommand(storedDataService));
             Register(new Commands.DD.DeleteParameterCommand(storedDataService));
             Register(new Commands.DD.UpdateParameterCommand(storedDataService));
-
-
-
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             Register(new Commands.DD.ShowAliasCommand(storedDataService));
+
+
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
         }

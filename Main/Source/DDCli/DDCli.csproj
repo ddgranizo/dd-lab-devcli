@@ -6,6 +6,9 @@
     <AssemblyName>DD</AssemblyName>
     <AssemblyVersion>1.0.0.*</AssemblyVersion>
     <Deterministic>false</Deterministic>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.0.1</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

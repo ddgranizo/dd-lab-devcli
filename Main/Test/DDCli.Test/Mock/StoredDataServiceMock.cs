@@ -111,14 +111,11 @@ namespace DDCli.Test.Mock
             return ParametersWithValueForReturn;
         }
 
-        public List<string> GetParameters()
-        {
-            return new List<string>();
-        }
 
-        List<CliParameter> IStoredDataService.GetParameters()
+        public List<CliParameter> GetParameters()
         {
             return new List<CliParameter>();
         }
+
     }
 }

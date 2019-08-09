@@ -8,6 +8,8 @@ using DDCli.Exceptions;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using DDCli.Interfaces;
+using System.Linq;
+using DDCli.Extensions;
 
 namespace DDCli.Test
 {
@@ -383,8 +385,12 @@ namespace DDCli.Test
             instance.ExecuteInputRequest(inputRequest);
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
 
-            var expected = rgx.Replace("Available commands:\r\n\t#mynamespace-mycommandname\r\n", ""); ;
-            var actual = rgx.Replace(LastLog, "");
+            var expected = instance.Commands
+                    .OrderBy(k => k.GetInvocationCommandName())
+                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#");
+            var actual = string.Join("\r\n", LastLog.Split("\r\n").Skip(1).SkipLast(1));
+
+
             Assert.Equal(expected, actual);
         }
 

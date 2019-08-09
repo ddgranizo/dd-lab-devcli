@@ -1,5 +1,6 @@
 ﻿using DDCli.Events;
 using DDCli.Exceptions;
+using DDCli.Extensions;
 using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Utilities;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace DDCli
@@ -237,11 +239,19 @@ namespace DDCli
         private string GetHelpMessage()
         {
             var data = new StringBuilder();
-            data.AppendLine("Available commands:");
-            foreach (var item in Commands.OrderBy(k => k.GetInvocationCommandName()))
-            {
-                data.AppendLine($"\t#{item.GetInvocationCommandName()}");
-            }
+
+            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
+            data.AppendLine($"DDCli version {assemblyVersion.ToString()}");
+            data.AppendLine(
+                Commands
+                    .OrderBy(k => k.GetInvocationCommandName())
+                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#"));
+
+            //data.AppendLine("Available commands:");
+            //foreach (var item in )
+            //{
+            //    data.AppendLine($"\t#{item.GetInvocationCommandName()}");
+            //}
             return data.ToString();
         }
 
