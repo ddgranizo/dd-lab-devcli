@@ -391,7 +391,7 @@ namespace DDCli.Test
             var expected = instance.Commands
                     .OrderBy(k => k.GetInvocationCommandName())
                     .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#");
-            var actual = string.Join("\r\n", LastLog.Split("\r\n").Skip(1).SkipLast(1));
+            var actual = string.Join("\r\n", LastLog.Split(Environment.NewLine).Skip(1).SkipLast(1));
 
             Assert.Equal(expected, actual);
         }
