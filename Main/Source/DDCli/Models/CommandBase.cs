@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DDCli.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ namespace DDCli.Models
 {
     public abstract class CommandBase
     {
-        private const string BaseNamespace = "DDCli.Commands.";
+        private const string BaseNamespace = "DDCli.Commands";
 
         public event OnLogHnadler OnLog;
         public List<CommandParameterDefinition> CommandParametersDefinition { get; set; }
@@ -33,6 +34,10 @@ namespace DDCli.Models
             }
 
             CommandNameSpace = commandNameSpace.Replace(BaseNamespace, string.Empty);
+            if (CommandNameSpace.Length>0)
+            {
+                CommandNameSpace = CommandNameSpace.Substring(1); //remove the first dot
+            }
             CommandName = commandName;
             Description = description;
             CommandParametersDefinition = commandParameters ?? throw new ArgumentNullException(nameof(commandParameters));
@@ -73,8 +78,12 @@ namespace DDCli.Models
 
         public string GetInvocationCommandName()
         {
-            return string.Format("{0}.{1}", CommandNameSpace, CommandName)
+            return !string.IsNullOrEmpty(CommandNameSpace)
+                ? string.Format("{0}.{1}", CommandNameSpace, CommandName)
                     .Substring(0, CommandNameSpace.Length + CommandName.Length + 1 - "command".Length)
+                    .Replace(".", "-").ToLowerInvariant()
+                : CommandName
+                    .Substring(0, CommandName.Length - "command".Length)
                     .Replace(".", "-").ToLowerInvariant();
         }
 
@@ -90,17 +99,19 @@ namespace DDCli.Models
             data.AppendLine($"# Command Name: {CommandName}");
             data.AppendLine($"# Invocation Name: {GetInvocationCommandName()}");
             data.AppendLine($"# Description: {Description}");
-            data.AppendLine("Parameters:");
-            foreach (var item in CommandParametersDefinition)
-            {
-                data.Append($"\t--{item.Name}");
-                if (item.ShortCut != null)
-                {
-                    data.Append($" [-{item.ShortCut}]");
-                }
-                data.Append($", Type value: {item.Type.ToString()}, Description: {item.Description}");
-                data.AppendLine();
-            }
+
+            data.AppendLine(
+                CommandParametersDefinition.ToDisplayList(
+                    (item) => {
+                        StringBuilder line = new StringBuilder();
+                        line.Append($"--{item.Name}");
+                        if (item.ShortCut != null)
+                        {
+                            line.Append($" [-{item.ShortCut}]");
+                        }
+                        line.Append($", Type value: {item.Type.ToString()}, Description: {item.Description}");
+                        return line.ToString();
+                    }, "Parameters:", ""));
             Log(data.ToString());
         }
 

@@ -7,5 +7,10 @@ namespace DDCli
     public class Definitions
     {
         public const string PasswordOfuscator = "********";
+        public static string[] AvailableTrueStrings = new string[] {
+                "true",
+                "yes",
+                "1",
+                "si" };
     }
 }

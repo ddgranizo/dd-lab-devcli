@@ -13,7 +13,8 @@ namespace DDCli.Commands
     {
 
         private const string HelpDefinition = "Shows all the available commands";
-
+        public const string HeaderListMessage = "Available commands:";
+        public const string FirstCharacterLine = "#";
         public List<CommandBase> Commands { get; }
 
         public HelpCommand(List<CommandBase> commands)
@@ -36,7 +37,7 @@ namespace DDCli.Commands
             data.AppendLine(
                 Commands
                     .OrderBy(k => k.GetInvocationCommandName())
-                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#"));
+                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, HeaderListMessage, FirstCharacterLine));
             return data.ToString();
         }
 

@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "help"
+      "commandLineArgs": "addalias --help"
     }
   }
 }

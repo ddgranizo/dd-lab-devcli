@@ -48,14 +48,6 @@ namespace DDCli
 
         public void ExecuteInputRequest(InputRequest inputRequest)
         {
-            //var helpCommand = new HelpCommand(Commands);
-            //if (inputRequest.CommandNamespace == helpCommand.CommandNameSpace 
-            //    && inputRequest.CommandName == helpCommand.CommandName)
-            //{
-            //    ExecuteCommand(helpCommand, new List<CommandParameter>());
-            //    return;
-            //}
-
             List<CommandBase> commands = SearchCommandAndAlias(inputRequest);
 
             if (commands.Count > 1)
@@ -235,32 +227,11 @@ namespace DDCli
 
         private static bool StrToBool(string value)
         {
-            return new string[] {
-                "true",
-                "yes",
-                "1",
-                "si"
-            }.ToList().IndexOf(value.ToLowerInvariant()) > -1;
+            return Definitions
+                    .AvailableTrueStrings
+                    .ToList().IndexOf(value.ToLowerInvariant()) > -1;
         }
-
-        private string GetHelpMessage()
-        {
-            var data = new StringBuilder();
-
-            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            data.AppendLine($"DDCli version {assemblyVersion.ToString()}");
-            data.AppendLine(
-                Commands
-                    .OrderBy(k => k.GetInvocationCommandName())
-                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#"));
-
-            //data.AppendLine("Available commands:");
-            //foreach (var item in )
-            //{
-            //    data.AppendLine($"\t#{item.GetInvocationCommandName()}");
-            //}
-            return data.ToString();
-        }
+       
 
     }
 }
