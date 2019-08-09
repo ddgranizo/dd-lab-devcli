@@ -385,6 +385,8 @@ namespace DDCli.Test
 
             instance.ExecuteInputRequest(inputRequest);
 
+            Console.WriteLine("Last logggggg:");
+            Console.WriteLine(LastLog);
 
             var expected = instance.Commands
                     .OrderBy(k => k.GetInvocationCommandName())
