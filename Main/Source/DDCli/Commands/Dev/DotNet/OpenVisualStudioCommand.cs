@@ -13,11 +13,11 @@ namespace DDCli.Commands.Dev.DotNet
 
         public CommandParameterDefinition RootParameter { get; set; }
         public IPromptCommandService PromptCommandService { get; }
-        public IDirectoryService DirectoryService { get; }
+        public IFileService DirectoryService { get; }
 
         public OpenVisualStudioCommand(
             IPromptCommandService promptCommandService,
-            IDirectoryService directoryService)
+            IFileService directoryService)
             : base(typeof(OpenVisualStudioCommand).Namespace, nameof(OpenVisualStudioCommand), HelpDefinition)
         {
             RootParameter = new CommandParameterDefinition(

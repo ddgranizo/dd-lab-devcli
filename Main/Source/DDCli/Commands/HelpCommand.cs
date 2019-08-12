@@ -25,8 +25,7 @@ namespace DDCli.Commands
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            var data = GetMessage();
-            Log(data);
+            Log(GetMessage());
         }
 
         private string GetMessage()
@@ -37,7 +36,10 @@ namespace DDCli.Commands
             data.AppendLine(
                 Commands
                     .OrderBy(k => k.GetInvocationCommandName())
-                    .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, HeaderListMessage, FirstCharacterLine));
+                    .ToDisplayList((item) => {
+                        return item.GetInvocationCommandName(); }, 
+                        HeaderListMessage, 
+                        FirstCharacterLine));
             return data.ToString();
         }
 

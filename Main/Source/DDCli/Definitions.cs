@@ -12,5 +12,6 @@ namespace DDCli
                 "yes",
                 "1",
                 "si" };
+        public const string TemplateConfigFilename = "ddtemplate.json";
     }
 }

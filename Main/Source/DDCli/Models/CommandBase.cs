@@ -99,10 +99,9 @@ namespace DDCli.Models
             data.AppendLine($"# Command Name: {CommandName}");
             data.AppendLine($"# Invocation Name: {GetInvocationCommandName()}");
             data.AppendLine($"# Description: {Description}");
-
             data.AppendLine(
                 CommandParametersDefinition.ToDisplayList(
-                    (item) => {
+                    item => {
                         StringBuilder line = new StringBuilder();
                         line.Append($"--{item.Name}");
                         if (item.ShortCut != null)

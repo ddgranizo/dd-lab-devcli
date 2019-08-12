@@ -14,12 +14,12 @@ namespace DDCli.Commands.Dev.Windows
 
 
         public CommandParameterDefinition NameParameter { get; set; }
-        public IDirectoryService DirectoryService { get; }
+        public IFileService DirectoryService { get; }
         public IPromptCommandService PromptCommandService { get; }
         public IClipboardService ClipboardService { get; }
 
         public OpenRepoCommand(
-            IDirectoryService directoryService,
+            IFileService directoryService,
             IPromptCommandService promptCommandService,
             IClipboardService clipboardService)
             : base(typeof(OpenRepoCommand).Namespace, nameof(OpenRepoCommand), HelpDefinition)

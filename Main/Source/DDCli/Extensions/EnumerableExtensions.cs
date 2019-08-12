@@ -10,15 +10,17 @@ namespace DDCli.Extensions
         public static string ToDisplayList(
             this IEnumerable<string> source,
             string header,
-            string lineInitialzierChar = "-")
+            string lineInitialzierChar = "-",
+            bool tab = true)
         {
-            return ToDisplayList(source, (item) => { return item; }, header, lineInitialzierChar);
+            return ToDisplayList(source, (item) => { return item; }, header, lineInitialzierChar, tab);
         }
         public static string ToDisplayList<T>(
             this IEnumerable<T> source, 
             Func<T, string> func, 
             string header, 
-            string lineInitialzierChar = "-")
+            string lineInitialzierChar = "-",
+            bool tab = true)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(header);
@@ -30,7 +32,7 @@ namespace DDCli.Extensions
             int counter = 1;
             foreach (var item in source)
             {
-                StringBuilder sbLine = new StringBuilder("\t");
+                StringBuilder sbLine = new StringBuilder(tab ? "\t" : "");
                 sbLine.Append(enumerated ? $"{counter++.ToString()}- " : $"{lineInitialzierChar} ");
                 sbLine.Append(func(item));
                 sb.AppendLine(sbLine.ToString());

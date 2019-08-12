@@ -100,7 +100,6 @@ namespace DDCli
                 {
                     command.ExecuteHelp();
                 }
-
             }
             catch (Exception)
             {

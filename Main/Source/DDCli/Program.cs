@@ -14,7 +14,7 @@ namespace DDCli
         static void Main(string[] args)
         {
             var storedData = StoredDataManager.GetStoredData();
-            
+
             IRegistryService registryService = new RegistryService();
             ICryptoService cryptoService = new CryptoService(registryService);
             IStoredDataService storedDataService = new StoredDataService(storedData, cryptoService);
@@ -73,6 +73,18 @@ namespace DDCli
             {
                 Console.WriteLine($"Cannot resolver parameter {ex.Message}");
             }
+            catch (PathNotFoundException ex)
+            {
+                Console.WriteLine($"Path '{ex.Message}' does not exists");
+            }
+            catch (TemplateConfigFileNotFoundException ex)
+            {
+                Console.WriteLine($"Can't find '{Definitions.TemplateConfigFilename}' file in '{ex.Message}' path");
+            }
+            catch (InvalidTemplateConfigFileException ex)
+            {
+                Console.WriteLine($"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
@@ -88,23 +100,23 @@ namespace DDCli
         private static void RegisterCommands(StoredCliData storedData, IStoredDataService storedDataService)
         {
             IClipboardService clipboardService = new ClipboardService();
-            IDirectoryService directoryService = new DirectoryService();
+            IFileService fileService = new FileService();
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
-            
+            IConsoleService consoleService = new ConsoleService();
 
             Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
-            Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, directoryService));
-            Register(new Commands.Dev.Windows.OpenRepoCommand(directoryService, promptCommandService, clipboardService));
+            Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, fileService));
+            Register(new Commands.Dev.Windows.OpenRepoCommand(fileService, promptCommandService, clipboardService));
             Register(new Commands.DD.AddParameterCommand(storedDataService));
             Register(new Commands.DD.ShowParametersCommand(storedDataService));
             Register(new Commands.DD.DeleteParameterCommand(storedDataService));
             Register(new Commands.DD.UpdateParameterCommand(storedDataService));
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             Register(new Commands.DD.ShowAliasCommand(storedDataService));
-
+            Register(new Commands.Dev.Utils.TemplateCommand(fileService, consoleService));
 
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));

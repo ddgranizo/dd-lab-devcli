@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "addalias --help"
+      "commandLineArgs": "template -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\src\\ReactInputBasicText\""
     }
   }
 }
