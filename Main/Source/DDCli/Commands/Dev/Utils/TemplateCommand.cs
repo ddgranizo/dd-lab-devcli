@@ -17,35 +17,60 @@ namespace DDCli.Commands.Dev.Utils
 
         private Dictionary<string, string> _userInputs = new Dictionary<string, string>();
 
-        public CommandParameterDefinition PathParameter { get; set; }
+        public CommandParameterDefinition CommandPathParameter { get; set; }
+        public CommandParameterDefinition CommandNameParameter { get; set; }
         public IFileService FileService { get; }
         public IConsoleService ConsoleService { get; }
+        public IStoredDataService StoredDataService { get; }
         public List<ReplacePairValue> UserTemplateSetupReplaceStrings { get; set; }
-        public TemplateCommand(IFileService directoryService, IConsoleService consoleService)
+        public TemplateCommand(
+            IFileService directoryService, 
+            IConsoleService consoleService, 
+            IStoredDataService storedDataService)
              : base(typeof(TemplateCommand).Namespace, nameof(TemplateCommand), HelpDefinition)
         {
-            PathParameter = new CommandParameterDefinition(
+            CommandPathParameter = new CommandParameterDefinition(
                 "path",
                 CommandParameterDefinition.TypeValue.String,
                 "path for clone with ddtemplate.json",
                 "p");
+
+            CommandNameParameter = new CommandParameterDefinition(
+                "name",
+                CommandParameterDefinition.TypeValue.String,
+                "Name of the registered template",
+                "n");
+
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
             ConsoleService = consoleService 
                 ?? throw new ArgumentNullException(nameof(consoleService));
-            RegisterCommandParameter(PathParameter);
-
+            StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
+            RegisterCommandParameter(CommandPathParameter);
+            RegisterCommandParameter(CommandNameParameter);
             UserTemplateSetupReplaceStrings = new List<ReplacePairValue>();
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)
         {
-            return IsParamOk(parameters, PathParameter.Name);
+            return (IsParamOk(parameters, CommandPathParameter.Name)
+                    || IsParamOk(parameters, CommandNameParameter.Name))
+                    && !(IsParamOk(parameters, CommandPathParameter.Name) 
+                            && IsParamOk(parameters, CommandNameParameter.Name));
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            var path = GetStringParameterValue(parameters, PathParameter.Name);
+            string path = string.Empty;
+            if (IsParamOk(parameters, CommandNameParameter.Name))
+            {
+                var templateName = GetStringParameterValue(parameters, CommandNameParameter.Name);
+                path = StoredDataService.GetTemplatePath(templateName);
+            }
+            else
+            {
+                path = GetStringParameterValue(parameters, CommandPathParameter.Name);
+            }
             if (!FileService.ExistsDirectory(path))
             {
                 throw new PathNotFoundException(path);

@@ -103,5 +103,41 @@ namespace DDCli.Services
         {
             return StoredCliData.Parameters;
         }
+
+        public void AddTemplate(string path, string templateName, string description)
+        {
+            StoredCliData.RegisteredTemplates.Add(new RegisteredTemplate(path, templateName, description));
+            SaveContext();
+        }
+
+        public void DeleteTemplate(string templateName)
+        {
+            var templateForRemove = StoredCliData.RegisteredTemplates.First(k => k.TemplateName == templateName);
+            StoredCliData.RegisteredTemplates.Remove(templateForRemove);
+            SaveContext();
+        }
+
+        public List<string> GetTemplatesWithValues()
+        {
+            return StoredCliData.RegisteredTemplates
+                .Select(k =>
+                    string.Format("{0} => {1}, located at '{2}'", k.TemplateName, k.Description, k.Path))
+                .ToList();
+        }
+
+        public List<RegisteredTemplate> GetTemplates()
+        {
+            return  StoredCliData.RegisteredTemplates.ToList();
+        }
+
+        public bool ExistsTemplate(string templateName)
+        {
+            return StoredCliData.RegisteredTemplates.Any(k => k.TemplateName == templateName);
+        }
+
+        public string GetTemplatePath(string templateName)
+        {
+            return StoredCliData.RegisteredTemplates.First(k => k.TemplateName == templateName).Path;
+        }
     }
 }

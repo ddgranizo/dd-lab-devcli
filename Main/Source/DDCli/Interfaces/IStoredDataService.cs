@@ -68,6 +68,20 @@ namespace DDCli.Interfaces
 
         List<CliParameter> GetParameters();
 
+        void AddTemplate(string path, string templateName, string description);
+
+
+        void DeleteTemplate(string templateName);
+
+        List<string> GetTemplatesWithValues();
+
+        List<RegisteredTemplate> GetTemplates();
+
+        bool ExistsTemplate(string templateName);
+
+        string GetTemplatePath(string templateName);
+
+
 
     }
 }

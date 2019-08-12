@@ -19,8 +19,11 @@ namespace DDCli.Test.Mock
 
         public string ClonedDirectorySource { get; set; }
         public string ClonedDirectoryDestination { get; set; }
+
+
         public FileServiceMock()
         {
+
         }
 
         public List<string> CloneDirectory(string sourceFolder, string destinationFolder, List<string> ignorePathPatterns)

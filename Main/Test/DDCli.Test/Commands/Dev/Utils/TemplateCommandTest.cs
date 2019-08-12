@@ -3,9 +3,7 @@ using DDCli.Exceptions;
 using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Test.Mock;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace DDCli.Test.Commands.Dev.Utils
@@ -72,14 +70,14 @@ namespace DDCli.Test.Commands.Dev.Utils
                     myNewVale
                 }
             };
-            var commandDefinition = new TemplateCommand(fileService, commandService);
+            var commandDefinition = new TemplateCommand(fileService, commandService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
-                commandDefinition.PathParameter.GetInvokeName(),
+                commandDefinition.CommandPathParameter.GetInvokeName(),
                 myPath);
 
             instance.ExecuteInputRequest(inputRequest);
@@ -104,14 +102,14 @@ namespace DDCli.Test.Commands.Dev.Utils
         {
             var myPath = @"my\Path";
             var fileService = new FileServiceMock() { ExistsTemplateConfigFileReturn = false, ExistsDirectoryReturn = true };
-            var commandDefinition = new TemplateCommand(fileService, _consoleService);
+            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
-                commandDefinition.PathParameter.GetInvokeName(),
+                commandDefinition.CommandPathParameter.GetInvokeName(),
                 myPath);
 
             Assert.Throws<TemplateConfigFileNotFoundException>(() =>
@@ -131,14 +129,14 @@ namespace DDCli.Test.Commands.Dev.Utils
         {
             var myPath = @"my\Path";
             var fileService = new FileServiceMock() { ExistsDirectoryReturn = false };
-            var commandDefinition = new TemplateCommand(fileService, _consoleService);
+            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
                 commandDefinition.GetInvocationCommandName(),
-                commandDefinition.PathParameter.GetInvokeName(),
+                commandDefinition.CommandPathParameter.GetInvokeName(),
                 myPath);
 
             Assert.Throws<PathNotFoundException>(() =>
@@ -156,7 +154,7 @@ namespace DDCli.Test.Commands.Dev.Utils
         public void WhenExecuteCommandWithoutPathParameter_CommandManager_ShouldThrowException()
         {
             var fileService = new FileServiceMock();
-            var commandDefinition = new TemplateCommand(fileService, _consoleService);
+            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);

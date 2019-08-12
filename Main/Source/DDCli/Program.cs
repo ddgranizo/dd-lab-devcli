@@ -85,6 +85,18 @@ namespace DDCli
             {
                 Console.WriteLine($"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
+            catch (InvalidStringFormatException ex)
+            {
+                Console.WriteLine($"Invalid string format. {ex.Message}");
+            }
+            catch (TemplateNameRepeatedException)
+            {
+                Console.WriteLine($"Template name repeated");
+            }
+            catch (TemplateNotFoundException)
+            {
+                Console.WriteLine($"Can't find any template with this name");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
@@ -116,7 +128,10 @@ namespace DDCli
             Register(new Commands.DD.UpdateParameterCommand(storedDataService));
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             Register(new Commands.DD.ShowAliasCommand(storedDataService));
-            Register(new Commands.Dev.Utils.TemplateCommand(fileService, consoleService));
+            Register(new Commands.Dev.Utils.TemplateCommand(fileService, consoleService, storedDataService));
+            Register(new Commands.DD.AddTemplateCommand(storedDataService, fileService));
+            Register(new Commands.DD.DeleteTemplateCommand(storedDataService));
+            Register(new Commands.DD.ShowTemplatesCommand(storedDataService));
 
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));

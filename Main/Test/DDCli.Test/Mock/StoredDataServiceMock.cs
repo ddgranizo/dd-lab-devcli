@@ -30,6 +30,20 @@ namespace DDCli.Test.Mock
         public string UpdatedParameterKey { get; set; }
         public string UpdatedParameterValue { get; set; }
 
+
+        public string AddedTemplateName { get; set; }
+        public string AddedTemplatePath { get; set; }
+
+        public string DeletedTemplate { get; set; }
+
+        public List<string> TemplatesDisplayForReturn { get; set; }
+
+        public List<RegisteredTemplate> TemplatesForReturn { get; set; }
+
+        public bool ExistsTemplateReturn { get; set; }
+
+        public string GetTemplatePathReturn { get; set; }
+
         public StoredDataServiceMock()
         {
 
@@ -117,5 +131,35 @@ namespace DDCli.Test.Mock
             return new List<CliParameter>();
         }
 
+        public void AddTemplate(string path, string templateName, string description)
+        {
+            AddedTemplateName = templateName;
+            AddedTemplatePath = path;
+        }
+
+        public void DeleteTemplate(string templateName)
+        {
+            DeletedTemplate = templateName;
+        }
+
+        public List<string> GetTemplatesWithValues()
+        {
+            return TemplatesDisplayForReturn;
+        }
+
+        public List<RegisteredTemplate> GetTemplates()
+        {
+            return TemplatesForReturn;
+        }
+
+        public bool ExistsTemplate(string templateName)
+        {
+            return ExistsTemplateReturn;
+        }
+
+        public string GetTemplatePath(string templateName)
+        {
+            return GetTemplatePathReturn;
+        }
     }
 }
