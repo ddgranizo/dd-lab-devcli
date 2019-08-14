@@ -97,6 +97,10 @@ namespace DDCli
             {
                 Console.WriteLine($"Can't find any template with this name");
             }
+            catch (RepositoryNotFoundException)
+            {
+                Console.WriteLine($"Can't find any repository with this name");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");

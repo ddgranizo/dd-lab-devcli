@@ -1,4 +1,5 @@
-﻿using DDCli.Interfaces;
+﻿using DDCli.Exceptions;
+using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Utilities;
 using System;
@@ -46,6 +47,10 @@ namespace DDCli.Commands.Dev.Windows
 
             var name = GetStringParameterValue(parameters, NameParameter.Name);
             var directories = DirectoryService.SearchDirectories(SearchPath, name, true);
+            if (directories.Count == 0)
+            {
+                throw new RepositoryNotFoundException();
+            }
             foreach (var item in directories)
             {
                 Log($"{directories.IndexOf(item) + 1} - {item}");
