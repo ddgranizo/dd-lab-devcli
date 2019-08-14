@@ -114,5 +114,20 @@ namespace DDCli.Test.Mock
         {
             throw new NotImplementedException();
         }
+
+        public bool IsFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDirectory(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetFileDirectory(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
