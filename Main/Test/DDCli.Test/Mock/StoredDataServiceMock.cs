@@ -98,7 +98,8 @@ namespace DDCli.Test.Mock
             return ReturnBoolExistsParameter;
         }
 
-        public void AddParameter(string key, string value, bool isEncrypted)
+
+        public void AddParameter(string key, string value, bool isEncrypted, bool isAutoIncrement)
         {
             AddedParameterKey = key;
             AddedParameterValue = value;
@@ -160,6 +161,12 @@ namespace DDCli.Test.Mock
         public string GetTemplatePath(string templateName)
         {
             return GetTemplatePathReturn;
+        }
+
+
+        public void UpdateAutoIncrements(List<string> autoincrementParameters)
+        {
+            
         }
     }
 }

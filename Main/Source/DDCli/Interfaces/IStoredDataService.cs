@@ -56,7 +56,7 @@ namespace DDCli.Interfaces
 
         bool ExistsParameter(string parameter);
 
-        void AddParameter(string key, string value, bool isEncrypted);
+        void AddParameter(string key, string value, bool isEncrypted, bool isAutoIncrement);
 
         void DeleteParameter(string key);
 
@@ -80,6 +80,9 @@ namespace DDCli.Interfaces
         bool ExistsTemplate(string templateName);
 
         string GetTemplatePath(string templateName);
+
+
+        void UpdateAutoIncrements(List<string> autoincrementParameters);
 
 
 

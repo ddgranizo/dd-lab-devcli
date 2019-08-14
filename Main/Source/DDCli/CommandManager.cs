@@ -24,6 +24,7 @@ namespace DDCli
 
         private readonly ParameterManager _parameterManager;
 
+        private readonly List<string> _autoincrementParametersReplaced = new List<string>();
         public List<string> EncryptedResolved { get; set; }
         public CommandManager(IStoredDataService storedDataService, ICryptoService cryptoService)
         {
@@ -91,6 +92,7 @@ namespace DDCli
                 if (command.CanExecute(commandsParameters))
                 {
                     _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
+                    _parameterManager.OnReplacedAutoIncrement += _parameterManager_OnReplacedAutoIncrement;
                     var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
                     var timer = new Stopwatch(); timer.Start();
                     command.Execute(commandsParameters);
@@ -107,14 +109,25 @@ namespace DDCli
             }
             finally
             {
+
                 _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
+                _parameterManager.OnReplacedAutoIncrement -= _parameterManager_OnReplacedAutoIncrement;
                 command.OnLog -= Command_OnLog;
+                StoredDataService.UpdateAutoIncrements(this._autoincrementParametersReplaced);
             }
         }
 
-        private void _parameterManager_OnReplacedEncrypted(object sender, ReplacedEncryptedEventArgs args)
+        private void _parameterManager_OnReplacedAutoIncrement(object sender, ReplacedParameterEventArgs args)
         {
-            EncryptedResolved.Add(args.Encrypted);
+            if (_autoincrementParametersReplaced.FirstOrDefault(k=>args.Parameter == k) == null)
+            {
+                _autoincrementParametersReplaced.Add(args.Parameter);
+            }
+        }
+
+        private void _parameterManager_OnReplacedEncrypted(object sender, ReplacedParameterValueEventArgs args)
+        {
+            EncryptedResolved.Add(args.Value);
         }
 
         private List<CommandBase> SearchCommandAndAlias(InputRequest inputRequest)

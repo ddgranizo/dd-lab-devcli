@@ -9,10 +9,9 @@ namespace DDCli.Models
         public string Key { get; set; }
         public string Value { get; set; }
         public bool IsEncrypted { get; set; }
+        public bool IsAutoIncrement { get; set; }
 
-
-
-        public CliParameter(string key, string value, bool isEncrypted = false)
+        public CliParameter(string key, string value, bool isEncrypted = false, bool isAutoIncrement = false)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -27,6 +26,7 @@ namespace DDCli.Models
             Key = key;
             Value = value;
             IsEncrypted = isEncrypted;
+            IsAutoIncrement = isAutoIncrement;
         }
 
         public CliParameter()

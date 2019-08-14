@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "showtemplates"
+      "commandLineArgs": "repo -n customer[[my.auto.increment.1]]"
     }
   }
 }

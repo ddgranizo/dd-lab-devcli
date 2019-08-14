@@ -65,9 +65,9 @@ namespace DDCli.Services
             return StoredCliData.Parameters.FirstOrDefault(k => k.Key == parameter) != null;
         }
 
-        public void AddParameter(string key, string value, bool isEncrypted)
+        public void AddParameter(string key, string value, bool isEncrypted, bool isAutoIncrement)
         {
-            StoredCliData.Parameters.Add(new CliParameter(key, isEncrypted ? CryptoService.Encrypt(value) : value , isEncrypted));
+            StoredCliData.Parameters.Add(new CliParameter(key, isEncrypted ? CryptoService.Encrypt(value) : value , isEncrypted, isAutoIncrement));
             SaveContext();
         }
 
@@ -102,6 +102,23 @@ namespace DDCli.Services
         public List<CliParameter> GetParameters()
         {
             return StoredCliData.Parameters;
+        }
+
+        public void UpdateAutoIncrements(List<string> autoincrementParameters)
+        {
+            var parameters = GetParameters();
+            foreach (var item in autoincrementParameters)
+            {
+                var param = parameters.FirstOrDefault(k => k.Key == item && k.IsAutoIncrement);
+                if (param != null)
+                {
+                    var valueStr = param.Value;
+                    if (int.TryParse(valueStr, out int value))
+                    {
+                        UpdateParameter(item, (value + 1).ToString());
+                    }
+                }
+            }
         }
 
         public void AddTemplate(string path, string templateName, string description)
@@ -139,5 +156,7 @@ namespace DDCli.Services
         {
             return StoredCliData.RegisteredTemplates.First(k => k.TemplateName == templateName).Path;
         }
+
+        
     }
 }

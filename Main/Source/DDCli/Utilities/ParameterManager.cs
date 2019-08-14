@@ -11,10 +11,12 @@ using System.Text.RegularExpressions;
 namespace DDCli.Utilities
 {
 
-    public delegate void OnReplacedEncryptedHandler(object sender, ReplacedEncryptedEventArgs args);
+    public delegate void OnReplacedParameterHandler(object sender, ReplacedParameterEventArgs args);
+    public delegate void OnReplacedValueHandler(object sender, ReplacedParameterValueEventArgs args);
     public class ParameterManager
     {
-        public event OnReplacedEncryptedHandler OnReplacedEncrypted; //TODO MAÑANA: cada vez que se reemplace un encriptado, avisar al command manager para que cualquier Log lo obfusque
+        public event OnReplacedValueHandler OnReplacedEncrypted;
+        public event OnReplacedParameterHandler OnReplacedAutoIncrement;
 
         private const string ParameterPattern = "\\[\\[[^\\]]+\\][\\+$ugaxvhd\\^]*\\]";
 
@@ -60,7 +62,11 @@ namespace DDCli.Utilities
                     replaced = replaced.Replace(parameter, toReplaceParameterValue);
                     if (storedParameter.IsEncrypted)
                     {
-                        OnReplacedEncrypted?.Invoke(this, new ReplacedEncryptedEventArgs(toReplaceParameterValue));
+                        OnReplacedEncrypted?.Invoke(this, new ReplacedParameterValueEventArgs(toReplaceParameterValue));
+                    }
+                    if (storedParameter.IsAutoIncrement)
+                    {
+                        OnReplacedAutoIncrement?.Invoke(this, new ReplacedParameterEventArgs(storedParameter.Key));
                     }
                 }
             } while (success);
