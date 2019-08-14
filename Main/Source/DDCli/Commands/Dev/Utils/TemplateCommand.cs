@@ -20,12 +20,10 @@ namespace DDCli.Commands.Dev.Utils
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandNameParameter { get; set; }
         public IFileService FileService { get; }
-        public IConsoleService ConsoleService { get; }
         public IStoredDataService StoredDataService { get; }
         public List<ReplacePairValue> UserTemplateSetupReplaceStrings { get; set; }
         public TemplateCommand(
             IFileService directoryService, 
-            IConsoleService consoleService, 
             IStoredDataService storedDataService)
              : base(typeof(TemplateCommand).Namespace, nameof(TemplateCommand), HelpDefinition)
         {
@@ -43,8 +41,6 @@ namespace DDCli.Commands.Dev.Utils
 
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
-            ConsoleService = consoleService 
-                ?? throw new ArgumentNullException(nameof(consoleService));
             StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
             RegisterCommandParameter(CommandPathParameter);
             RegisterCommandParameter(CommandNameParameter);
@@ -84,6 +80,11 @@ namespace DDCli.Commands.Dev.Utils
                 ExceptionInLine.Run<DDTemplateConfig>(
                     () => { return FileService.GetTemplateConfig(path); },
                     (ex) => { throw new InvalidTemplateConfigFileException(ex.Message); });
+
+            if (templateConfig == null)
+            {
+                throw new InvalidTemplateConfigFileException();
+            }
 
 
             Log($"Set up for template '{templateConfig.TemplateName}'");

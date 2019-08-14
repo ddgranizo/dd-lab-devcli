@@ -4,6 +4,7 @@ using DDCli.Exceptions;
 using DDCli.Extensions;
 using DDCli.Interfaces;
 using DDCli.Models;
+using DDCli.Services;
 using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,21 +18,34 @@ namespace DDCli
     public delegate void OnLogHnadler(object sender, LogEventArgs e);
     public class CommandManager
     {
+
+        public event OnReplacedParameterHandler OnReplacedAutoIncrementInCommand;
+        public enum ExecutionModeTypes
+        {
+            Single = 1,
+            Multiple = 2,
+        }
+
         public event OnLogHnadler OnLog;
         public List<CommandBase> Commands { get; set; }
         public IStoredDataService StoredDataService { get; }
         public ICryptoService CryptoService { get; }
+        public ExecutionModeTypes ExecutionMode { get; }
 
+        private const string MandatoryCommandSufix = "command";
         private readonly ParameterManager _parameterManager;
 
         private readonly List<string> _autoincrementParametersReplaced = new List<string>();
         public List<string> EncryptedResolved { get; set; }
-        public CommandManager(IStoredDataService storedDataService, ICryptoService cryptoService)
+        public CommandManager(
+            IStoredDataService storedDataService,
+            ICryptoService cryptoService,
+            ExecutionModeTypes executionMode = ExecutionModeTypes.Single)
         {
             Commands = new List<CommandBase>();
             StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
-
+            ExecutionMode = executionMode;
             _parameterManager = new ParameterManager(CryptoService);
             EncryptedResolved = new List<string>();
         }
@@ -39,15 +53,23 @@ namespace DDCli
 
         public void RegisterCommand(CommandBase command)
         {
-            if (command.CommandName.Substring(command.CommandName.Length - "command".Length).ToLowerInvariant() != "command")
+            if (command.CommandName.Substring(command.CommandName.Length - MandatoryCommandSufix.Length).ToLowerInvariant() != MandatoryCommandSufix)
             {
                 throw new NotImplementedException("Invalid command name");
             }
             Commands.Add(command);
         }
 
+        public void RegisterCommands(List<CommandBase> commands)
+        {
+            foreach (var command in commands)
+            {
+                RegisterCommand(command);
+            }
+        }
 
-        public void ExecuteInputRequest(InputRequest inputRequest)
+
+        public void ExecuteInputRequest(InputRequest inputRequest, List<string> consoleInputs = null)
         {
             List<CommandBase> commands = SearchCommandAndAlias(inputRequest);
 
@@ -76,7 +98,26 @@ namespace DDCli
 
             if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))
             {
-                ExecuteCommand(command, commandsParameters);
+                _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
+                _parameterManager.OnReplacedAutoIncrement += _parameterManager_OnReplacedAutoIncrement;
+
+                try
+                {
+                    ExecuteCommand(command, commandsParameters, consoleInputs);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
+                    _parameterManager.OnReplacedAutoIncrement -= _parameterManager_OnReplacedAutoIncrement;
+                    if (ExecutionMode == ExecutionModeTypes.Single)
+                    {
+                        StoredDataService.UpdateAutoIncrements(this._autoincrementParametersReplaced);
+                    }
+                }
             }
             else
             {
@@ -84,17 +125,18 @@ namespace DDCli
             }
         }
 
-        private void ExecuteCommand(CommandBase command, List<CommandParameter> commandsParameters)
+        private void ExecuteCommand(CommandBase command, List<CommandParameter> commandsParameters, List<string> consoleInputs = null)
         {
             try
             {
                 command.OnLog += Command_OnLog;
+                command.OnReplacedAutoIncrementInSubCommand += _parameterManager_OnReplacedAutoIncrement;
                 if (command.CanExecute(commandsParameters))
                 {
-                    _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
-                    _parameterManager.OnReplacedAutoIncrement += _parameterManager_OnReplacedAutoIncrement;
+
                     var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
                     var timer = new Stopwatch(); timer.Start();
+                    command.ConsoleService = new ConsoleService(consoleInputs);
                     command.Execute(commandsParameters);
                     Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
                 }
@@ -109,20 +151,18 @@ namespace DDCli
             }
             finally
             {
-
-                _parameterManager.OnReplacedEncrypted -= _parameterManager_OnReplacedEncrypted;
-                _parameterManager.OnReplacedAutoIncrement -= _parameterManager_OnReplacedAutoIncrement;
                 command.OnLog -= Command_OnLog;
-                StoredDataService.UpdateAutoIncrements(this._autoincrementParametersReplaced);
             }
         }
 
         private void _parameterManager_OnReplacedAutoIncrement(object sender, ReplacedParameterEventArgs args)
         {
-            if (_autoincrementParametersReplaced.FirstOrDefault(k=>args.Parameter == k) == null)
+
+            if (_autoincrementParametersReplaced.FirstOrDefault(k => args.Parameter == k) == null)
             {
                 _autoincrementParametersReplaced.Add(args.Parameter);
             }
+            OnReplacedAutoIncrementInCommand?.Invoke(sender, args);
         }
 
         private void _parameterManager_OnReplacedEncrypted(object sender, ReplacedParameterValueEventArgs args)
@@ -135,9 +175,9 @@ namespace DDCli
             var commands = Commands.Where(k => k.CommandName.ToLowerInvariant() == inputRequest.CommandName)
                                     .ToList();
 
-            if (commands.Count == 0 && inputRequest.CommandName.Length > "command".Length)
+            if (commands.Count == 0 && inputRequest.CommandName.Length > MandatoryCommandSufix.Length)
             {
-                var aliasName = inputRequest.CommandName.Substring(0, inputRequest.CommandName.Length - "command".Length);
+                var aliasName = inputRequest.CommandName.Substring(0, inputRequest.CommandName.Length - MandatoryCommandSufix.Length);
                 var isAlias = StoredDataService.ExistsAlias(aliasName);
                 if (isAlias)
                 {
@@ -243,7 +283,7 @@ namespace DDCli
                     .AvailableTrueStrings
                     .ToList().IndexOf(value.ToLowerInvariant()) > -1;
         }
-       
+
 
     }
 }

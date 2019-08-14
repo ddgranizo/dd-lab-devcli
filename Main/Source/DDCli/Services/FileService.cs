@@ -247,5 +247,41 @@ namespace DDCli.Services
                 MoveFile(from, to, waitAccess);
             }
         }
+
+        public bool ExistsPipelineConfigFile(string path)
+        {
+            return ExistsFileInDirectory(path, Definitions.PipelineConfigFilename);
+        }
+
+        public DDPipelineConfig GetPipelineConfig(string path)
+        {
+            try
+            {
+                var completePath = ConcatDirectoryAndFile(path, Definitions.PipelineConfigFilename);
+                var json = File.ReadAllText(completePath);
+                var parsed = JsonConvert.DeserializeObject<DDPipelineConfig>(json);
+                return parsed;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool IsFile(string path)
+        {
+            return !IsDirectory(path);
+        }
+
+        public bool IsDirectory(string path)
+        {
+            FileAttributes attr = File.GetAttributes(path);
+            return attr.HasFlag(FileAttributes.Directory);
+        }
+
+        public string GetFileDirectory(string path)
+        {
+            return new FileInfo(path).DirectoryName;
+        }
     }
 }

@@ -7,13 +7,25 @@ namespace DDCli.Services
 {
     public class ConsoleService : IConsoleService
     {
-        public ConsoleService()
+
+        public List<string> ReturnValues { get; }
+        public bool IsInteractive { get; set; }
+
+        private int returnCounter = 0;
+
+        public ConsoleService(List<string> returnValues)
         {
+            ReturnValues = returnValues;
+            IsInteractive = returnValues == null;
         }
 
         public string ReadLine()
         {
-            return Console.ReadLine();
+            if (IsInteractive)
+            {
+                return Console.ReadLine();
+            }
+            return ReturnValues[returnCounter++];
         }
 
         public void WriteLine(string text)

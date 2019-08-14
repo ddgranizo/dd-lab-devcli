@@ -22,7 +22,7 @@ namespace DDCli
             commandManager = new CommandManager(storedDataService, cryptoService);
             commandManager.OnLog += CommandManager_OnLog;
 
-            RegisterCommands(storedData, storedDataService);
+            RegisterCommands(storedDataService, registryService, cryptoService);
 
             try
             {
@@ -77,9 +77,9 @@ namespace DDCli
             {
                 Console.WriteLine($"Path '{ex.Message}' does not exists");
             }
-            catch (TemplateConfigFileNotFoundException ex)
+            catch (TemplateConfigFileNotFoundException)
             {
-                Console.WriteLine($"Can't find '{Definitions.TemplateConfigFilename}' file in '{ex.Message}' path");
+                Console.WriteLine($"Can't find '{Definitions.TemplateConfigFilename}' file in path");
             }
             catch (InvalidTemplateConfigFileException ex)
             {
@@ -101,6 +101,14 @@ namespace DDCli
             {
                 Console.WriteLine($"Can't find any repository with this name");
             }
+            catch (PipelineConfigFileNotFoundException)
+            {
+                Console.WriteLine($"Can't find '{Definitions.PipelineConfigFilename}' file in path");
+            }
+            catch (InvalidPipelineConfigFileException ex)
+            {
+                Console.WriteLine($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
@@ -113,13 +121,15 @@ namespace DDCli
             Console.WriteLine(e.Log);
         }
 
-        private static void RegisterCommands(StoredCliData storedData, IStoredDataService storedDataService)
+        private static void RegisterCommands(
+            IStoredDataService storedDataService,
+            IRegistryService registryService,
+            ICryptoService cryptoService)
         {
             IClipboardService clipboardService = new ClipboardService();
             IFileService fileService = new FileService();
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
-            IConsoleService consoleService = new ConsoleService();
 
             Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
@@ -132,14 +142,20 @@ namespace DDCli
             Register(new Commands.DD.UpdateParameterCommand(storedDataService));
             Register(new Commands.DD.DeleteAliasCommand(storedDataService));
             Register(new Commands.DD.ShowAliasCommand(storedDataService));
-            Register(new Commands.Dev.Utils.TemplateCommand(fileService, consoleService, storedDataService));
+            Register(new Commands.Dev.Utils.TemplateCommand(fileService, storedDataService));
             Register(new Commands.DD.AddTemplateCommand(storedDataService, fileService));
             Register(new Commands.DD.DeleteTemplateCommand(storedDataService));
             Register(new Commands.DD.ShowTemplatesCommand(storedDataService));
-
+            
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 
+            Register(new Commands.DD.PipelineCommand(
+                commandManager.Commands, 
+                fileService,
+                registryService,
+                cryptoService,
+                storedDataService));
             Register(new Commands.HelpCommand(commandManager.Commands));
         }
 

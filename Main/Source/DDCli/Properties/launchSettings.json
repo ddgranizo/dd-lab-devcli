@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "repo -n customer[[my.auto.increment.1]]"
+      "commandLineArgs": "pipeline -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-pipelines\\Crm\\CustomControlBuildPipeline\\ddpipeline.json\""
     }
   }
 }

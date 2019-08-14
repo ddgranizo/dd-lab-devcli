@@ -45,7 +45,6 @@ namespace DDCli.Installer
             var projectGuid = GetSetting(devOpsSettingSection, "ProjectGuid");
             var username = GetSetting(devOpsSettingSection, "Username");
 
-
             Console.WriteLine("Connecting Dev Ops organization...");
             var devOpsService = new AzureDevOpsService(organizationUri, username, devOpsToken, new Guid(projectGuid));
 

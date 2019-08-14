@@ -16,8 +16,11 @@ namespace DDCli.Interfaces
 
         bool ExistsTemplateConfigFile(string path);
 
+        bool ExistsPipelineConfigFile(string path);
+
         DDTemplateConfig GetTemplateConfig(string path);
 
+        DDPipelineConfig GetPipelineConfig(string path);
 
         List<string> CloneDirectory(string sourceFolder, string destinationFolder, List<string> ignorePathPatterns);
 
@@ -34,5 +37,11 @@ namespace DDCli.Interfaces
         List<string> SearchFilesInPath(string rootPath, string pattern);
 
         void MoveFile(string from, string to, bool waitAccess = false);
+
+        bool IsFile(string path);
+
+        bool IsDirectory(string path);
+
+        string GetFileDirectory(string path);
     }
 }

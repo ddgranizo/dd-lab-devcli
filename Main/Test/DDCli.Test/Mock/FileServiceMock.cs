@@ -104,5 +104,15 @@ namespace DDCli.Test.Mock
         {
             throw new NotImplementedException();
         }
+
+        public bool ExistsPipelineConfigFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DDPipelineConfig GetPipelineConfig(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

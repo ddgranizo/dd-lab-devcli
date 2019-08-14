@@ -62,15 +62,14 @@ namespace DDCli.Test.Commands.Dev.Utils
                 ExistsDirectoryReturn = true,
                 AbsolutePathReturn = myAbsolutePath
             };
-            var commandService = new ConsoleServiceMock()
-            {
-                ReadLineReturns = new List<string>()
+
+            var consoleInputs = new List<string>()
                 {
                     myNewPathName,
                     myNewVale
-                }
-            };
-            var commandDefinition = new TemplateCommand(fileService, commandService, _storedDataService);
+                };
+
+            var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
@@ -80,7 +79,7 @@ namespace DDCli.Test.Commands.Dev.Utils
                 commandDefinition.CommandPathParameter.GetInvokeName(),
                 myPath);
 
-            instance.ExecuteInputRequest(inputRequest);
+            instance.ExecuteInputRequest(inputRequest, consoleInputs);
 
             Assert.Equal(fileService.CreatedDirectory, myAbsolutePath);
             Assert.Equal(fileService.ClonedDirectorySource, myPath);
@@ -102,7 +101,7 @@ namespace DDCli.Test.Commands.Dev.Utils
         {
             var myPath = @"my\Path";
             var fileService = new FileServiceMock() { ExistsTemplateConfigFileReturn = false, ExistsDirectoryReturn = true };
-            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
+            var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
@@ -129,7 +128,7 @@ namespace DDCli.Test.Commands.Dev.Utils
         {
             var myPath = @"my\Path";
             var fileService = new FileServiceMock() { ExistsDirectoryReturn = false };
-            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
+            var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
@@ -154,7 +153,7 @@ namespace DDCli.Test.Commands.Dev.Utils
         public void WhenExecuteCommandWithoutPathParameter_CommandManager_ShouldThrowException()
         {
             var fileService = new FileServiceMock();
-            var commandDefinition = new TemplateCommand(fileService, _consoleService, _storedDataService);
+            var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
             var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);

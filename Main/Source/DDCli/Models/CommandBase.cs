@@ -1,4 +1,6 @@
 ﻿using DDCli.Extensions;
+using DDCli.Interfaces;
+using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,8 @@ namespace DDCli.Models
 {
     public abstract class CommandBase
     {
+        public event OnReplacedParameterHandler OnReplacedAutoIncrementInSubCommand;
+
         private const string BaseNamespace = "DDCli.Commands";
 
         public event OnLogHnadler OnLog;
@@ -15,9 +19,10 @@ namespace DDCli.Models
         public string CommandName { get; set; }
         public string CommandNameSpace { get; set; }
         public string Description { get; set; }
-
+        public IConsoleService ConsoleService { get; set; }
         public CommandBase(string commandNameSpace, string commandName, string description, List<CommandParameterDefinition> commandParameters)
         {
+
             if (string.IsNullOrEmpty(commandNameSpace))
             {
                 throw new ArgumentException("commandNameSpace cannot be empty or null", nameof(commandNameSpace));
@@ -86,6 +91,12 @@ namespace DDCli.Models
                     .Substring(0, CommandName.Length - "command".Length)
                     .Replace(".", "-").ToLowerInvariant();
         }
+
+        public void ParameterAutoIncrementeReplaced(string parameterKey)
+        {
+            OnReplacedAutoIncrementInSubCommand?.Invoke(this, new Events.ReplacedParameterEventArgs(parameterKey));
+        }
+
 
         public void Log(string log)
         {
