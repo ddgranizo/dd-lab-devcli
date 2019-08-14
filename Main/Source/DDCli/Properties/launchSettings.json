@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "pipeline -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-pipelines\\Crm\\CustomControlBuildPipeline\\ddpipeline.json\""
+      "commandLineArgs": "windowscmd \"dir\""
     }
   }
 }

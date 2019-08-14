@@ -37,37 +37,45 @@ namespace DDCli.Models
 
         private List<InputParameter> GetInputParameters(string[] parameterArr)
         {
+
             var parameters = new List<InputParameter>();
-            bool nextIsValue = false;
-            for (int i = 0; i < parameterArr.Length; i++)
+            if (parameterArr.Length == 1 && !IsParamNameValid(parameterArr[0]))
             {
-                var parameter = parameterArr[i];
-                if (!nextIsValue)
+                parameters.Add(new InputParameter( parameterArr[0]) );
+            }
+            else
+            {
+                bool nextIsValue = false;
+                for (int i = 0; i < parameterArr.Length; i++)
                 {
-                    bool isValidParam = IsParamNameValid(parameter);
-                    bool isValidShortCut = isValidParam 
-                        ? false : 
-                        IsParamShortCutValid(parameter);
-                    if (!isValidParam && !isValidShortCut)
+                    var parameter = parameterArr[i];
+                    if (!nextIsValue)
                     {
-                        throw new InvalidParamNameException(parameter);
+                        bool isValidParam = IsParamNameValid(parameter);
+                        bool isValidShortCut = isValidParam
+                            ? false :
+                            IsParamShortCutValid(parameter);
+                        if (!isValidParam && !isValidShortCut)
+                        {
+                            throw new InvalidParamNameException(parameter);
+                        }
+                        string paramValue = null;
+                        string parameterTrimmed = isValidShortCut
+                                ? parameter.Substring("-".Length)
+                                : parameter.Substring("--".Length);
+                        if (i < parameterArr.Length - 1
+                                && !IsParamNameValid(parameterArr[i + 1])
+                                && !IsParamShortCutValid(parameterArr[i + 1]))
+                        {
+                            paramValue = parameterArr[i + 1];
+                            nextIsValue = true;
+                        }
+                        parameters.Add(new InputParameter(parameterTrimmed, paramValue, isValidShortCut));
                     }
-                    string paramValue = null;
-                    string parameterTrimmed = isValidShortCut
-                            ? parameter.Substring("-".Length)
-                            : parameter.Substring("--".Length);
-                    if (i < parameterArr.Length - 1 
-                            && !IsParamNameValid(parameterArr[i + 1]) 
-                            && !IsParamShortCutValid(parameterArr[i + 1]))
+                    else
                     {
-                        paramValue = parameterArr[i + 1];
-                        nextIsValue = true;
+                        nextIsValue = false;
                     }
-                    parameters.Add(new InputParameter(parameterTrimmed, paramValue, isValidShortCut));
-                }
-                else
-                {
-                    nextIsValue = false;
                 }
             }
             return parameters;

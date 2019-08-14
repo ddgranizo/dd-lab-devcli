@@ -12,6 +12,8 @@ namespace DDCli.Models
         public string ParameterName { get; }
         public bool IsShortCut { get; set; }
 
+        public bool IsOnlyOne { get; set; }
+
         public InputParameter(string parameter, string rawStringValue, bool isShortCut = false)
         {
             if (string.IsNullOrEmpty(parameter))
@@ -22,6 +24,14 @@ namespace DDCli.Models
             RawStringValue = rawStringValue;
             IsShortCut = isShortCut;
             ParameterName = parameter;
+            HasValue = !string.IsNullOrEmpty(rawStringValue);
+            IsOnlyOne = false;
+        }
+
+        public InputParameter(string rawStringValue)
+        {
+            RawStringValue = rawStringValue;
+            IsOnlyOne = true;
             HasValue = !string.IsNullOrEmpty(rawStringValue);
         }
 

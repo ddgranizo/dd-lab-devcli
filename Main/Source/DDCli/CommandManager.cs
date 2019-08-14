@@ -86,14 +86,27 @@ namespace DDCli
             var command = commands[0];
 
             var commandsParameters = new List<CommandParameter>();
-            foreach (var parameterDefinition in command.CommandParametersDefinition)
+            if (command.CommandParametersDefinition.Where(k => k.Name != "help").Count() == 1
+                && inputRequest.InputParameters.Count == 1
+                && inputRequest.InputParameters[0].IsOnlyOne)
             {
-                var itemInput = GetImputParameterFromRequest(inputRequest, parameterDefinition);
-                if (itemInput != null)
+                var targetCommandParameter = command.CommandParametersDefinition.FirstOrDefault(k => k.Name != "help");
+                var parameter = GetParsedCommandParameter(
+                    command, targetCommandParameter, inputRequest.InputParameters[0]);
+                commandsParameters.Add(parameter);
+            }
+            else
+            {
+                foreach (var parameterDefinition in command.CommandParametersDefinition)
                 {
-                    var parameter = GetParsedCommandParameter(command, parameterDefinition, itemInput);
-                    commandsParameters.Add(parameter);
+                    var itemInput = GetImputParameterFromRequest(inputRequest, parameterDefinition);
+                    if (itemInput != null)
+                    {
+                        var parameter = GetParsedCommandParameter(command, parameterDefinition, itemInput);
+                        commandsParameters.Add(parameter);
+                    }
                 }
+
             }
 
             if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))

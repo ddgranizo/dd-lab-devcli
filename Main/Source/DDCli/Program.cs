@@ -131,6 +131,9 @@ namespace DDCli
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
 
+
+            Register(new Commands.DD.EchoCommand());
+            Register(new Commands.DD.WindowsCmdCommand(promptCommandService));
             Register(new Commands.Dev.Git.CSharpGitIgnoreCommand(webService));
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
