@@ -25,8 +25,8 @@ namespace DDCli.Interfaces
         List<string> CloneDirectory(string sourceFolder, string destinationFolder, List<string> ignorePathPatterns);
 
 
-        string GetAbsolutePath(string absoluteRelativePath);
-
+        string GetAbsoluteCurrentPath(string absoluteRelativePath);
+        string GetAbsolutePath(string absoluteRelativePath, string basePath);
         void CreateDirectory(string path, bool reCreateIfExists = false);
 
 
@@ -43,5 +43,11 @@ namespace DDCli.Interfaces
         bool IsDirectory(string path);
 
         string GetFileDirectory(string path);
+
+
+        void ZipDierctory(string path);
+        void ZipFile(string path, string zipName = null);
+
+        void UnZipPath(string path, string destinationFolder = null);
     }
 }

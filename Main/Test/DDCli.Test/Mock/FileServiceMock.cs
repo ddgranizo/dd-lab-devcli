@@ -13,14 +13,23 @@ namespace DDCli.Test.Mock
         public bool ExistsDirectoryReturn { get; set; }
         public bool ExistsTemplateConfigFileReturn { get; set; }
         public DDTemplateConfig DDTemplateConfigReturn { get; set; }
-        public string AbsolutePathReturn { get; set; }
+        public string AbsoluteCurrentPathReturn { get; set; }
 
+        public string AbsolutePathReturn { get; set; }
         public string CreatedDirectory { get; set; }
 
         public string ClonedDirectorySource { get; set; }
         public string ClonedDirectoryDestination { get; set; }
 
 
+        public string FileDirectoryReturn { get; set; }
+
+        public string ZippedPath { get; set; }
+        public string UnzippedPath { get; set; }
+
+        public bool IsDirectoryReturn { get; set; }
+
+        public bool IsFileReturn { get; set; }
         public FileServiceMock()
         {
 
@@ -58,9 +67,9 @@ namespace DDCli.Test.Mock
             return ExistsTemplateConfigFileReturn;
         }
 
-        public string GetAbsolutePath(string absoluteRelativePath)
+        public string GetAbsoluteCurrentPath(string absoluteRelativePath)
         {
-            return AbsolutePathReturn;
+            return AbsoluteCurrentPathReturn;
         }
 
         public string GetCurrentPath()
@@ -117,17 +126,37 @@ namespace DDCli.Test.Mock
 
         public bool IsFile(string path)
         {
-            throw new NotImplementedException();
+            return IsFileReturn;
         }
 
         public bool IsDirectory(string path)
         {
-            throw new NotImplementedException();
+            return IsDirectoryReturn;
         }
 
         public string GetFileDirectory(string path)
         {
-            throw new NotImplementedException();
+            return FileDirectoryReturn;
+        }
+
+        public string GetAbsolutePath(string absoluteRelativePath, string basePath)
+        {
+            return AbsolutePathReturn;
+        }
+
+        public void ZipDierctory(string path)
+        {
+            ZippedPath = path;
+        }
+
+        public void ZipFile(string path, string zipName = null)
+        {
+            ZippedPath = path;
+        }
+
+        public void UnZipPath(string path, string destinationFolder = null)
+        {
+            UnzippedPath = path;
         }
     }
 }

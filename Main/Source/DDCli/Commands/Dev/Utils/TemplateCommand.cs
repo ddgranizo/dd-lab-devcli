@@ -100,7 +100,7 @@ namespace DDCli.Commands.Dev.Utils
                 UserTemplateSetupReplaceStrings.Add(replacedPair);
             }
 
-            var absoluteDestionPath = FileService.GetAbsolutePath(destinationPath);
+            var absoluteDestionPath = FileService.GetAbsoluteCurrentPath(destinationPath);
 
             Log($"The template will be cloned at '{absoluteDestionPath}'");
             FileService.CreateDirectory(absoluteDestionPath, true);

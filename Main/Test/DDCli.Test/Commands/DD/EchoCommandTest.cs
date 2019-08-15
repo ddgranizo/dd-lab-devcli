@@ -72,12 +72,9 @@ namespace DDCli.Test.Commands.DD
             });
         }
 
-
-
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
         {
             LastLog = e.Log;
         }
-
     }
 }

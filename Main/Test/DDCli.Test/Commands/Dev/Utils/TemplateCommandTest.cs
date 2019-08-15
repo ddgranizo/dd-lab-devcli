@@ -58,7 +58,7 @@ namespace DDCli.Test.Commands.Dev.Utils
                 },
                 ExistsTemplateConfigFileReturn = true,
                 ExistsDirectoryReturn = true,
-                AbsolutePathReturn = myAbsolutePath
+                AbsoluteCurrentPathReturn = myAbsolutePath
             };
 
             var consoleInputs = new List<string>()

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DDCli.Commands.Dev.Windows
+namespace DDCli.Commands.Windows
 {
     public class OpenRepoCommand : CommandBase
     {

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.IO.Compression;
+using DDCli.Exceptions;
 
 namespace DDCli.Services
 {
@@ -28,6 +30,8 @@ namespace DDCli.Services
         {
             return Directory.GetCurrentDirectory();
         }
+
+
 
         public bool ExistsDirectory(string path)
         {
@@ -111,13 +115,23 @@ namespace DDCli.Services
             return destinationClonedFiles;
         }
 
-        public string GetAbsolutePath(string absoluteRelativePath)
+        public string GetAbsoluteCurrentPath(string absoluteRelativePath)
         {
             if (Path.IsPathRooted(absoluteRelativePath))
             {
                 return absoluteRelativePath;
             }
             var currentPath = GetCurrentPath();
+            return string.Format("{0}\\{1}", currentPath, absoluteRelativePath);
+        }
+
+        public string GetAbsolutePath(string absoluteRelativePath, string basePath)
+        {
+            if (Path.IsPathRooted(absoluteRelativePath))
+            {
+                return absoluteRelativePath;
+            }
+            var currentPath = basePath;
             return string.Format("{0}\\{1}", currentPath, absoluteRelativePath);
         }
 
@@ -222,7 +236,7 @@ namespace DDCli.Services
 
         public List<string> SearchFilesInPath(string rootPath, string pattern)
         {
-            return pattern.Split('|').SelectMany(k=> Directory.EnumerateFiles(rootPath, k, SearchOption.AllDirectories)).ToList();
+            return pattern.Split('|').SelectMany(k => Directory.EnumerateFiles(rootPath, k, SearchOption.AllDirectories)).ToList();
         }
 
 
@@ -275,13 +289,54 @@ namespace DDCli.Services
 
         public bool IsDirectory(string path)
         {
-            FileAttributes attr = File.GetAttributes(path);
-            return attr.HasFlag(FileAttributes.Directory);
+            try
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                return attr.HasFlag(FileAttributes.Directory);
+            }
+            catch (Exception)
+            {
+                throw new PathNotFoundException(path);
+            }
         }
 
         public string GetFileDirectory(string path)
         {
             return new FileInfo(path).DirectoryName;
         }
+
+        public void ZipDierctory(string path)
+        {
+            DirectoryInfo info = new DirectoryInfo(path);
+            var destinationFileName = $"{info.Parent.FullName}\\{info.Name}.zip";
+            System.IO.Compression.ZipFile.CreateFromDirectory(path, destinationFileName);
+        }
+
+        public void ZipFile(string path, string zipName = null)
+        {
+            var fileInfo = new FileInfo(path);
+            var fileName = fileInfo.Name;
+            var fileDirectoryPath = GetFileDirectory(path);
+            var sourceFileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+            var processedZipName = zipName ?? $"{sourceFileNameWithoutExtension}.zip";
+            var destinationZipPath = $"{fileDirectoryPath}\\{processedZipName}";
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationZipPath);
+            var tempFolderPath = $"{fileDirectoryPath}\\{fileNameWithoutExtension}";
+            Directory.CreateDirectory(tempFolderPath);
+            File.Copy(path, $"{tempFolderPath}\\{fileName}");
+            System.IO.Compression.ZipFile.CreateFromDirectory(tempFolderPath, destinationZipPath);
+            Directory.Delete(tempFolderPath);
+        }
+
+        public void UnZipPath(string path, string destinationFolder = null)
+        {
+            var fileDirectoryPath = GetFileDirectory(path);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+            var processedDestinationFolder = destinationFolder ?? fileNameWithoutExtension;
+            var absolutePath = GetAbsolutePath(processedDestinationFolder, fileDirectoryPath);
+            System.IO.Compression.ZipFile.ExtractToDirectory(path, absolutePath);
+        }
+
+        
     }
 }

@@ -138,7 +138,7 @@ namespace DDCli
             Register(new Commands.Dev.DotNet.PublishDebugWinCommand());
             Register(new Commands.Dev.DotNet.PublishReleaseWinCommand());
             Register(new Commands.Dev.DotNet.OpenVisualStudioCommand(promptCommandService, fileService));
-            Register(new Commands.Dev.Windows.OpenRepoCommand(fileService, promptCommandService, clipboardService));
+            Register(new Commands.Windows.OpenRepoCommand(fileService, promptCommandService, clipboardService));
             Register(new Commands.DD.AddParameterCommand(storedDataService));
             Register(new Commands.DD.ShowParametersCommand(storedDataService));
             Register(new Commands.DD.DeleteParameterCommand(storedDataService));
@@ -149,7 +149,9 @@ namespace DDCli
             Register(new Commands.DD.AddTemplateCommand(storedDataService, fileService));
             Register(new Commands.DD.DeleteTemplateCommand(storedDataService));
             Register(new Commands.DD.ShowTemplatesCommand(storedDataService));
-            
+            Register(new Commands.Windows.ZipCommand(fileService));
+            Register(new Commands.Windows.UnzipCommand(fileService));
+
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 
