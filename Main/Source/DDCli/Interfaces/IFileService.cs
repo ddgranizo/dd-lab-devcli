@@ -30,7 +30,11 @@ namespace DDCli.Interfaces
         void CreateDirectory(string path, bool reCreateIfExists = false);
 
 
-        void ReplaceStringInPaths(string rootPath,  string oldValue, string newValue, bool includeDirectories, bool includeFileNames, bool includeFileContents, string filePattern);
+        void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern);
+
+        void ReplaceAllFilesName(string rootPath, string oldValue, string newValue);
+
+        void ReplaceAllSubDirectoriesName(string rootPath, string oldValue, string newValue);
 
         List<string> SearchDirectoriesInPath(string rootPath, string pattern);
 

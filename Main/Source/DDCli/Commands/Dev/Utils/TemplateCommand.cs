@@ -111,16 +111,24 @@ namespace DDCli.Commands.Dev.Utils
             foreach (var replaceString in UserTemplateSetupReplaceStrings)
             {
                 Log($"Applying replacemene of string '{replaceString.ReplacedPair.OldValue}'->'{replaceString.Value}'. Apply for directories:{replaceString.ReplacedPair.ApplyForDirectories}, Apply for file names:{replaceString.ReplacedPair.ApplyForFileNames}, Apply for directories:{replaceString.ReplacedPair.ApplyForFileContents}");
-                FileService.ReplaceStringInPaths(
-                    absoluteDestionPath,
-                    replaceString.ReplacedPair.OldValue,
-                    replaceString.Value,
-                    replaceString.ReplacedPair.ApplyForDirectories,
-                    replaceString.ReplacedPair.ApplyForFileNames,
-                    replaceString.ReplacedPair.ApplyForFileContents,
-                    replaceString.ReplacedPair.ApplyForFilePattern);
-            }
 
+                var oldValue = replaceString.ReplacedPair.OldValue;
+                var newValue = replaceString.Value;
+                var rootPath = absoluteDestionPath;
+                var pattern = replaceString.ReplacedPair.ApplyForFilePattern;
+                if (replaceString.ReplacedPair.ApplyForDirectories)
+                {
+                    FileService.ReplaceAllSubDirectoriesName(rootPath, oldValue, newValue);
+                }
+                if (replaceString.ReplacedPair.ApplyForFileNames)
+                {
+                    FileService.ReplaceAllFilesName(rootPath, oldValue, newValue);
+                }
+                if(replaceString.ReplacedPair.ApplyForFileContents)
+                {
+                    FileService.ReplaceFilesContents(rootPath, oldValue, newValue, pattern);
+                }
+            }
         }
     }
 }

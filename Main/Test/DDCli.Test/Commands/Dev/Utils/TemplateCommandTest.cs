@@ -29,7 +29,7 @@ namespace DDCli.Test.Commands.Dev.Utils
             Trait("TestCategory", "DevCommandTest"),
             Trait("TestCategory", "UtilsCommandTest"),
             Trait("TestCategory", "TemplateCommandTest")]
-        public void WhenExecuteCommandWithValidTemplateConfig_CommandManager_ShouldThrowException()
+        public void WhenExecuteCommandWithValidTemplateConfig_CommandManager_ShouldExecuteReplaces()
         {
             var myAbsolutePath = @"c:\absolute\my\Path";
             var myPath = @"my\Path";
@@ -84,7 +84,9 @@ namespace DDCli.Test.Commands.Dev.Utils
             Assert.Equal(fileService.ClonedDirectoryDestination, myAbsolutePath);
             Assert.Equal(fileService.ReplacedStringInPathsNewValue, myNewVale);
             Assert.Equal(fileService.ReplacedStringInPathsOldValue, myOldValue);
-            Assert.Equal(fileService.ReplacedStringInPathsRootPath, myAbsolutePath);
+            Assert.Equal(fileService.ReplacedFilesContentsPath, myAbsolutePath);
+            Assert.Equal(fileService.ReplacedFilesNamesPath, myAbsolutePath);
+            Assert.Equal(fileService.ReplacedSubDirectoriesPath, myAbsolutePath);
         }
 
 

@@ -88,15 +88,12 @@ namespace DDCli.Test.Mock
         }
 
 
-        public string ReplacedStringInPathsRootPath { get; set; }
-        public string ReplacedStringInPathsOldValue { get; set; }
-        public string ReplacedStringInPathsNewValue { get; set; }
+        
 
         public void ReplaceStringInPaths(string rootPath, string oldValue, string newValue, bool includeDirectories, bool includeFileNames, bool includeFileContents, string filePattern)
         {
-            ReplacedStringInPathsRootPath = rootPath;
-            ReplacedStringInPathsOldValue = oldValue;
-            ReplacedStringInPathsNewValue = newValue;
+            
+            
         }
 
         public List<string> SearchDirectories(string path, string name, bool includeSubdirectories)
@@ -157,6 +154,35 @@ namespace DDCli.Test.Mock
         public void UnZipPath(string path, string destinationFolder = null)
         {
             UnzippedPath = path;
+        }
+
+
+        public string ReplacedFilesContentsPath { get; set; }
+        public string ReplacedFilesNamesPath { get; set; }
+        public string ReplacedSubDirectoriesPath { get; set; }
+        public string ReplacedStringInPathsRootPath { get; set; }
+        public string ReplacedStringInPathsOldValue { get; set; }
+        public string ReplacedStringInPathsNewValue { get; set; }
+
+        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
+        {
+            ReplacedFilesContentsPath = rootPath;
+            ReplacedStringInPathsOldValue = oldValue;
+            ReplacedStringInPathsNewValue = newValue;
+        }
+
+        public void ReplaceAllFilesName(string rootPath, string oldValue, string newValue)
+        {
+            ReplacedFilesNamesPath = rootPath;
+            ReplacedStringInPathsOldValue = oldValue;
+            ReplacedStringInPathsNewValue = newValue;
+        }
+
+        public void ReplaceAllSubDirectoriesName(string rootPath, string oldValue, string newValue)
+        {
+            ReplacedSubDirectoriesPath = rootPath;
+            ReplacedStringInPathsOldValue = oldValue;
+            ReplacedStringInPathsNewValue = newValue;
         }
     }
 }

@@ -178,26 +178,38 @@ namespace DDCli.Services
             }
         }
 
-        private void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
+        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
         {
             if (string.IsNullOrEmpty(filePattern))
             {
                 filePattern = "*.*";
             }
-            var filesInPattern = SearchFilesInPath(rootPath, filePattern);
-            foreach (var filePath in filesInPattern)
+            if (IsDirectory(rootPath))
             {
-                var fileContent = File.ReadAllText(filePath);
+                var filesInPattern = SearchFilesInPath(rootPath, filePattern);
+                foreach (var filePath in filesInPattern)
+                {
+                    var fileContent = File.ReadAllText(filePath);
+                    if (!string.IsNullOrEmpty(fileContent))
+                    {
+                        fileContent = fileContent.Replace(oldValue, newValue);
+                    }
+                    File.WriteAllText(filePath, fileContent);
+                }
+            }
+            else
+            {
+                var fileContent = File.ReadAllText(rootPath);
                 if (!string.IsNullOrEmpty(fileContent))
                 {
                     fileContent = fileContent.Replace(oldValue, newValue);
                 }
-                File.WriteAllText(filePath, fileContent);
+                File.WriteAllText(rootPath, fileContent);
             }
         }
 
 
-        private void ReplaceAllFilesName(string rootPath, string oldValue, string newValue)
+        public void ReplaceAllFilesName(string rootPath, string oldValue, string newValue)
         {
             var fileWithName = SearchFilesInPath(rootPath, $"*{oldValue}*.*").FirstOrDefault();
             while (fileWithName != null)
@@ -213,7 +225,7 @@ namespace DDCli.Services
                 fileWithName = SearchFilesInPath(rootPath, $"*{oldValue}*.*").FirstOrDefault();
             }
         }
-        private void ReplaceAllSubDirectoriesName(string rootPath, string oldValue, string newValue)
+        public void ReplaceAllSubDirectoriesName(string rootPath, string oldValue, string newValue)
         {
             var directoryWithName = SearchDirectoriesInPath(rootPath, $"*{oldValue}*").FirstOrDefault();
             while (directoryWithName != null)

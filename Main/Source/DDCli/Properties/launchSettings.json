@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "unzip -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-pipelines\\CrmCustomControlBuildPipeline.zip\" -d \"C:\\Users\\daniel.diazg\\MyRepos\\dd-pipelines\\pepe\\pepa\""
+      "commandLineArgs": "replacefilecontent -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-pipelines\\CrmCustomControlBuildPipeline\" -o \"commands\" -n \"PEPE\""
     }
   }
 }

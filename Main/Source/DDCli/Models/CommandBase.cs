@@ -132,7 +132,8 @@ namespace DDCli.Models
 
         public bool IsParamOk(List<CommandParameter> parameters, string name)
         {
-            var paremeterDefinition = CommandParametersDefinition.FirstOrDefault(k => k.Name == name);
+            var paremeterDefinition = CommandParametersDefinition
+                .FirstOrDefault(k => k.Name == name);
             if (paremeterDefinition == null)
             {
                 throw new KeyNotFoundException($"Parameter with name '{name}' doesnt exist in the definition of '{GetInvocationCommandName()}'");
