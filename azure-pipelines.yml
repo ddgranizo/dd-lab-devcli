@@ -42,7 +42,6 @@ steps:
   inputs:
     command: 'restore'
     restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-    feedsToUse: 'select'
   displayName: "Restoring Framework nugets..."
 
 
