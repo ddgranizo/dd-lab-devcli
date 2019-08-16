@@ -91,6 +91,10 @@ namespace DDCli.Commands.DD
                 }
                 else
                 {
+                    if (counter == 10)
+                    {
+
+                    }
                     var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
                     var args = StringFormats.StringToParams(replacedCommand);
                     Log($"### (Pipeline) [{counter++}/{pipelineConfig.Commands.Count}] Executing command {replacedCommand}...");

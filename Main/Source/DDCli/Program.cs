@@ -152,6 +152,7 @@ namespace DDCli
             Register(new Commands.Windows.ZipCommand(fileService));
             Register(new Commands.Windows.UnzipCommand(fileService));
             Register(new Commands.Windows.ReplaceFileContentCommand(fileService));
+            Register(new Commands.Windows.RenameFolderCommand(fileService));
 
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));

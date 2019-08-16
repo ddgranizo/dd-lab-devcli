@@ -48,13 +48,14 @@ namespace DDCli.Interfaces
 
         string GetFileDirectory(string path);
 
-
         void ZipDierctory(string path);
+
         void ZipFile(string path, string zipName = null);
 
         void UnZipPath(string path, string destinationFolder = null);
 
-
         byte[] ReadAllBytes(string path);
+
+        void RenameFolder(string oldPath, string newPath);
     }
 }

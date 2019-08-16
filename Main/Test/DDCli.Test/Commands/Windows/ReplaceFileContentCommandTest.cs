@@ -10,13 +10,13 @@ using Xunit;
 
 namespace DDCli.Test.Commands.Windows
 {
-    public class ReplaceTextCommandTest
+    public class ReplaceFileContentCommandTest
     {
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
 
 
-        public ReplaceTextCommandTest()
+        public ReplaceFileContentCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();

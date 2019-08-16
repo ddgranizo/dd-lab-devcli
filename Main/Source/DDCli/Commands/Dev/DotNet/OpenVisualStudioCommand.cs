@@ -36,8 +36,8 @@ namespace DDCli.Commands.Dev.DotNet
         public override void Execute(List<CommandParameter> parameters)
         {
 
-            var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
-            bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
+            //var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
+            //bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
             //PromptCommandService
             //    .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
         }

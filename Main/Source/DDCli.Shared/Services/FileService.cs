@@ -365,5 +365,26 @@ namespace DDCli.Services
         {
             return File.ReadAllBytes(path);
         }
+
+        public void RenameFolder(string oldPath, string newPath)
+        {
+            var absoluteOldPath = GetAbsoluteCurrentPath(oldPath);
+            var directoryOldPathInfo = new DirectoryInfo(absoluteOldPath);
+            var absoluteNewPath = newPath;
+            if (!Path.IsPathRooted(newPath))
+            {
+                absoluteNewPath = $"{directoryOldPathInfo.FullName}\\{newPath}";
+            }
+            var directoryNewPathInfo = new DirectoryInfo(newPath);
+            if (directoryOldPathInfo.Parent.FullName != directoryNewPathInfo.Parent.FullName)
+            {
+                throw new InvalidParamException("Folders must be in the same path");
+            }
+            if (Directory.Exists(absoluteNewPath))
+            {
+                Directory.Delete(absoluteNewPath, true);
+            }
+            Directory.Move(absoluteOldPath, absoluteNewPath);
+        }
     }
 }

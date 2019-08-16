@@ -193,5 +193,14 @@ namespace DDCli.Test.Mock
         {
             return ReadAllBytesReturn;
         }
+
+
+        public string RenamedOldFolder { get; set; }
+        public string RenamedNewFolder { get; set; }
+        public void RenameFolder(string oldPath, string newPath)
+        {
+            RenamedOldFolder = oldPath;
+            RenamedNewFolder = newPath;
+        }
     }
 }
