@@ -35,6 +35,10 @@ steps:
     restoreSolution: '$(Agent.BuildDirectory)\\Main\\Source\\DDCli.Dynamics\\DDCli.Dynamics.csproj'
     feedsToUse: 'select'
 
+- script: |
+    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+  displayName: "Building Framework Dynamics CLI..."
+  
 #- script: |
 #    nuget restore '$(Agent.BuildDirectory)\Main\Source\DDCli.Dynamics\DDCli.Dynamics.csproj' 
 #  displayName: "Restoring nuget packages..."
@@ -55,9 +59,7 @@ steps:
 #    restoreNugetPackages: true
 
 
-#- script: |
-#    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-#  displayName: "Building Framework Dynamics CLI..."
+
 
 ###### UNIT TEST ########
 
@@ -70,16 +72,16 @@ steps:
 
 ###### CODE COVERAGE ########
 
-- task: CmdLine@2
-  inputs:
-    script: |
-      dotnet test Main\Test\DDCli.Test\DDCli.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
-  displayName: 'Calculating code coverage...'
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      dotnet test Main\Test\DDCli.Test\DDCli.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
+#  displayName: 'Calculating code coverage...'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
+#- task: PublishCodeCoverageResults@1
+#  inputs:
+#    codeCoverageTool: Cobertura
+#    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
 
 
 
