@@ -40,7 +40,6 @@ namespace DDCli.Dynamics
             {
                 Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
             }
-            Console.ReadLine();
         }
 
         private static void CommandManager_OnLog(object sender, Events.LogEventArgs e)

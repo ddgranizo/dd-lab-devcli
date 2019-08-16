@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\AliasRepeatedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\CommandNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\DuplicateCommandException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamNameException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamsException.cs" />

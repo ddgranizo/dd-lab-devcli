@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "renamefolder -o C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\bin\\Release\\release -n DD.Crm.CustomControls.Fields"
+      "commandLineArgs": "pipeline \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\ddpipeline.json\""
     }
   }
 }

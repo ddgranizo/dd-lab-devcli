@@ -51,6 +51,10 @@ namespace DDCli.Commands.DD
             var workingDirectory = GetStringParameterValue(parameters, CommandWorkingDirectoryParameter.Name, null);
             var filename = GetStringParameterValue(parameters, CommandFilenameParameter.Name, null);
             var command = GetStringParameterValue(parameters, CommandCmdParameter.Name, null);
+            if (command != null)
+            {
+                command = command.Replace("$$", "\"");
+            }
             var response =  PromptCommandService.RunCommand(command, filename, workingDirectory);
             Log(response);
         }

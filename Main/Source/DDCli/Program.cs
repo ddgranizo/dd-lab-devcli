@@ -31,87 +31,87 @@ namespace DDCli
             }
             catch (DuplicateCommandException ex)
             {
-                Console.WriteLine($"Found {ex.Commands.Count} commands with the same name in different namespaces. In this case is necessary use the namespace for execute it. Commands: {string.Join(",", ex.Commands.ToArray())}");
+                ExceptionManager.RaiseException($"Found {ex.Commands.Count} commands with the same name in different namespaces. In this case is necessary use the namespace for execute it. Commands: {string.Join(",", ex.Commands.ToArray())}");
             }
             catch (CommandNotFoundException)
             {
-                Console.WriteLine($"Command not found. Use 'help' for check the available commands");
+                ExceptionManager.RaiseException($"Command not found. Use 'help' for check the available commands");
             }
             catch (InvalidParamsException)
             {
-                Console.WriteLine($"This command cannot be executed with this combination of parameters");
+                ExceptionManager.RaiseException($"This command cannot be executed with this combination of parameters");
             }
             catch (InvalidParamNameException ex)
             {
-                Console.WriteLine($"Invalid parameter name '{ex.Message}'");
+                ExceptionManager.RaiseException($"Invalid parameter name '{ex.Message}'");
             }
             catch (NotArgumentsException)
             {
-                Console.WriteLine($"Check all the params with 'help' command");
+                ExceptionManager.RaiseException($"Check all the params with 'help' command");
             }
             catch (NotValidCommandNameException ex)
             {
-                Console.WriteLine($"Invalid command name '{ex.Message}'");
+                ExceptionManager.RaiseException($"Invalid command name '{ex.Message}'");
             }
             catch (AliasRepeatedException ex)
             {
-                Console.WriteLine($"Alias '{ex.Message}' is already used");
+                ExceptionManager.RaiseException($"Alias '{ex.Message}' is already used");
             }
             catch (AliasNotFoundException ex)
             {
-                Console.WriteLine($"Alias '{ex.Message}' is not registered");
+                ExceptionManager.RaiseException($"Alias '{ex.Message}' is not registered");
             }
             catch (ParameterRepeatedException ex)
             {
-                Console.WriteLine($"Parameter '{ex.Message}' is already used");
+                ExceptionManager.RaiseException($"Parameter '{ex.Message}' is already used");
             }
             catch (ParameterNotFoundException ex)
             {
-                Console.WriteLine($"Parameter '{ex.Message}' is not registered");
+                ExceptionManager.RaiseException($"Parameter '{ex.Message}' is not registered");
             }
             catch (InvalidParamException ex)
             {
-                Console.WriteLine($"Cannot resolver parameter {ex.Message}");
+                ExceptionManager.RaiseException($"Cannot resolver parameter {ex.Message}");
             }
             catch (PathNotFoundException ex)
             {
-                Console.WriteLine($"Path '{ex.Message}' does not exists");
+                ExceptionManager.RaiseException($"Path '{ex.Message}' does not exists");
             }
             catch (TemplateConfigFileNotFoundException)
             {
-                Console.WriteLine($"Can't find '{Definitions.TemplateConfigFilename}' file in path");
+                ExceptionManager.RaiseException($"Can't find '{Definitions.TemplateConfigFilename}' file in path");
             }
             catch (InvalidTemplateConfigFileException ex)
             {
-                Console.WriteLine($"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
+                ExceptionManager.RaiseException($"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
             catch (InvalidStringFormatException ex)
             {
-                Console.WriteLine($"Invalid string format. {ex.Message}");
+                ExceptionManager.RaiseException($"Invalid string format. {ex.Message}");
             }
             catch (TemplateNameRepeatedException)
             {
-                Console.WriteLine($"Template name repeated");
+                ExceptionManager.RaiseException($"Template name repeated");
             }
             catch (TemplateNotFoundException)
             {
-                Console.WriteLine($"Can't find any template with this name");
+                ExceptionManager.RaiseException($"Can't find any template with this name");
             }
             catch (RepositoryNotFoundException)
             {
-                Console.WriteLine($"Can't find any repository with this name");
+                ExceptionManager.RaiseException($"Can't find any repository with this name");
             }
             catch (PipelineConfigFileNotFoundException)
             {
-                Console.WriteLine($"Can't find '{Definitions.PipelineConfigFilename}' file in path");
+                ExceptionManager.RaiseException($"Can't find '{Definitions.PipelineConfigFilename}' file in path");
             }
             catch (InvalidPipelineConfigFileException ex)
             {
-                Console.WriteLine($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
+                ExceptionManager.RaiseException($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
+                ExceptionManager.RaiseException($"Throwed uncatched exception: {ex.ToString()}");
             }
 
         }
