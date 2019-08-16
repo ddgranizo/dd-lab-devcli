@@ -38,6 +38,14 @@ steps:
 
 
 
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    feedsToUse: 'select'
+  displayName: "Restoring Framework nugets..."
+
+
 - script: |
     msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
   displayName: "Building Framework Dynamics CLI..."
