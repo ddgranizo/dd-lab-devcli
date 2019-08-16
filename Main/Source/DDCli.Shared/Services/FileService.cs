@@ -321,6 +321,10 @@ namespace DDCli.Services
         {
             DirectoryInfo info = new DirectoryInfo(path);
             var destinationFileName = $"{info.Parent.FullName}\\{info.Name}.zip";
+            if (File.Exists(destinationFileName))
+            {
+                File.Delete(destinationFileName);
+            }
             System.IO.Compression.ZipFile.CreateFromDirectory(path, destinationFileName);
         }
 
@@ -336,6 +340,10 @@ namespace DDCli.Services
             var tempFolderPath = $"{fileDirectoryPath}\\{fileNameWithoutExtension}";
             Directory.CreateDirectory(tempFolderPath);
             File.Copy(path, $"{tempFolderPath}\\{fileName}");
+            if (File.Exists(destinationZipPath))
+            {
+                File.Delete(destinationZipPath);
+            }
             System.IO.Compression.ZipFile.CreateFromDirectory(tempFolderPath, destinationZipPath);
             Directory.Delete(tempFolderPath);
         }
