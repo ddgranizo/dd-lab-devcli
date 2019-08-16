@@ -39,7 +39,7 @@ steps:
 
 
 - script: |
-    msbuild '**/DDCli/DDCli.csproj'
+    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
   displayName: "Building Framework Dynamics CLI..."
 
 ###### UNIT TEST ########
