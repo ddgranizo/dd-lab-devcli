@@ -34,11 +34,11 @@ namespace DDCli.Dynamics
             }
             catch(PathNotFoundException ex)
             {
-                Console.WriteLine($"Path '{ex.Message}' does not exists");
+                ExceptionManager.RaiseException($"Path '{ex.Message}' does not exists");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Throwed uncatched exception: {ex.ToString()}");
+                ExceptionManager.RaiseException($"Throwed uncatched exception: {ex.ToString()}");
             }
         }
 
