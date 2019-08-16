@@ -22,7 +22,7 @@ steps:
 ##### INSTALL DOTNET #######
 
 - task: DotNetCoreInstaller@1
-  displayName: 'Installing version $(coreCliVersion)...'
+  displayName: 'Installing NetCore version $(coreCliVersion)...'
   inputs:
     version: $(coreCliVersion)
 
@@ -51,6 +51,7 @@ steps:
   inputs:
     solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
     msbuildArchitecture: 'x64'
+    configuration: 'Release'
   displayName: 'Building Framework CLI...'
 
 
@@ -81,9 +82,9 @@ steps:
 
 ###### PUBLISH ######
 
-- script: |
-    mkdir Output
-  displayName: "Making output directory"
+#- script: |
+#    mkdir Output
+#  displayName: "Making output directory"
 
 - script: |
     dotnet publish -c Release -r win10-x64 --version-suffix $(Build.BuildId)
@@ -91,12 +92,22 @@ steps:
   displayName: 'Publishing exe...'
 
 - task: ArchiveFiles@2
-  displayName: 'Packing into zip...'
+  displayName: 'Packing DDCli into zip...'
   inputs:
     rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/DDCli/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+    verbose: true
+
+- task: ArchiveFiles@2
+  displayName: 'Packing DDCli.Dynamics into zip...'
+  inputs:
+    rootFolderOrFile: 'Main/Source/DDCli.Dynamics/bin/Release/'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/DDCli.Dynamics/$(Build.BuildId).zip'
     replaceExistingArchive: true
     verbose: true
 
