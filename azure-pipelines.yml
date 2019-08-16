@@ -41,7 +41,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
-    restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    restoreSolution: '**/*.sln'
   displayName: "Restoring Framework nugets..."
 
 
