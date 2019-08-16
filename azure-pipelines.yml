@@ -31,7 +31,7 @@ steps:
 
 
 - script: |
-    nuget restore 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj' -PackagesDirectory packages'
+    nuget restore 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj' -PackagesDirectory packages
   displayName: "Restoring nuget packages..."
 
 
