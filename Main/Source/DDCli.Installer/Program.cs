@@ -63,7 +63,7 @@ namespace DDCli.Installer
                 File.Delete(FilePath);
             }
             CreateNewDirectory(ArtifactorExtractionFolder);
-            CreateNewDirectory(AssemblyCliExtractionFolder);
+            //CreateNewDirectory(AssemblyCliExtractionFolder);
 
             Stream zipStream = devOpsService.GetArtifact(lastBuild.Id, ArtifactName).Result;
             using (FileStream zipFile = new FileStream(FilePath, FileMode.Append))
@@ -78,6 +78,10 @@ namespace DDCli.Installer
             var assemblyCliDynamicsZipFileName = $@"{ArtifactorExtractionFolder}\Assembly\DDCli.Dynamics\{lastBuild.Id}.zip";
 
             Console.WriteLine("Unzipping assemblies...");
+
+            Directory.Delete(AssemblyCliExtractionFolder, true);
+            Directory.Delete(AssemblyCliDynamicsExtractionFolder, true);
+
             ZipFile.ExtractToDirectory(assemblyCliZipFileName, AssemblyCliExtractionFolder);
             ZipFile.ExtractToDirectory(assemblyCliDynamicsZipFileName, AssemblyCliDynamicsExtractionFolder);
             Console.WriteLine("Installing files in folder...");

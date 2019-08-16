@@ -15,7 +15,7 @@ namespace DDCli.Services
 
         public void CopyToClipboard(string val)
         {
-            $"echo {val} | clip".Bat();
+            throw new NotImplementedException();//$"echo {val} | clip".Bat();
         }
     }
 }

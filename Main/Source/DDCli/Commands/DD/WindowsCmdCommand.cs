@@ -12,6 +12,9 @@ namespace DDCli.Commands.DD
 
 
         public CommandParameterDefinition CommandCmdParameter { get; set; }
+        public CommandParameterDefinition CommandWorkingDirectoryParameter { get; set; }
+
+        public CommandParameterDefinition CommandFilenameParameter { get; set; }
         public IPromptCommandService PromptCommandService { get; }
 
         public WindowsCmdCommand(IPromptCommandService promptCommandService)
@@ -21,7 +24,18 @@ namespace DDCli.Commands.DD
                 CommandParameterDefinition.TypeValue.String,
                 "Command name for the alias", "c");
 
+            CommandWorkingDirectoryParameter = new CommandParameterDefinition("workingdirectory",
+                CommandParameterDefinition.TypeValue.String,
+                "Working directory", "w");
+
+            CommandFilenameParameter = new CommandParameterDefinition("filename",
+                CommandParameterDefinition.TypeValue.String,
+                "File name", "f");
+
             RegisterCommandParameter(CommandCmdParameter);
+            RegisterCommandParameter(CommandWorkingDirectoryParameter);
+            RegisterCommandParameter(CommandFilenameParameter);
+
             PromptCommandService = promptCommandService 
                 ?? throw new ArgumentNullException(nameof(promptCommandService));
         }
@@ -33,8 +47,11 @@ namespace DDCli.Commands.DD
 
         public override void Execute(List<CommandParameter> parameters)
         {
+            var workingDirectory = GetStringParameterValue(parameters, CommandWorkingDirectoryParameter.Name, null);
+            var filename = GetStringParameterValue(parameters, CommandFilenameParameter.Name, null);
             var command = GetStringParameterValue(parameters, CommandCmdParameter.Name);
-            PromptCommandService.RunCommand(command);
+            var response =  PromptCommandService.RunCommand(command, filename, workingDirectory);
+            Log(response);
         }
     }
 }

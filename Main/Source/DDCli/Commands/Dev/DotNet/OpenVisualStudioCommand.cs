@@ -38,8 +38,8 @@ namespace DDCli.Commands.Dev.DotNet
 
             var fileName = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\devenv.exe";
             bool runAsAdministrator = GetBoolParameterValue(parameters, RootParameter.Name, false);
-            PromptCommandService
-                .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
+            //PromptCommandService
+            //    .Run(DirectoryService.GetCurrentPath(), fileName, DirectoryService.GetCurrentPath(), runAsAdministrator, true);
         }
 
         private void PromptCommandManager_OnCommandPromptOutput(string output)
