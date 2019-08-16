@@ -16,6 +16,8 @@ namespace DDCli.Dynamics
         private static CommandManager commandManager;
         static void Main(string[] args)
         {
+            Console.WriteLine($"-->{string.Join(" ", args)}<--");
+
             var storedData = StoredDataManager.GetStoredData();
 
             IRegistryService registryService = new RegistryService();

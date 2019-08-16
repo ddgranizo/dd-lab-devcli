@@ -19,9 +19,9 @@ namespace DDCli.Exceptions
             sb.AppendLine("####      ERROR!      #####");
             sb.AppendLine("###########################");
             sb.AppendLine("###########################");
-            sb.AppendLine("");
+            sb.AppendLine("################# ------ >>");
             sb.AppendLine($"Error message: {ex.Message}");
-            sb.AppendLine("###########################");
+            sb.AppendLine("################# << ------");
             Console.WriteLine(sb.ToString());
             throw ex;
         }
