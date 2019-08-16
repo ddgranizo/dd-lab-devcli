@@ -35,10 +35,15 @@ steps:
     restoreSolution: '$(Agent.BuildDirectory)\\Main\\Source\\DDCli.Dynamics\\DDCli.Dynamics.csproj'
     feedsToUse: 'select'
 
-- script: |
-    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-  displayName: "Building Framework Dynamics CLI..."
-  
+#- script: |
+#    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+#  displayName: "Building Framework Dynamics CLI..."
+
+- task: MSBuild@1
+  inputs:
+    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    msbuildArchitecture: 'x64'
+
 #- script: |
 #    nuget restore '$(Agent.BuildDirectory)\Main\Source\DDCli.Dynamics\DDCli.Dynamics.csproj' 
 #  displayName: "Restoring nuget packages..."
