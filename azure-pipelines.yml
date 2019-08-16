@@ -31,21 +31,16 @@ steps:
 
 
 - script: |
-    nuget restore 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj -PackagesDirectory packages'
+    nuget restore 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj' -PackagesDirectory packages'
   displayName: "Restoring nuget packages..."
 
-  
+
 - task: DotNetCoreCLI@2
   displayName: 'Building Core CLI...'
   inputs:
     command: build
     projects: '**/DDCli/DDCli.csproj'
     configuration: $(buildConfiguration)
-
-
-
-
-
 
 
 #- task: MSBuild@1
