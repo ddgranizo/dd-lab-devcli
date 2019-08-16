@@ -37,17 +37,16 @@ steps:
     configuration: $(buildConfiguration)
 
 
-
-- task: NuGetCommand@2
+- task: MSBuild@1
   inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-  displayName: "Restoring Framework nugets..."
+    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    msbuildArchitecture: 'x64'
+    restoreNugetPackages: true
 
 
-- script: |
-    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-  displayName: "Building Framework Dynamics CLI..."
+#- script: |
+#    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+#  displayName: "Building Framework Dynamics CLI..."
 
 ###### UNIT TEST ########
 
