@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>3dd27314-d4cf-49a0-82ec-3b39b7ebb55b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>DDCli</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Definitions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Events\LogEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Events\ReplacedParameterEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Events\ReplacedParameterValueEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\AliasNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\AliasRepeatedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\CommandNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\DuplicateCommandException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamNameException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidParamsException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidPipelineConfigFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidStringFormatException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidTemplateConfigFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidZipFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotArgumentsException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotValidCommandNameException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ParameterNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ParameterRepeatedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PathNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineConfigFileNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\RepositoryNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateConfigFileNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNameRepeatedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IClipboardService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IConsoleService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICryptoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IFileService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPromptCommandService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegistryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStoredDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWebService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CliParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommandAlias.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommandParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CommandParameterDefinition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DDPipelineConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DDTemplateConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\InputParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\InputRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RegisteredTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ReplacePairValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\StoredCliData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ClipboardService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ConsoleService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CryptoService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\FileService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\PromptCommandService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\RegistryService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\StoredDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\WebService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ExceptionInLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ParameterManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StoredDataManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringFormats.cs" />
+  </ItemGroup>
+</Project>

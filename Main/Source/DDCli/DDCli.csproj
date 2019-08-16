@@ -20,4 +20,6 @@
     <Folder Include="Commands\Ops\" />
   </ItemGroup>
 
+  <Import Project="..\DDCli.Shared\DDCli.Shared.projitems" Label="Shared" />
+
 </Project>

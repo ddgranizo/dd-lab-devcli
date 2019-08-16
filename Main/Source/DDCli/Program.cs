@@ -156,12 +156,7 @@ namespace DDCli
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 
-            Register(new Commands.DD.PipelineCommand(
-                commandManager.Commands, 
-                fileService,
-                registryService,
-                cryptoService,
-                storedDataService));
+            Register(new Commands.DD.PipelineCommand(commandManager.Commands, fileService, registryService, cryptoService, storedDataService));
             Register(new Commands.HelpCommand(commandManager.Commands));
         }
 

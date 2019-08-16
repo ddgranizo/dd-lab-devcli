@@ -9,9 +9,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{094A30EA-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli.Test", "Test\DDCli.Test\DDCli.Test.csproj", "{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDCli.Installer", "Source\DDCli.Installer\DDCli.Installer.csproj", "{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDCli.Installer", "Source\DDCli.Installer\DDCli.Installer.csproj", "{E62D71E1-864F-4432-AAC3-F90FC0F0DDBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F43A0B8F-A8BB-42FA-8D8B-7D65DCBCDB8C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DDCli.Shared", "Source\DDCli.Shared\DDCli.Shared.shproj", "{3DD27314-D4CF-49A0-82EC-3B39B7EBB55B}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Source\DDCli.Shared\DDCli.Shared.projitems*{3dd27314-d4cf-49a0-82ec-3b39b7ebb55b}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -35,6 +42,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FABDC18B-C2E3-48EA-9031-E73A9FB9A10D} = {094A30EA-67CC-4CAA-8226-2E4045A6887E}
+		{3DD27314-D4CF-49A0-82EC-3B39B7EBB55B} = {F43A0B8F-A8BB-42FA-8D8B-7D65DCBCDB8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6657A737-9190-4B7A-B4E5-F0BB27DE1DC2}
