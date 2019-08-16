@@ -34,6 +34,8 @@ steps:
     command: 'restore'
     restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
     feedsToUse: 'select'
+    restoreDirectory: '../../packages'
+    
 
 #- script: |
 #    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
