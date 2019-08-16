@@ -27,28 +27,7 @@ steps:
     version: $(coreCliVersion)
 
 
-##### BUILD SOLUTION #######
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore'
-    restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-    feedsToUse: 'select'
-    restoreDirectory: '../../packages'
-    
-
-#- script: |
-#    msbuild 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-#  displayName: "Building Framework Dynamics CLI..."
-
-- task: MSBuild@1
-  inputs:
-    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-    msbuildArchitecture: 'x64'
-
-#- script: |
-#    nuget restore '$(Agent.BuildDirectory)\Main\Source\DDCli.Dynamics\DDCli.Dynamics.csproj' 
-#  displayName: "Restoring nuget packages..."
+##### BUILD NET CORE #######
 
 
 - task: DotNetCoreCLI@2
@@ -58,13 +37,21 @@ steps:
     projects: '**/DDCli/DDCli.csproj'
     configuration: $(buildConfiguration)
 
+##### BUILD NET FRAMEWORK #######
 
-#- task: MSBuild@1
-#  inputs:
-#    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
-#    msbuildArchitecture: 'x64'
-#    restoreNugetPackages: true
-
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    feedsToUse: 'select'
+    restoreDirectory: '../../packages'
+  displayName: 'Restoring Framework nugets...'
+    
+- task: MSBuild@1
+  inputs:
+    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    msbuildArchitecture: 'x64'
+  displayName: 'Building Framework CLI...'
 
 
 
