@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   solutionTarget: 'Main/dd-lab-devcli.sln'
@@ -22,19 +22,39 @@ steps:
 ##### INSTALL DOTNET #######
 
 - task: DotNetCoreInstaller@1
-  displayName: 'Installing version $(coreCliVersion)...'
+  displayName: 'Installing NetCore version $(coreCliVersion)...'
   inputs:
     version: $(coreCliVersion)
 
 
-##### BUILD SOLUTION #######
+##### BUILD NET CORE #######
+
 
 - task: DotNetCoreCLI@2
-  displayName: 'Building...'
+  displayName: 'Building Core CLI...'
   inputs:
     command: build
-    projects: '**/*.sln'
+    projects: '**/DDCli/DDCli.csproj'
     configuration: $(buildConfiguration)
+
+##### BUILD NET FRAMEWORK #######
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    feedsToUse: 'select'
+    restoreDirectory: '../../packages'
+  displayName: 'Restoring Framework nugets...'
+    
+- task: MSBuild@1
+  inputs:
+    solution: 'Main/Source/DDCli.Dynamics/DDCli.Dynamics.csproj'
+    msbuildArchitecture: 'x64'
+    configuration: 'Release'
+  displayName: 'Building Framework CLI...'
+
+
 
 ###### UNIT TEST ########
 
@@ -47,24 +67,24 @@ steps:
 
 ###### CODE COVERAGE ########
 
-- task: CmdLine@2
-  inputs:
-    script: |
-      dotnet test $(solutionTarget) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
-  displayName: 'Calculating code coverage...'
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      dotnet test Main\Test\DDCli.Test\DDCli.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='$(Agent.BuildDirectory)/results' 
+#  displayName: 'Calculating code coverage...'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
+#- task: PublishCodeCoverageResults@1
+#  inputs:
+#    codeCoverageTool: Cobertura
+#    summaryFileLocation: $(Agent.BuildDirectory)/results.cobertura.xml
 
 
 
 ###### PUBLISH ######
 
-- script: |
-    mkdir Output
-  displayName: "Making output directory"
+#- script: |
+#    mkdir Output
+#  displayName: "Making output directory"
 
 - script: |
     dotnet publish -c Release -r win10-x64 --version-suffix $(Build.BuildId)
@@ -72,12 +92,22 @@ steps:
   displayName: 'Publishing exe...'
 
 - task: ArchiveFiles@2
-  displayName: 'Packing into zip...'
+  displayName: 'Packing DDCli into zip...'
   inputs:
     rootFolderOrFile: 'Main/Source/DDCli/bin/Release/netcoreapp2.0/win10-x64/publish/'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/DDCli/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+    verbose: true
+
+- task: ArchiveFiles@2
+  displayName: 'Packing DDCli.Dynamics into zip...'
+  inputs:
+    rootFolderOrFile: 'Main/Source/DDCli.Dynamics/bin/Release/'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/DDCli.Dynamics/$(Build.BuildId).zip'
     replaceExistingArchive: true
     verbose: true
 
