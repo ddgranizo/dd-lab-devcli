@@ -28,7 +28,7 @@ namespace DDCli.Commands.Windows
                 "newpath",
                 CommandParameterDefinition.TypeValue.String,
                 "New name of the folder",
-                "d");
+                "n");
 
             CommandParametersDefinition.Add(CommandPathOldFolderParameter);
             CommandParametersDefinition.Add(CommandPathNewFolderParameter);

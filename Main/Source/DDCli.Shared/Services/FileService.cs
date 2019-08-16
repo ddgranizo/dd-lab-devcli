@@ -373,9 +373,9 @@ namespace DDCli.Services
             var absoluteNewPath = newPath;
             if (!Path.IsPathRooted(newPath))
             {
-                absoluteNewPath = $"{directoryOldPathInfo.FullName}\\{newPath}";
+                absoluteNewPath = $"{directoryOldPathInfo.Parent.FullName}\\{newPath}";
             }
-            var directoryNewPathInfo = new DirectoryInfo(newPath);
+            var directoryNewPathInfo = new DirectoryInfo(absoluteNewPath);
             if (directoryOldPathInfo.Parent.FullName != directoryNewPathInfo.Parent.FullName)
             {
                 throw new InvalidParamException("Folders must be in the same path");
