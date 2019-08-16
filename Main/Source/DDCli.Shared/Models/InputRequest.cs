@@ -37,7 +37,10 @@ namespace DDCli.Models
 
         private List<InputParameter> GetInputParameters(string[] parameterArr)
         {
-
+            for (int i = 0; i < parameterArr.Length; i++)
+            {
+                Console.WriteLine(i + "- " + parameterArr[i]);
+            }
             var parameters = new List<InputParameter>();
             if (parameterArr.Length == 1 && !IsParamNameValid(parameterArr[0]))
             {
