@@ -7,7 +7,7 @@
     <ProjectGuid>{15551EF3-85B0-425E-A8EE-E12E8299823C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DDCli.Dynamics</RootNamespace>
-    <AssemblyName>DDCli.Dynamics</AssemblyName>
+    <AssemblyName>DDDynamics</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

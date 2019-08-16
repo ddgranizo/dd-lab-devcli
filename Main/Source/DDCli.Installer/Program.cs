@@ -23,8 +23,10 @@ namespace DDCli.Installer
         private const string FilePath = "Assembly.zip";
         private const string ArtifactName = "Assembly";
         private const string ArtifactorExtractionFolder = "artifactor_extraction";
-        private const string AssemblyExtractionFolder = "assembly_extraction";
-        private const string InstallFolder = @"C:\DDCli";
+        private const string AssemblyCliExtractionFolder = "assembly_cli_extraction";
+        private const string AssemblyCliDynamicsExtractionFolder = "assembly_cli_dynamics_extraction";
+        private const string InstallCliFolder = @"C:\DDCli";
+        private const string InstallCliDynamicsFolder = @"C:\DDCli.Dynamics";
         static void Main(string[] args)
         {
 
@@ -61,7 +63,7 @@ namespace DDCli.Installer
                 File.Delete(FilePath);
             }
             CreateNewDirectory(ArtifactorExtractionFolder);
-            CreateNewDirectory(AssemblyExtractionFolder);
+            CreateNewDirectory(AssemblyCliExtractionFolder);
 
             Stream zipStream = devOpsService.GetArtifact(lastBuild.Id, ArtifactName).Result;
             using (FileStream zipFile = new FileStream(FilePath, FileMode.Append))
@@ -72,15 +74,17 @@ namespace DDCli.Installer
 
             Console.WriteLine("Unzipping artifactor...");
             ZipFile.ExtractToDirectory(FilePath, ArtifactorExtractionFolder);
-            var assemblyZipFileName = $@"{ArtifactorExtractionFolder}\Assembly\{lastBuild.Id}.zip";
+            var assemblyCliZipFileName = $@"{ArtifactorExtractionFolder}\Assembly\DDCli\{lastBuild.Id}.zip";
+            var assemblyCliDynamicsZipFileName = $@"{ArtifactorExtractionFolder}\Assembly\DDCli.Dynamics\{lastBuild.Id}.zip";
 
-            Console.WriteLine("Unzipping assembly...");
-            ZipFile.ExtractToDirectory(assemblyZipFileName, AssemblyExtractionFolder);
-
+            Console.WriteLine("Unzipping assemblies...");
+            ZipFile.ExtractToDirectory(assemblyCliZipFileName, AssemblyCliExtractionFolder);
+            ZipFile.ExtractToDirectory(assemblyCliDynamicsZipFileName, AssemblyCliDynamicsExtractionFolder);
             Console.WriteLine("Installing files in folder...");
-            Directory.Delete(InstallFolder, true);
-            Directory.Move(AssemblyExtractionFolder, InstallFolder);
-
+            Directory.Delete(InstallCliFolder, true);
+            Directory.Delete(InstallCliDynamicsFolder, true);
+            Directory.Move(AssemblyCliExtractionFolder, InstallCliFolder);
+            Directory.Move(AssemblyCliDynamicsExtractionFolder, InstallCliDynamicsFolder);
             Console.WriteLine("Installation complete");
 
         }
