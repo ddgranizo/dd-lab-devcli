@@ -12,7 +12,7 @@ namespace DDCli.Models
     {
         public event OnReplacedParameterHandler OnReplacedAutoIncrementInSubCommand;
 
-        private const string BaseNamespace = "DDCli.Commands";
+        private const string BaseNamespaces = "DDCli.Commands;DDCli.Dynamics.Commands";
 
         public event OnLogHnadler OnLog;
         public List<CommandParameterDefinition> CommandParametersDefinition { get; set; }
@@ -37,8 +37,8 @@ namespace DDCli.Models
             {
                 throw new ArgumentException("help cannot be empty or null", nameof(description));
             }
-
-            CommandNameSpace = commandNameSpace.Replace(BaseNamespace, string.Empty);
+            CommandNameSpace = commandNameSpace;
+            BaseNamespaces.Split(';').ToList().ForEach(k => CommandNameSpace = CommandNameSpace.Replace(k, string.Empty));
             if (CommandNameSpace.Length>0)
             {
                 CommandNameSpace = CommandNameSpace.Substring(1); //remove the first dot

@@ -1,7 +1,6 @@
-﻿using DDCli.Commands;
+﻿
 using DDCli.Events;
 using DDCli.Exceptions;
-using DDCli.Extensions;
 using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Services;
@@ -10,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace DDCli
 {
@@ -146,11 +143,13 @@ namespace DDCli
                 command.OnReplacedAutoIncrementInSubCommand += _parameterManager_OnReplacedAutoIncrement;
                 if (command.CanExecute(commandsParameters))
                 {
-
-                    var processedParameters = _parameterManager.ResolveParameters(StoredDataService, commandsParameters);
+                    var commandName = command.CommandName;
+                    var processedParameters = commandName != "AddParameterCommand"
+                            ? _parameterManager.ResolveParameters(StoredDataService, commandsParameters)
+                            : commandsParameters;
                     var timer = new Stopwatch(); timer.Start();
                     command.ConsoleService = new ConsoleService(consoleInputs);
-                    command.Execute(commandsParameters);
+                    command.Execute(processedParameters);
                     Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
                 }
                 else

@@ -349,6 +349,9 @@ namespace DDCli.Services
             System.IO.Compression.ZipFile.ExtractToDirectory(path, absolutePath);
         }
 
-        
+        public byte[] ReadAllBytes(string path)
+        {
+            return File.ReadAllBytes(path);
+        }
     }
 }

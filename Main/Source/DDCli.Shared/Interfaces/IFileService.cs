@@ -53,5 +53,8 @@ namespace DDCli.Interfaces
         void ZipFile(string path, string zipName = null);
 
         void UnZipPath(string path, string destinationFolder = null);
+
+
+        byte[] ReadAllBytes(string path);
     }
 }

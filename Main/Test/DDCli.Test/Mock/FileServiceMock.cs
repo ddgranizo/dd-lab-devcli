@@ -30,6 +30,10 @@ namespace DDCli.Test.Mock
         public bool IsDirectoryReturn { get; set; }
 
         public bool IsFileReturn { get; set; }
+
+
+        public byte[] ReadAllBytesReturn { get; set; }
+
         public FileServiceMock()
         {
 
@@ -183,6 +187,11 @@ namespace DDCli.Test.Mock
             ReplacedSubDirectoriesPath = rootPath;
             ReplacedStringInPathsOldValue = oldValue;
             ReplacedStringInPathsNewValue = newValue;
+        }
+
+        public byte[] ReadAllBytes(string path)
+        {
+            return ReadAllBytesReturn;
         }
     }
 }

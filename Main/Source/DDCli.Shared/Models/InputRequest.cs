@@ -84,7 +84,7 @@ namespace DDCli.Models
 
         private string GetNameSpace(string commandRawName)
         {
-            return string.Join('.', commandRawName.Split('-').SkipLast(1));
+            return string.Join(".", commandRawName.Split('-').SkipLastCustom(1).ToArray());
         }
 
         private string GetCommandName(string commandRawName)
