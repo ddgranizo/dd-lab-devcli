@@ -33,7 +33,7 @@ steps:
   displayName: 'Building...'
   inputs:
     command: build
-    projects: '**/*.sln'
+    projects: '**/DDCli/DDCli.csproj'
     configuration: $(buildConfiguration)
 
 ###### UNIT TEST ########
