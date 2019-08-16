@@ -42,5 +42,11 @@ namespace DDCli.Test.Mock
         {
             throw new NotImplementedException();
         }
+
+        public string RunCommand(string command, string filename = null, string workingDirectory = null)
+        {
+            RunCommandValue = command;
+            return string.Empty;
+        }
     }
 }
