@@ -42,14 +42,15 @@ namespace DDCli.Commands.DD
 
         public override bool CanExecute(List<CommandParameter> parameters)
         {
-            return IsParamOk(parameters, CommandCmdParameter.Name);
+            return IsParamOk(parameters, CommandCmdParameter.Name)
+                 || IsParamOk(parameters, CommandFilenameParameter.Name);
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
             var workingDirectory = GetStringParameterValue(parameters, CommandWorkingDirectoryParameter.Name, null);
             var filename = GetStringParameterValue(parameters, CommandFilenameParameter.Name, null);
-            var command = GetStringParameterValue(parameters, CommandCmdParameter.Name);
+            var command = GetStringParameterValue(parameters, CommandCmdParameter.Name, null);
             var response =  PromptCommandService.RunCommand(command, filename, workingDirectory);
             Log(response);
         }

@@ -42,7 +42,7 @@ namespace DDCli.Services
 
         public string Bat(string cmd, string filename = null, string workingDirectory = null)
         {
-            var escapedArgs = cmd.Replace("\"", "\\\"");
+            var escapedArgs = cmd != null ? cmd.Replace("\"", "\\\"") : string.Empty;
             var file = filename ?? "cmd.exe";
             var cmdString = filename == null
                 ? $"/c \"{escapedArgs}\""

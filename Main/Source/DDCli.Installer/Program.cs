@@ -79,8 +79,9 @@ namespace DDCli.Installer
 
             Console.WriteLine("Unzipping assemblies...");
 
-            Directory.Delete(AssemblyCliExtractionFolder, true);
-            Directory.Delete(AssemblyCliDynamicsExtractionFolder, true);
+            
+            DeleteDirectory(AssemblyCliExtractionFolder);
+            DeleteDirectory(AssemblyCliDynamicsExtractionFolder);
 
             ZipFile.ExtractToDirectory(assemblyCliZipFileName, AssemblyCliExtractionFolder);
             ZipFile.ExtractToDirectory(assemblyCliDynamicsZipFileName, AssemblyCliDynamicsExtractionFolder);
@@ -102,6 +103,13 @@ namespace DDCli.Installer
             Directory.CreateDirectory(path);
         }
 
+        private static void DeleteDirectory(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+        }
 
         public static string GetSetting(IConfigurationSection section, string key)
         {

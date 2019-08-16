@@ -346,6 +346,10 @@ namespace DDCli.Services
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
             var processedDestinationFolder = destinationFolder ?? fileNameWithoutExtension;
             var absolutePath = GetAbsolutePath(processedDestinationFolder, fileDirectoryPath);
+            if (Directory.Exists(absolutePath))
+            {
+                Directory.Delete(absolutePath, true);
+            }
             System.IO.Compression.ZipFile.ExtractToDirectory(path, absolutePath);
         }
 

@@ -81,12 +81,33 @@ namespace DDCli.Commands.DD
             multipleCommandManager.RegisterCommands(RegisteredCommands);
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;
-            foreach (var commandDefinition in pipelineConfig.Commands)
+
+            int counter = 1;
+            foreach (var commandDefinition in  pipelineConfig.Commands)
             {
-                var args = StringFormats.StringToParams(commandDefinition.Command);
-                var inputCommand = new InputRequest(args);
-                multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
+                if (commandDefinition.IsDisabled)
+                {
+                    Log($"### (Pipeline) [{counter++}/{pipelineConfig.Commands.Count}] Skip command. Reason: Disabled");
+                }
+                else
+                {
+                    var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
+                    var args = StringFormats.StringToParams(replacedCommand);
+                    Log($"### (Pipeline) [{counter++}/{pipelineConfig.Commands.Count}] Executing command {replacedCommand}...");
+                    var inputCommand = new InputRequest(args);
+                    multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
+                }
             }
+        }
+
+        private static string ReplaceConstants(Dictionary<string, string> constants, string command)
+        {
+            var replaced = command;
+            foreach (var key in constants.Keys)
+            {
+                replaced = replaced.Replace($"[[{key}]]", constants[key]);
+            }
+            return replaced;
         }
 
         private void MultipleCommandManager_OnReplacedAutoIncrementInSubCommand(object sender, Events.ReplacedParameterEventArgs args)

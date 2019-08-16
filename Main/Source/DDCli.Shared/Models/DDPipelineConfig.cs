@@ -7,6 +7,8 @@ namespace DDCli.Models
 {
     public class DDPipelineConfig
     {
+        [JsonProperty("pipelineConstants")]
+        public Dictionary<string,string> PipelineConstants { get; set; }
         [JsonProperty("commands")]
         public List<PipeLineCommandDefinition> Commands { get; set; }
     }
@@ -19,6 +21,9 @@ namespace DDCli.Models
 
         [JsonProperty("consoleInputs")]
         public List<string> ConsoleInputs { get; set; }
+
+        [JsonProperty("isDisabled")]
+        public bool IsDisabled { get; set; }
     }
 
 }
