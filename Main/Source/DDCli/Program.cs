@@ -14,7 +14,6 @@ namespace DDCli
         static void Main(string[] args)
         {
             var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
-            Console.WriteLine($"-->{string.Join("###", argsV2)}<--");
 
             var storedData = StoredDataManager.GetStoredData();
 
