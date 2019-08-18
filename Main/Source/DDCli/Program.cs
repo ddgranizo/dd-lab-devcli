@@ -13,7 +13,8 @@ namespace DDCli
         private static CommandManager commandManager;
         static void Main(string[] args)
         {
-            Console.WriteLine($"-->{string.Join("###", args)}<--");
+            var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
+            Console.WriteLine($"-->{string.Join("###", argsV2)}<--");
 
             var storedData = StoredDataManager.GetStoredData();
 
@@ -28,7 +29,7 @@ namespace DDCli
 
             try
             {
-                var inputCommand = new InputRequest(args);
+                var inputCommand = new InputRequest(argsV2);
                 commandManager.ExecuteInputRequest(inputCommand);
             }
             catch (DuplicateCommandException ex)
