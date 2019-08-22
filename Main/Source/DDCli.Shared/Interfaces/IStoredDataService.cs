@@ -86,5 +86,13 @@ namespace DDCli.Interfaces
 
 
 
+
+        bool ExistsPipeline(string pipelineName);
+
+        void AddPipeline(string path, string pipelineName, string description);
+
+        void DeletePipeline(string pipelineName);
+
+        List<RegisteredPipeline> GetPipelines();
     }
 }

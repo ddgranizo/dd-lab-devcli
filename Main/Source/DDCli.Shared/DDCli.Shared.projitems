@@ -34,7 +34,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineConfigFileNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\RepositoryNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateConfigFileNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineNameRepeatedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNameRepeatedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DDTemplateConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InputRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RegisteredPipeline.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RegisteredTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ReplacePairValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\StoredCliData.cs" />

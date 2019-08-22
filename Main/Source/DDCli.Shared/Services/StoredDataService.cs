@@ -157,6 +157,27 @@ namespace DDCli.Services
             return StoredCliData.RegisteredTemplates.First(k => k.TemplateName == templateName).Path;
         }
 
-        
+        public bool ExistsPipeline(string pipelineName)
+        {
+            return StoredCliData.RegisteredPipelines.Any(k => k.PipelineName == pipelineName);
+        }
+
+        public void AddPipeline(string path, string pipelineName, string description)
+        {
+            StoredCliData.RegisteredPipelines.Add(new RegisteredPipeline(path, pipelineName, description));
+            SaveContext();
+        }
+
+        public void DeletePipeline(string pipelineName)
+        {
+            var pipelineForRemove = StoredCliData.RegisteredPipelines.First(k => k.PipelineName == pipelineName);
+            StoredCliData.RegisteredPipelines.Remove(pipelineForRemove);
+            SaveContext();
+        }
+
+        public List<RegisteredPipeline> GetPipelines()
+        {
+            return StoredCliData.RegisteredPipelines.ToList();
+        }
     }
 }

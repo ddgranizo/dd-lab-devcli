@@ -168,5 +168,37 @@ namespace DDCli.Test.Mock
         {
             
         }
+
+
+        public bool ExistsPipelineReturn { get; set; }
+
+        public bool ExistsPipeline(string pipelineName)
+        {
+            return ExistsPipelineReturn;
+        }
+
+
+        public string AddedPipelinePath { get; set; }
+        public string AddedPipelineName { get; set; }
+        public string AddedPipelineDescription { get; set; }
+        public void AddPipeline(string path, string pipelineName, string description)
+        {
+            AddedPipelinePath = path;
+            AddedPipelineName = pipelineName;
+            AddedPipelineDescription = description;
+        }
+
+        public string DeletedPipeline { get; set; }
+        public void DeletePipeline(string pipelineName)
+        {
+            DeletedPipeline = pipelineName;
+        }
+
+
+        public List<RegisteredPipeline> GetPipelinesReturn { get; set; }
+        public List<RegisteredPipeline> GetPipelines()
+        {
+            return GetPipelinesReturn;
+        }
     }
 }

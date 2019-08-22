@@ -111,6 +111,14 @@ namespace DDCli
             {
                 ExceptionManager.RaiseException($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
+            catch (PipelineNameRepeatedException )
+            {
+                ExceptionManager.RaiseException($"Pipeline name repeated");
+            }
+            catch (PipelineNotFoundException )
+            {
+                ExceptionManager.RaiseException($"Can't find any pipeline with this name");
+            }
             catch (Exception ex)
             {
                 ExceptionManager.RaiseException($"Throwed uncatched exception: {ex.ToString()}");
@@ -155,6 +163,11 @@ namespace DDCli
             Register(new Commands.Windows.UnzipCommand(fileService));
             Register(new Commands.Windows.ReplaceFileContentCommand(fileService));
             Register(new Commands.Windows.RenameFolderCommand(fileService));
+
+            Register(new Commands.DD.AddPipelineCommand(storedDataService, fileService));
+            Register(new Commands.DD.DeletePipelineCommand(storedDataService));
+            Register(new Commands.DD.ShowPipelinesCommand(storedDataService));
+
 
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
