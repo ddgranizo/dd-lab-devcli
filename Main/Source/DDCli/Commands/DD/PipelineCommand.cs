@@ -4,6 +4,7 @@ using DDCli.Models;
 using DDCli.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,8 +24,8 @@ namespace DDCli.Commands.DD
         public IStoredDataService StoredDataService { get; }
 
         public PipelineCommand(
-            List<CommandBase> registeredCommands, 
-            IFileService fileService, 
+            List<CommandBase> registeredCommands,
+            IFileService fileService,
             IRegistryService registryService,
             ICryptoService cryptoService,
             IStoredDataService storedDataService)
@@ -61,17 +62,13 @@ namespace DDCli.Commands.DD
             {
                 throw new PathNotFoundException(directory);
             }
-            if (!FileService.ExistsPipelineConfigFile(directory))
-            {
-                throw new PipelineConfigFileNotFoundException(directory);
-            }
 
             var pipelineConfig =
                 ExceptionInLine.Run<DDPipelineConfig>(
                     () => { return FileService.GetPipelineConfig(directory); },
                     (ex) => { throw new InvalidPipelineConfigFileException(ex.Message); });
 
-            if (pipelineConfig == null)
+            if (!FileService.IsValidPipelineConfiguration(pipelineConfig))
             {
                 throw new InvalidPipelineConfigFileException();
             }
@@ -82,26 +79,29 @@ namespace DDCli.Commands.DD
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;
 
-            int counter = 1;
-            foreach (var commandDefinition in  pipelineConfig.Commands)
+
+            Log($"## Executing pipeline {pipelineConfig.PipelineName}...");
+            Stopwatch sb = new Stopwatch(); sb.Start();
+            int counter = 0;
+            foreach (var commandDefinition in pipelineConfig.Commands)
             {
+                var currentCounter = counter++;
+                var commandName = string.IsNullOrEmpty(commandDefinition.Alias) ? "" : commandDefinition.Alias;
                 if (commandDefinition.IsDisabled)
                 {
-                    Log($"### (Pipeline) [{counter++}/{pipelineConfig.Commands.Count}] Skip command. Reason: Disabled");
+                    Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Skip command. Reason: Disabled");
                 }
                 else
                 {
-                    if (counter == 10)
-                    {
-
-                    }
                     var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
                     var args = StringFormats.StringToParams(replacedCommand);
-                    Log($"### (Pipeline) [{counter++}/{pipelineConfig.Commands.Count}] Executing command {replacedCommand}...");
+                    Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Executing command {replacedCommand}...");
                     var inputCommand = new InputRequest(args);
                     multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
                 }
             }
+            var time = StringFormats.MillisecondsToHumanTime(sb.ElapsedMilliseconds);
+            Log($"## Completed pipeline {pipelineConfig.PipelineName} in {time}");
         }
 
         private static string ReplaceConstants(Dictionary<string, string> constants, string command)

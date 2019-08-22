@@ -16,8 +16,7 @@ namespace DDCli.Interfaces
 
         bool ExistsTemplateConfigFile(string path);
 
-        bool ExistsPipelineConfigFile(string path);
-
+        bool IsValidPipelineConfiguration(DDPipelineConfig config);
         DDTemplateConfig GetTemplateConfig(string path);
 
         DDPipelineConfig GetPipelineConfig(string path);

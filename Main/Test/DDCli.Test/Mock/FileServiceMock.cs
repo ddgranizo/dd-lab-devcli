@@ -115,10 +115,7 @@ namespace DDCli.Test.Mock
             throw new NotImplementedException();
         }
 
-        public bool ExistsPipelineConfigFile(string path)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public DDPipelineConfig GetPipelineConfig(string path)
         {
@@ -208,6 +205,14 @@ namespace DDCli.Test.Mock
         {
             RenamedOldFolder = oldPath;
             RenamedNewFolder = newPath;
+        }
+
+
+        public bool IsValidPipelineConfigurationReturn { get; set; }
+
+        public bool IsValidPipelineConfiguration(DDPipelineConfig config)
+        {
+            return IsValidPipelineConfigurationReturn;
         }
     }
 }

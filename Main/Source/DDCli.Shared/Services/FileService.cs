@@ -292,10 +292,7 @@ namespace DDCli.Services
             }
         }
 
-        public bool ExistsPipelineConfigFile(string path)
-        {
-            return ExistsFileInDirectory(path, Definitions.PipelineConfigFilename);
-        }
+      
 
         public DDPipelineConfig GetPipelineConfig(string path)
         {
@@ -405,9 +402,9 @@ namespace DDCli.Services
             Directory.Move(absoluteOldPath, absoluteNewPath);
         }
 
-        
-
-
-        
+        public bool IsValidPipelineConfiguration(DDPipelineConfig config)
+        {
+            return config.Commands != null && !string.IsNullOrEmpty(config.PipelineName); 
+        }
     }
 }

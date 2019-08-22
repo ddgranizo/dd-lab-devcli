@@ -150,7 +150,9 @@ namespace DDCli
                     var timer = new Stopwatch(); timer.Start();
                     command.ConsoleService = new ConsoleService(consoleInputs);
                     command.Execute(processedParameters);
-                    Console.WriteLine($"Executed command in {timer.ElapsedMilliseconds}ms");
+                    var tab = ExecutionMode == ExecutionModeTypes.Single ? "" : "\t";
+                    var time = StringFormats.MillisecondsToHumanTime(timer.ElapsedMilliseconds);
+                    Console.WriteLine($"{tab}Executed command in {time}");
                 }
                 else
                 {
