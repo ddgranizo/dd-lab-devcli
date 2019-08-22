@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.IO.Compression;
 using DDCli.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace DDCli.Services
 {
@@ -180,6 +181,36 @@ namespace DDCli.Services
 
         public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
         {
+            var filesInPath = GetFilesInPath(rootPath, filePattern);
+            foreach (var filePath in filesInPath)
+            {
+                var fileContent = File.ReadAllText(filePath);
+                if (!string.IsNullOrEmpty(fileContent))
+                {
+                    fileContent = fileContent.Replace(oldValue, newValue);
+                }
+                File.WriteAllText(filePath, fileContent);
+            }
+        }
+
+
+        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern)
+        {
+            var filesInPath = GetFilesInPath(rootPath, filePattern);
+            foreach (var filePath in filesInPath)
+            {
+                var fileContent = File.ReadAllText(filePath);
+                if (!string.IsNullOrEmpty(fileContent))
+                {
+                    fileContent = Regex.Replace(fileContent, oldValueRegexPattern, newValue);
+                }
+                File.WriteAllText(filePath, fileContent);
+            }
+        }
+
+
+        private List<string> GetFilesInPath(string rootPath, string filePattern)
+        {
             if (string.IsNullOrEmpty(filePattern))
             {
                 filePattern = "*.*";
@@ -187,27 +218,14 @@ namespace DDCli.Services
             if (IsDirectory(rootPath))
             {
                 var filesInPattern = SearchFilesInPath(rootPath, filePattern);
-                foreach (var filePath in filesInPattern)
-                {
-                    var fileContent = File.ReadAllText(filePath);
-                    if (!string.IsNullOrEmpty(fileContent))
-                    {
-                        fileContent = fileContent.Replace(oldValue, newValue);
-                    }
-                    File.WriteAllText(filePath, fileContent);
-                }
+                return filesInPattern;
             }
             else
             {
                 var fileContent = File.ReadAllText(rootPath);
-                if (!string.IsNullOrEmpty(fileContent))
-                {
-                    fileContent = fileContent.Replace(oldValue, newValue);
-                }
-                File.WriteAllText(rootPath, fileContent);
+                return new List<string>() { rootPath };
             }
         }
-
 
         public void ReplaceAllFilesName(string rootPath, string oldValue, string newValue)
         {
@@ -386,5 +404,10 @@ namespace DDCli.Services
             }
             Directory.Move(absoluteOldPath, absoluteNewPath);
         }
+
+        
+
+
+        
     }
 }

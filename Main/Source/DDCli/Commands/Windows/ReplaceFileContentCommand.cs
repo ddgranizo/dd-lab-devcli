@@ -15,6 +15,7 @@ namespace DDCli.Commands.Windows
 
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandOldValueParameter { get; set; }
+        public CommandParameterDefinition CommandOldValuePatternParameter { get; set; }
         public CommandParameterDefinition CommandNewValueParameter { get; set; }
         public CommandParameterDefinition CommandPatternParameter { get; set; }
         public IFileService FileService { get; }
@@ -36,6 +37,12 @@ namespace DDCli.Commands.Windows
                 "Old value for replace",
                 "o");
 
+            CommandOldValuePatternParameter = new CommandParameterDefinition(
+                "oldvaluepattern",
+                CommandParameterDefinition.TypeValue.String,
+                "Old value for replace. Use regex pattern",
+                "op");
+
             CommandNewValueParameter = new CommandParameterDefinition(
                 "newvalue",
                 CommandParameterDefinition.TypeValue.String,
@@ -51,6 +58,7 @@ namespace DDCli.Commands.Windows
 
             CommandParametersDefinition.Add(CommandPathParameter);
             CommandParametersDefinition.Add(CommandOldValueParameter);
+            CommandParametersDefinition.Add(CommandOldValuePatternParameter);
             CommandParametersDefinition.Add(CommandNewValueParameter);
             CommandParametersDefinition.Add(CommandPatternParameter);
 
@@ -60,24 +68,31 @@ namespace DDCli.Commands.Windows
         public override bool CanExecute(List<CommandParameter> parameters)
         {
             return IsParamOk(parameters, CommandPathParameter.Name)
-                    && IsParamOk(parameters, CommandOldValueParameter.Name)
+                    && (IsParamOk(parameters, CommandOldValueParameter.Name) || IsParamOk(parameters, CommandOldValuePatternParameter.Name))
                     && IsParamOk(parameters, CommandNewValueParameter.Name);
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
             var path = GetStringParameterValue(parameters, CommandPathParameter.Name);
-            var oldValue = GetStringParameterValue(parameters, CommandOldValueParameter.Name);
             var newValue = GetStringParameterValue(parameters, CommandNewValueParameter.Name);
-
             string pattern = "*.*";
             if (IsParamOk(parameters, CommandPatternParameter.Name))
             {
                 pattern = GetStringParameterValue(parameters, CommandPatternParameter.Name);
             }
-            FileService.ReplaceFilesContents(path, oldValue, newValue, pattern);
-        }
 
+            var oldValueRegexPattern = GetStringParameterValue(parameters, CommandOldValuePatternParameter.Name, null);
+            if (oldValueRegexPattern != null)
+            {
+                FileService.ReplaceFilesContentsWithRegexPattern(path, oldValueRegexPattern, newValue, pattern);
+            }
+            else
+            {
+                var oldValue = GetStringParameterValue(parameters, CommandOldValueParameter.Name);
+                FileService.ReplaceFilesContents(path, oldValue, newValue, pattern);
+            }
+        }
       
     }
 }

@@ -32,6 +32,8 @@ namespace DDCli.Interfaces
 
         void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern);
 
+        void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern);
+
         void ReplaceAllFilesName(string rootPath, string oldValue, string newValue);
 
         void ReplaceAllSubDirectoriesName(string rootPath, string oldValue, string newValue);
