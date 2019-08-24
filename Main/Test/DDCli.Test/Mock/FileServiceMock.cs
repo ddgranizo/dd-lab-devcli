@@ -170,14 +170,14 @@ namespace DDCli.Test.Mock
         public string ReplacedStringInPathsOldValue { get; set; }
         public string ReplacedStringInPathsNewValue { get; set; }
 
-        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
+        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern, int times = -1)
         {
             ReplacedFilesContentsPath = rootPath;
             ReplacedStringInPathsOldValue = oldValue;
             ReplacedStringInPathsNewValue = newValue;
         }
 
-        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern)
+        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern, int times = -1)
         {
             ReplacedFilesContentsPath = rootPath;
             ReplacedStringInPathsOldValue = oldValueRegexPattern;

@@ -29,9 +29,9 @@ namespace DDCli.Interfaces
         void CreateDirectory(string path, bool reCreateIfExists = false);
 
 
-        void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern);
+        void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern, int times = -1);
 
-        void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern);
+        void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern, int times = -1);
 
         void ReplaceAllFilesName(string rootPath, string oldValue, string newValue);
 

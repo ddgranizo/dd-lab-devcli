@@ -18,6 +18,7 @@ namespace DDCli.Commands.Windows
         public CommandParameterDefinition CommandOldValuePatternParameter { get; set; }
         public CommandParameterDefinition CommandNewValueParameter { get; set; }
         public CommandParameterDefinition CommandPatternParameter { get; set; }
+        public CommandParameterDefinition CommandTimesParameter { get; set; }
         public IFileService FileService { get; }
 
         public ReplaceFileContentCommand(
@@ -55,12 +56,19 @@ namespace DDCli.Commands.Windows
                 "Pattern for files (use more than one with ;). Default value: *.*",
                 "a");
 
+            CommandTimesParameter = new CommandParameterDefinition(
+               "times",
+               CommandParameterDefinition.TypeValue.Integer,
+               "How many times the old value will be replaced. By default = -1, which means the old value will be replaced in the whole file",
+               "t");
+
 
             CommandParametersDefinition.Add(CommandPathParameter);
             CommandParametersDefinition.Add(CommandOldValueParameter);
             CommandParametersDefinition.Add(CommandOldValuePatternParameter);
             CommandParametersDefinition.Add(CommandNewValueParameter);
             CommandParametersDefinition.Add(CommandPatternParameter);
+            CommandParametersDefinition.Add(CommandTimesParameter);
 
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
@@ -76,6 +84,7 @@ namespace DDCli.Commands.Windows
         {
             var path = GetStringParameterValue(parameters, CommandPathParameter.Name);
             var newValue = GetStringParameterValue(parameters, CommandNewValueParameter.Name);
+            var timesToReplace = GetIntParameterValue(parameters, CommandTimesParameter.Name, -1);
             string pattern = "*.*";
             if (IsParamOk(parameters, CommandPatternParameter.Name))
             {
@@ -85,12 +94,12 @@ namespace DDCli.Commands.Windows
             var oldValueRegexPattern = GetStringParameterValue(parameters, CommandOldValuePatternParameter.Name, null);
             if (oldValueRegexPattern != null)
             {
-                FileService.ReplaceFilesContentsWithRegexPattern(path, oldValueRegexPattern, newValue, pattern);
+                FileService.ReplaceFilesContentsWithRegexPattern(path, oldValueRegexPattern, newValue, pattern, timesToReplace);
             }
             else
             {
                 var oldValue = GetStringParameterValue(parameters, CommandOldValueParameter.Name);
-                FileService.ReplaceFilesContents(path, oldValue, newValue, pattern);
+                FileService.ReplaceFilesContents(path, oldValue, newValue, pattern, timesToReplace);
             }
         }
       

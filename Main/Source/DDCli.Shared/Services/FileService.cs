@@ -179,7 +179,7 @@ namespace DDCli.Services
             }
         }
 
-        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern)
+        public void ReplaceFilesContents(string rootPath, string oldValue, string newValue, string filePattern, int times = -1)
         {
             var filesInPath = GetFilesInPath(rootPath, filePattern);
             foreach (var filePath in filesInPath)
@@ -187,14 +187,22 @@ namespace DDCli.Services
                 var fileContent = File.ReadAllText(filePath);
                 if (!string.IsNullOrEmpty(fileContent))
                 {
-                    fileContent = fileContent.Replace(oldValue, newValue);
+                    var regex = new Regex(Regex.Escape(oldValue));
+                    if (times < 1)
+                    {
+                        fileContent = regex.Replace(fileContent, newValue);
+                    }
+                    else
+                    {
+                        fileContent = regex.Replace(fileContent, newValue, times);
+                    }
                 }
                 File.WriteAllText(filePath, fileContent);
             }
         }
 
 
-        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern)
+        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern, int times= -1)
         {
             var filesInPath = GetFilesInPath(rootPath, filePattern);
             foreach (var filePath in filesInPath)
@@ -293,7 +301,7 @@ namespace DDCli.Services
             }
         }
 
-      
+
 
         public DDPipelineConfig GetPipelineConfig(string path)
         {
@@ -404,7 +412,7 @@ namespace DDCli.Services
 
         public bool IsValidPipelineConfiguration(DDPipelineConfig config)
         {
-            return config.Commands != null && !string.IsNullOrEmpty(config.PipelineName); 
+            return config.Commands != null && !string.IsNullOrEmpty(config.PipelineName);
         }
 
         public bool ExistsPath(string path)
