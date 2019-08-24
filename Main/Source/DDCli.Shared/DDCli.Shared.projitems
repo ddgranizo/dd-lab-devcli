@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineNameRepeatedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNameRepeatedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\PipelineNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotConfirmedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TemplateNotFoundException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
