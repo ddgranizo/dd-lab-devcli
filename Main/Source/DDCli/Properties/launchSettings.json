@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "replacefilecontent -p \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\bin\\Release\\DD.Crm.CustomControls\\solution.xml\" -op \"1.0.\\d+(?:\\.\\d+)+\" -n \"3.3.3.3\""
+      "commandLineArgs": "movepath -sp \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\bin\\Debug\\DD.Crm.CustomControls.zip\" -df \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\archive\\1.0.4.100\""
     }
   }
 }

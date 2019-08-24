@@ -274,7 +274,8 @@ namespace DDCli.Services
         {
             try
             {
-                File.Move(from, to);
+                var toComposed = !IsDirectory(to) ? to : string.Format(@"{0}\{1}", to, new FileInfo(from).Name);
+                File.Move(from, toComposed);
             }
             catch (IOException)
             {
@@ -298,8 +299,7 @@ namespace DDCli.Services
         {
             try
             {
-                var completePath = ConcatDirectoryAndFile(path, Definitions.PipelineConfigFilename);
-                var json = File.ReadAllText(completePath);
+                var json = File.ReadAllText(path);
                 var parsed = JsonConvert.DeserializeObject<DDPipelineConfig>(json);
                 return parsed;
             }
@@ -405,6 +405,22 @@ namespace DDCli.Services
         public bool IsValidPipelineConfiguration(DDPipelineConfig config)
         {
             return config.Commands != null && !string.IsNullOrEmpty(config.PipelineName); 
+        }
+
+        public bool ExistsPath(string path)
+        {
+            bool existsFile = File.Exists(path);
+            bool existsDirectory = Directory.Exists(path);
+            return existsFile | existsDirectory;
+        }
+
+        public void MoveFolderContent(string sourceFolder, string destinationFolder, string filePattern)
+        {
+            var filesForMove = GetFilesInPath(sourceFolder, filePattern);
+            foreach (var file in filesForMove)
+            {
+                MoveFile(file, destinationFolder);
+            }
         }
     }
 }

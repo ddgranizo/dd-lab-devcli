@@ -86,18 +86,23 @@ namespace DDCli.Test.Mock
             return DDTemplateConfigReturn;
         }
 
+
+
+        public string MovedFileFrom { get; set; }
+        public string MovedFileTo { get; set; }
         public void MoveFile(string from, string to, bool waitAccess = false)
         {
-            throw new NotImplementedException();
+            MovedFileFrom = from;
+            MovedFileTo = to;
         }
 
 
-        
+
 
         public void ReplaceStringInPaths(string rootPath, string oldValue, string newValue, bool includeDirectories, bool includeFileNames, bool includeFileContents, string filePattern)
         {
-            
-            
+
+
         }
 
         public List<string> SearchDirectories(string path, string name, bool includeSubdirectories)
@@ -115,7 +120,7 @@ namespace DDCli.Test.Mock
             throw new NotImplementedException();
         }
 
-      
+
 
         public DDPipelineConfig GetPipelineConfig(string path)
         {
@@ -213,6 +218,24 @@ namespace DDCli.Test.Mock
         public bool IsValidPipelineConfiguration(DDPipelineConfig config)
         {
             return IsValidPipelineConfigurationReturn;
+        }
+
+
+
+        public bool ExistsPathReturn { get; set; }
+
+        public bool ExistsPath(string path)
+        {
+            return ExistsPathReturn;
+        }
+
+
+        public string MovedSourceFolder { get; set; }
+        public string MovedDestionationFolder { get; set; }
+        public void MoveFolderContent(string sourceFolder, string destinationFolder, string filePattern)
+        {
+            MovedSourceFolder = sourceFolder;
+            MovedDestionationFolder = destinationFolder;
         }
     }
 }

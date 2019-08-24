@@ -47,6 +47,9 @@ namespace DDCli.Interfaces
 
         bool IsDirectory(string path);
 
+
+        bool ExistsPath(string path);
+
         string GetFileDirectory(string path);
 
         void ZipDierctory(string path);
@@ -58,5 +61,7 @@ namespace DDCli.Interfaces
         byte[] ReadAllBytes(string path);
 
         void RenameFolder(string oldPath, string newPath);
+
+        void MoveFolderContent(string sourceFolder, string destinationFolder, string filePattern);
     }
 }

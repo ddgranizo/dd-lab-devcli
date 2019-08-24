@@ -61,6 +61,8 @@ namespace DDCli.Dynamics
 
 
             Register(new Commands.ImportSolutionCommand(fileService));
+            Register(new Commands.GetTokenCommand());
+
             Register(new Commands.HelpCommand(commandManager.Commands));
         }
 

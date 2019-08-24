@@ -53,19 +53,14 @@ namespace DDCli.Commands.DD
         public override void Execute(List<CommandParameter> parameters)
         {
             var path = GetStringParameterValue(parameters, CommandPathParameter.Name);
-            var directory = path;
-            if (FileService.IsFile(path))
+            if (!FileService.ExistsFile(path))
             {
-                directory = FileService.GetFileDirectory(path);
+                throw new PathNotFoundException(path);
             }
-            if (!FileService.ExistsDirectory(directory))
-            {
-                throw new PathNotFoundException(directory);
-            }
-
+            
             var pipelineConfig =
                 ExceptionInLine.Run<DDPipelineConfig>(
-                    () => { return FileService.GetPipelineConfig(directory); },
+                    () => { return FileService.GetPipelineConfig(path); },
                     (ex) => { throw new InvalidPipelineConfigFileException(ex.Message); });
 
             if (!FileService.IsValidPipelineConfiguration(pipelineConfig))
