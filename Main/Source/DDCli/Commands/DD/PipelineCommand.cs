@@ -57,7 +57,7 @@ namespace DDCli.Commands.DD
             {
                 throw new PathNotFoundException(path);
             }
-            
+
             var pipelineConfig =
                 ExceptionInLine.Run<DDPipelineConfig>(
                     () => { return FileService.GetPipelineConfig(path); },
@@ -73,6 +73,19 @@ namespace DDCli.Commands.DD
             multipleCommandManager.RegisterCommands(RegisteredCommands);
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;
+
+
+            if (pipelineConfig.PipelineVariables.Count > 0)
+            {
+                Log($"## Setting up pipeline variables:");
+                foreach (var variable in pipelineConfig.PipelineVariables)
+                {
+                    Log($"\tValue for variable '{variable}':");
+                    var value = Console.ReadLine();
+
+                    pipelineConfig.PipelineConstants.Add(variable, value);
+                }
+            }
 
 
             Log($"## Executing pipeline {pipelineConfig.PipelineName}...");

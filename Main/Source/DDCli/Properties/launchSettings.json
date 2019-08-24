@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "movepath -sp \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\bin\\Debug\\DD.Crm.CustomControls.zip\" -df \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\release\\archive\\1.0.4.100\""
+      "commandLineArgs": "pipeline \"C:\\Users\\daniel.diazg\\MyRepos\\dd-crm-customcontrols\\deployReleasePipeline.json\""
     }
   }
 }

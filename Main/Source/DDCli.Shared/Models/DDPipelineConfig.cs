@@ -11,6 +11,8 @@ namespace DDCli.Models
         public string PipelineName { get; set; }
         [JsonProperty("constants")]
         public Dictionary<string, string> PipelineConstants { get; set; }
+        [JsonProperty("variables")]
+        public List<string> PipelineVariables { get; set; }
         [JsonProperty("commands")]
         public List<PipeLineCommandDefinition> Commands { get; set; }
     }
