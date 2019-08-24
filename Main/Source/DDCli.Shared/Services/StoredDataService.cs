@@ -179,5 +179,10 @@ namespace DDCli.Services
         {
             return StoredCliData.RegisteredPipelines.ToList();
         }
+
+        public string GetPipelinePath(string pipelineName)
+        {
+            return StoredCliData.RegisteredPipelines.First(k => k.PipelineName == pipelineName).Path;
+        }
     }
 }

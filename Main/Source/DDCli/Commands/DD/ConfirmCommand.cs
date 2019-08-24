@@ -13,9 +13,8 @@ namespace DDCli.Commands.DD
     {
         public static string HelpDefinition { get; private set; } = "Prompt a question so the user need to confirm";
         public CommandParameterDefinition CommandQuestionParameter { get; set; }
-        public IConsoleService ConsoleService { get; }
 
-        public ConfirmCommand(IConsoleService console)
+        public ConfirmCommand()
             : base(typeof(ConfirmCommand).Namespace, nameof(ConfirmCommand), HelpDefinition)
         {
             CommandQuestionParameter = new CommandParameterDefinition(
@@ -26,8 +25,6 @@ namespace DDCli.Commands.DD
 
             RegisterCommandParameter(CommandQuestionParameter);
 
-            ConsoleService = console 
-                ?? throw new ArgumentNullException(nameof(console));
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)

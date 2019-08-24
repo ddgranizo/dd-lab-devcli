@@ -166,7 +166,7 @@ namespace DDCli.Test.Mock
 
         public void UpdateAutoIncrements(List<string> autoincrementParameters)
         {
-            
+
         }
 
 
@@ -199,6 +199,13 @@ namespace DDCli.Test.Mock
         public List<RegisteredPipeline> GetPipelines()
         {
             return GetPipelinesReturn;
+        }
+
+
+        public string PipelinePathReturn { get; set; }
+        public string GetPipelinePath(string pipelineName)
+        {
+            return PipelinePathReturn;
         }
     }
 }

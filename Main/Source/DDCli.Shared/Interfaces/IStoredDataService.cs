@@ -94,5 +94,8 @@ namespace DDCli.Interfaces
         void DeletePipeline(string pipelineName);
 
         List<RegisteredPipeline> GetPipelines();
+
+
+        string GetPipelinePath(string pipelineName);
     }
 }

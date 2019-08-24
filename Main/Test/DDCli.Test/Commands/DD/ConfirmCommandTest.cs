@@ -31,12 +31,10 @@ namespace DDCli.Test.Commands.DD
         public void WhenExecuteCommandText_CommandManager_ShouldLogText()
         {
             var question = "myQuestion";
+            var response = "invalidYes";
             var storedDataService = new StoredDataServiceMock();
             var consoleServiceMock = new ConsoleServiceMock();
-
-            consoleServiceMock.ReadLineReturn = "invalidYes";
-            var commandDefinition = new ConfirmCommand(consoleServiceMock);
-
+            var commandDefinition = new ConfirmCommand();
             var instance = new CommandManager(storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
             instance.OnLog += Instance_OnLog;
@@ -47,7 +45,7 @@ namespace DDCli.Test.Commands.DD
 
             Assert.Throws<NotConfirmedException>(() =>
             {
-                instance.ExecuteInputRequest(inputRequest);
+                instance.ExecuteInputRequest(inputRequest, new List<string>() { response });
             });
         }
 
@@ -63,8 +61,8 @@ namespace DDCli.Test.Commands.DD
 
             var consoleServiceMock = new ConsoleServiceMock();
 
-            var commandDefinition = new ConfirmCommand(consoleServiceMock);
-
+            var commandDefinition = new ConfirmCommand();
+            commandDefinition.ConsoleService = consoleServiceMock;
             var instance = new CommandManager(storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
@@ -73,7 +71,7 @@ namespace DDCli.Test.Commands.DD
 
             Assert.Throws<InvalidParamsException>(() =>
             {
-                instance.ExecuteInputRequest(inputRequest);
+                instance.ExecuteInputRequest(inputRequest, new List<string>() { });
             });
         }
 

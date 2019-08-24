@@ -17,6 +17,7 @@ namespace DDCli.Commands.DD
         public static string HelpDefinition { get; private set; } = "Execute multiples commands in one session";
 
         public CommandParameterDefinition CommandPathParameter { get; set; }
+        public CommandParameterDefinition CommandNameParameter { get; set; }
         public List<CommandBase> RegisteredCommands { get; }
         public IFileService FileService { get; }
         public IRegistryService RegistryService { get; }
@@ -34,8 +35,13 @@ namespace DDCli.Commands.DD
             CommandPathParameter = new CommandParameterDefinition("path",
                 CommandParameterDefinition.TypeValue.String,
                 "Path with the ddpipeline.json file", "p");
+            CommandNameParameter = new CommandParameterDefinition(
+                "name",
+                CommandParameterDefinition.TypeValue.String,
+                "Name of the registered pipeline", "n");
 
             RegisterCommandParameter(CommandPathParameter);
+            RegisterCommandParameter(CommandNameParameter);
 
             RegisteredCommands = registeredCommands ?? throw new ArgumentNullException(nameof(registeredCommands));
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -47,12 +53,23 @@ namespace DDCli.Commands.DD
 
         public override bool CanExecute(List<CommandParameter> parameters)
         {
-            return IsParamOk(parameters, CommandPathParameter.Name);
+            return IsParamOk(parameters, CommandPathParameter.Name)
+                || IsParamOk(parameters, CommandNameParameter.Name);
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            var path = GetStringParameterValue(parameters, CommandPathParameter.Name);
+            string path = string.Empty;
+            if (IsParamOk(parameters, CommandNameParameter.Name))
+            {
+                var pipelineName = GetStringParameterValue(parameters, CommandNameParameter.Name);
+                path = StoredDataService.GetPipelinePath(pipelineName);
+            }
+            else
+            {
+                path = GetStringParameterValue(parameters, CommandPathParameter.Name);
+            }
+
             if (!FileService.ExistsFile(path))
             {
                 throw new PathNotFoundException(path);
@@ -74,19 +91,7 @@ namespace DDCli.Commands.DD
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;
 
-
-            if (pipelineConfig.PipelineVariables.Count > 0)
-            {
-                Log($"## Setting up pipeline variables:");
-                foreach (var variable in pipelineConfig.PipelineVariables)
-                {
-                    Log($"\tValue for variable '{variable}':");
-                    var value = Console.ReadLine();
-
-                    pipelineConfig.PipelineConstants.Add(variable, value);
-                }
-            }
-
+            RequestInputVariables(pipelineConfig);
 
             Log($"## Executing pipeline {pipelineConfig.PipelineName}...");
             Stopwatch sb = new Stopwatch(); sb.Start();
@@ -101,21 +106,47 @@ namespace DDCli.Commands.DD
                 }
                 else
                 {
-                    var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
-                    var args = StringFormats.StringToParams(replacedCommand);
-                    for (int i = 0; i < args.Length; i++)
-                    {
-                        var arg = args[i];
-                        args[i] = arg.Replace("$$", "\"");
-                    }
-                    
-                    Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Executing command {replacedCommand}...");
-                    var inputCommand = new InputRequest(args);
-                    multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
+                    ExecuteCommand(pipelineConfig, multipleCommandManager, commandDefinition, currentCounter, commandName);
                 }
             }
             var time = StringFormats.MillisecondsToHumanTime(sb.ElapsedMilliseconds);
             Log($"## Completed pipeline {pipelineConfig.PipelineName} in {time}");
+        }
+
+        private void ExecuteCommand(DDPipelineConfig pipelineConfig, CommandManager multipleCommandManager, PipeLineCommandDefinition commandDefinition, int currentCounter, string commandName)
+        {
+            var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
+            var args = GetCommandArgs(replacedCommand);
+
+            Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Executing command {replacedCommand}...");
+            var inputCommand = new InputRequest(args);
+            multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
+        }
+
+        private static string[] GetCommandArgs(string replacedCommand)
+        {
+            var args = StringFormats.StringToParams(replacedCommand);
+            for (int i = 0; i < args.Length; i++)
+            {
+                var arg = args[i];
+                args[i] = arg.Replace("$$", "\"");
+            }
+            return args;
+        }
+
+        private void RequestInputVariables(DDPipelineConfig pipelineConfig)
+        {
+            if (pipelineConfig.PipelineVariables != null && pipelineConfig.PipelineVariables.Count > 0)
+            {
+                Log($"## Setting up pipeline variables:");
+                foreach (var variable in pipelineConfig.PipelineVariables)
+                {
+                    Log($"\tValue for variable '{variable}':");
+                    var value = Console.ReadLine();
+
+                    pipelineConfig.PipelineConstants.Add(variable, value);
+                }
+            }
         }
 
         private static string ReplaceConstants(Dictionary<string, string> constants, string command)
