@@ -34,9 +34,18 @@ namespace DDCli.Utilities
             var storedParameters = storedDataService.GetParameters();
             foreach (var parameter in parameters.Where(k => !string.IsNullOrEmpty(k.ValueString)))
             {
+                parameter.ValueString = ReplaceSystemParameters(parameter.ValueString);
                 parameter.ValueString = ReplaceStringParameters(storedParameters, parameter.ValueString);
             }
+            
             return parameters;
+        }
+
+
+        private string ReplaceSystemParameters(string rawString)
+        {
+            rawString = rawString.Replace("[[$now]]", DateTime.Now.ToString());
+            return rawString;
         }
 
 

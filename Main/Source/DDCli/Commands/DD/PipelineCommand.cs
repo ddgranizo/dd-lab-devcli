@@ -103,6 +103,12 @@ namespace DDCli.Commands.DD
                 {
                     var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
                     var args = StringFormats.StringToParams(replacedCommand);
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        var arg = args[i];
+                        args[i] = arg.Replace("$$", "\"");
+                    }
+                    
                     Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Executing command {replacedCommand}...");
                     var inputCommand = new InputRequest(args);
                     multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
