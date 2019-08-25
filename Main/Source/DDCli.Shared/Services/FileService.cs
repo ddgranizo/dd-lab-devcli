@@ -283,6 +283,10 @@ namespace DDCli.Services
             try
             {
                 var toComposed = !IsDirectory(to) ? to : string.Format(@"{0}\{1}", to, new FileInfo(from).Name);
+                if (File.Exists(toComposed))
+                {
+                    File.Delete(toComposed);
+                }
                 File.Move(from, toComposed);
             }
             catch (IOException)
