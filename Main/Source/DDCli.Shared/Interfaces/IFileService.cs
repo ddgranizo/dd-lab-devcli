@@ -41,7 +41,7 @@ namespace DDCli.Interfaces
 
         List<string> SearchFilesInPath(string rootPath, string pattern);
 
-        void MoveFile(string from, string to, bool waitAccess = false);
+        void MoveFile(string from, string to);
 
         bool IsFile(string path);
 

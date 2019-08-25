@@ -90,7 +90,7 @@ namespace DDCli.Test.Mock
 
         public string MovedFileFrom { get; set; }
         public string MovedFileTo { get; set; }
-        public void MoveFile(string from, string to, bool waitAccess = false)
+        public void MoveFile(string from, string to)
         {
             MovedFileFrom = from;
             MovedFileTo = to;

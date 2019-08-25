@@ -202,7 +202,7 @@ namespace DDCli.Services
         }
 
 
-        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern, int times= -1)
+        public void ReplaceFilesContentsWithRegexPattern(string rootPath, string oldValueRegexPattern, string newValue, string filePattern, int times = -1)
         {
             var filesInPath = GetFilesInPath(rootPath, filePattern);
             foreach (var filePath in filesInPath)
@@ -247,7 +247,7 @@ namespace DDCli.Services
                 var oldFilename = fileInfo.FullName;
                 var oldFolder = fileInfo.Directory;
                 var newFileName = string.Format("{0}\\{1}", oldFolder, newName);
-                MoveFile(oldFilename, newFileName, true);
+                MoveFile(oldFilename, newFileName);
                 fileWithName = SearchFilesInPath(rootPath, $"*{oldValue}*.*").FirstOrDefault();
             }
         }
@@ -278,31 +278,18 @@ namespace DDCli.Services
         }
 
 
-        public void MoveFile(string from, string to, bool waitAccess = false)
+        public void MoveFile(string from, string to)
         {
-            try
+            var toComposed = to;
+            if (!Path.IsPathRooted(to))
             {
-                var toComposed = !IsDirectory(to) ? to : string.Format(@"{0}\{1}", to, new FileInfo(from).Name);
-                if (File.Exists(toComposed))
-                {
-                    File.Delete(toComposed);
-                }
-                File.Move(from, toComposed);
+                toComposed = string.Format(@"{0}\{1}", to, new FileInfo(from).Name);
             }
-            catch (IOException)
+            if (File.Exists(toComposed))
             {
-                if (!waitAccess)
-                {
-                    throw;
-                }
-                Console.WriteLine($"File '{from}' is beeing used by other process. Close the other process and press enter. For cancel this process type 'c'");
-                var input = Console.ReadLine();
-                if (!string.IsNullOrEmpty(input) && input == "c")
-                {
-                    throw;
-                }
-                MoveFile(from, to, waitAccess);
+                File.Delete(toComposed);
             }
+            File.Move(from, toComposed);
         }
 
 
