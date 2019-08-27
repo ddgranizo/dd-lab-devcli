@@ -96,31 +96,118 @@ namespace DDCli.Commands.DD
             Log($"## Executing pipeline {pipelineConfig.PipelineName}...");
             Stopwatch sb = new Stopwatch(); sb.Start();
             int counter = 0;
+            int totalCommandsCound = pipelineConfig.Commands.Count;
             foreach (var commandDefinition in pipelineConfig.Commands)
             {
                 var currentCounter = counter++;
                 var commandName = string.IsNullOrEmpty(commandDefinition.Alias) ? "" : commandDefinition.Alias;
                 if (commandDefinition.IsDisabled)
                 {
-                    Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Skip command. Reason: Disabled");
+                    Log($"### [{currentCounter}/{totalCommandsCound}] {commandName} | Skip command. Reason: Disabled");
                 }
                 else
                 {
-                    ExecuteCommand(pipelineConfig, multipleCommandManager, commandDefinition, currentCounter, commandName);
+                    if (commandDefinition.IsIteration)
+                    {
+                        ExecuteIterationCommand(
+                           multipleCommandManager,
+                            commandDefinition.Command,
+                            commandDefinition.ConsoleInputs,
+                            pipelineConfig.PipelineConstants,
+                            totalCommandsCound,
+                            currentCounter,
+                            commandName,
+                            commandDefinition);
+                    }
+                    else
+                    {
+                        ExecuteCommand(
+                            multipleCommandManager,
+                            commandDefinition.Command,
+                            commandDefinition.ConsoleInputs,
+                            pipelineConfig.PipelineConstants,
+                            totalCommandsCound,
+                            currentCounter,
+                            commandName);
+                    }
+
                 }
             }
             var time = StringFormats.MillisecondsToHumanTime(sb.ElapsedMilliseconds);
             Log($"## Completed pipeline {pipelineConfig.PipelineName} in {time}");
         }
 
-        private void ExecuteCommand(DDPipelineConfig pipelineConfig, CommandManager multipleCommandManager, PipeLineCommandDefinition commandDefinition, int currentCounter, string commandName)
+        private void ExecuteIterationCommand(
+            CommandManager multipleCommandManager,
+            string command,
+            List<string> consoleInputs,
+            Dictionary<string, string> constants,
+            int totalCommandCount,
+            int currentCounter,
+            string commandAlias,
+            PipeLineCommandDefinition commandDefinition)
         {
-            var replacedCommand = ReplaceConstants(pipelineConfig.PipelineConstants, commandDefinition.Command);
-            var args = GetCommandArgs(replacedCommand);
+           
+            int iteration = 0;
+            if (commandDefinition.IterationType == PipelineIterator.StringArray)
+            {
+                foreach (var item in commandDefinition.IterationTypeStringArrayValues)
+                {
+                    var replacedIterationCommand = command.Replace("[[i]]", item);
+                    ExecuteCommand(
+                        multipleCommandManager,
+                        replacedIterationCommand,
+                        consoleInputs,
+                        constants,
+                        totalCommandCount,
+                        currentCounter,
+                        commandAlias,
+                        iteration);
+                    iteration++;
+                }
+            }
+            else if (commandDefinition.IterationType == PipelineIterator.Number)
+            {
+                for (iteration = commandDefinition.IterationTypeNumberFromValue; iteration < commandDefinition.IterationTypeNumberToValue; iteration++)
+                {
+                    var replacedIterationCommand = command.Replace("[[i]]", iteration.ToString());
+                    ExecuteCommand(
+                        multipleCommandManager,
+                        replacedIterationCommand,
+                        consoleInputs,
+                        constants,
+                        totalCommandCount,
+                        currentCounter,
+                        commandAlias,
+                        iteration);
+                }
+            }
+        }
 
-            Log($"### [{currentCounter}/{pipelineConfig.Commands.Count}] {commandName} | Executing command {replacedCommand}...");
+
+        private void ExecuteCommand(
+            CommandManager multipleCommandManager,
+            string command,
+            List<string> consoleInputs,
+            Dictionary<string, string> constants,
+            int totalCommandCount,
+            int currentCounter,
+            string commandAlias,
+            int? iteration = null)
+        {
+            var replacedCommand = ReplaceConstants(constants, command);
+            var args = GetCommandArgs(replacedCommand);
+            if (iteration != null)
+            {
+                Log($"### [{currentCounter}/{totalCommandCount} i={iteration++}] {commandAlias} | Executing iteration command {replacedCommand}...");
+            }
+            else
+            {
+                Log($"### [{currentCounter}/{totalCommandCount}] {commandAlias} | Executing command {replacedCommand}...");
+            }
+            
             var inputCommand = new InputRequest(args);
-            multipleCommandManager.ExecuteInputRequest(inputCommand, commandDefinition.ConsoleInputs);
+            multipleCommandManager.ExecuteInputRequest(inputCommand, consoleInputs);
         }
 
         private static string[] GetCommandArgs(string replacedCommand)

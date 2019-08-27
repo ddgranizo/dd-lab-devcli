@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "template -n React5ViewsInputText"
+      "commandLineArgs": "pipeline -n CustomControlsDevelopment"
     }
   }
 }
