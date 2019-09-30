@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "pipeline -n CustomControlsDevelopment"
+      "commandLineArgs": "addwpfusercontrol"
     }
   }
 }

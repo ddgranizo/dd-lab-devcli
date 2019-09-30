@@ -9,6 +9,8 @@ namespace DDCli.Utilities
     public static class StringFormats
     {
 
+        
+
         public static string[] StringToParams(string text)
         {
             return Regex.Matches(text, @"[\""].+?[\""]|[^ ]+")

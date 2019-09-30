@@ -140,6 +140,7 @@ namespace DDCli
             IFileService fileService = new FileService();
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
+            ITemplateReplacementService templateReplacementService = new TemplateReplacementService();
 
             Register(new Commands.DD.EchoCommand());
             Register(new Commands.DD.WindowsCmdCommand(promptCommandService));
@@ -169,6 +170,7 @@ namespace DDCli
             Register(new Commands.Windows.MovePathCommand(fileService));
             Register(new Commands.DD.ConfirmCommand());
 
+            Register(new Commands.Dev.DotNet.AddWPFUserControlCommand(fileService, templateReplacementService));
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 

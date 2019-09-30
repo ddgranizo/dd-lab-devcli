@@ -12,14 +12,12 @@ namespace DDCli.Test.Commands.Windows
 {
     public class ReplaceFileContentCommandTest
     {
-        ICryptoService _cryptoServiceMock;
-        IRegistryService _registryServiceMock;
+        readonly ICryptoService _cryptoServiceMock;
 
 
         public ReplaceFileContentCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
-            _registryServiceMock = new RegistryServiceMock();
         }
 
 

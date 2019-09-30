@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Xml.Serialization;
+
+
+namespace [[ViewModelNameSpace]]
+{
+
+    public class [[ClassName]]ViewModel : BaseViewModel
+    {
+
+$i$
+		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value); } }
+$$
+        
+		private [[ClassName]]View _view;
+
+        public [[ClassName]]ViewModel([[ClassName]]View v)
+        {
+			
+        }
+
+    }
+}

@@ -36,7 +36,7 @@ namespace DDCli.Test.Mock
 
         public FileServiceMock()
         {
-
+            FilesWritten = new List<string>();
         }
 
         public List<string> CloneDirectory(string sourceFolder, string destinationFolder, List<string> ignorePathPatterns)
@@ -76,9 +76,10 @@ namespace DDCli.Test.Mock
             return AbsoluteCurrentPathReturn;
         }
 
+        public string CurrentPath { get; set; }
         public string GetCurrentPath()
         {
-            throw new NotImplementedException();
+            return CurrentPath;
         }
 
         public DDTemplateConfig GetTemplateConfig(string path)
@@ -236,6 +237,14 @@ namespace DDCli.Test.Mock
         {
             MovedSourceFolder = sourceFolder;
             MovedDestionationFolder = destinationFolder;
+        }
+
+
+        public List<string> FilesWritten { get; set; }
+        public string WriteFile(string path, string content, bool overwrite)
+        {
+            FilesWritten.Add(content);
+            return path;
         }
     }
 }

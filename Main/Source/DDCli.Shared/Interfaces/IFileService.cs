@@ -5,6 +5,7 @@ namespace DDCli.Interfaces
 {
     public interface IFileService
     {
+        string WriteFile(string path, string content, bool overwrite);
         string GetCurrentPath();
         List<string> SearchDirectories(string path, string name, bool includeSubdirectories);
 

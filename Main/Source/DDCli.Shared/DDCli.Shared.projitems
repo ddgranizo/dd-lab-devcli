@@ -42,12 +42,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IClipboardService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICodeDomService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IConsoleService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICryptoService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPromptCommandService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStoredDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ITemplateReplacementService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IWebService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandAlias.cs" />
@@ -69,10 +71,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\PromptCommandService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StoredDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\TemplateReplacementService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\WebService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ExceptionInLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ParameterManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StoredDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringFormats.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlViewTemplate.txt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlViewModelTemplate.txt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlControllerTemplate.txt" />
   </ItemGroup>
 </Project>

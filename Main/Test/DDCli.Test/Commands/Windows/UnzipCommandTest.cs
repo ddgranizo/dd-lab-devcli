@@ -12,14 +12,12 @@ namespace DDCli.Test.Commands.Windows
 {
     public class UnzipCommandTest
     {
-        ICryptoService _cryptoServiceMock;
-        IRegistryService _registryServiceMock;
+        readonly ICryptoService _cryptoServiceMock;
 
 
         public UnzipCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
-            _registryServiceMock = new RegistryServiceMock();
         }
 
 

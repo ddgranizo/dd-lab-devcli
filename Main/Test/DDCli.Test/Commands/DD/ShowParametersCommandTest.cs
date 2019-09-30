@@ -15,13 +15,11 @@ namespace DDCli.Test.Commands.DD
     public class ShowParametersCommandTest
     {
 
-        ICryptoService _cryptoServiceMock;
-        IRegistryService _registryServiceMock;
+        readonly ICryptoService _cryptoServiceMock;
         public string LastLog { get; set; }
         public ShowParametersCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
-            _registryServiceMock = new RegistryServiceMock();
         }
 
 

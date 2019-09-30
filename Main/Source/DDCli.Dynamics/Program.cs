@@ -59,7 +59,6 @@ namespace DDCli.Dynamics
             IPromptCommandService promptCommandService = new PromptCommandService();
             IWebService webService = new WebService();
 
-
             Register(new Commands.ImportSolutionCommand(fileService));
             Register(new Commands.GetTokenCommand());
 

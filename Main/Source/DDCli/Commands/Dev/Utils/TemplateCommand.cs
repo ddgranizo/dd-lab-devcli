@@ -15,7 +15,6 @@ namespace DDCli.Commands.Dev.Utils
     {
         private const string HelpDefinition = @"clone folder using ddtemplate.json configuration";
 
-        private Dictionary<string, string> _userInputs = new Dictionary<string, string>();
 
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandNameParameter { get; set; }

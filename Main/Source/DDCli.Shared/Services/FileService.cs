@@ -19,6 +19,50 @@ namespace DDCli.Services
         {
         }
 
+
+
+        public string WriteFile(string path, string content, bool overwrite)
+        {
+            if (ExistsFile(path))
+            {
+                if (overwrite)
+                {
+                    File.WriteAllText(path, content);
+                    return path;
+                }
+                else
+                {
+                    var newPath = GetNewNameForRepeatedFile(path);
+                    File.WriteAllText(newPath, content);
+                    return newPath;
+                }
+            }
+            File.WriteAllText(path, content);
+            return path;
+        }
+
+
+        private string GetNewNameForRepeatedFile(string path)
+        {
+            string newPath = path;
+            bool more;
+            int counter = 0;
+            var info = new FileInfo(path);
+            do
+            {
+                newPath = counter == 0
+                    ? newPath
+                    : $"{info.Name} ({counter++}){info.Extension}";
+                more = ExistsFile(newPath);
+            } while (more);
+            return newPath;
+        }
+
+        public void WriteFile(string path, string content)
+        {
+            File.WriteAllText(path, content);
+        }
+
         public List<string> SearchDirectories(string path, string name, bool includeSubdirectories)
         {
             return Directory.GetDirectories(path)
@@ -230,7 +274,6 @@ namespace DDCli.Services
             }
             else
             {
-                var fileContent = File.ReadAllText(rootPath);
                 return new List<string>() { rootPath };
             }
         }
@@ -421,5 +464,7 @@ namespace DDCli.Services
                 MoveFile(file, destinationFolder);
             }
         }
+
+
     }
 }

@@ -12,13 +12,11 @@ namespace DDCli.Test.Commands.Dev.Utils
     {
 
 
-        ICryptoService _cryptoServiceMock;
-        IRegistryService _registryServiceMock;
-        IStoredDataService _storedDataService;
+        readonly ICryptoService _cryptoServiceMock;
+        readonly IStoredDataService _storedDataService;
         public TemplateCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
-            _registryServiceMock = new RegistryServiceMock();
             _storedDataService = new StoredDataServiceMock();
         }
 

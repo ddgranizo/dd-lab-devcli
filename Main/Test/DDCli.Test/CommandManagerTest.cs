@@ -20,7 +20,6 @@ namespace DDCli.Test
         const string GenericCompleteCommandName = "MyCommandNameCommand";
         const string GenericCommandName = "MyCommandName";
         const string HelpCommandName = "Help";
-        const string WrongCommandName = "MyCommandNameComm$and";
         const string GenericNameSpace = "MyNamespace";
         const string GenericDescription = "MyDescription";
         const string GenericParameterName = "MyParameter";
@@ -29,14 +28,12 @@ namespace DDCli.Test
 
 
 
-        IStoredDataService _storedDataServiceMock;
-        ICryptoService _cryptoServiceMock;
-        IRegistryService _registryServiceMock;
+        readonly IStoredDataService _storedDataServiceMock;
+        readonly ICryptoService _cryptoServiceMock;
         public CommandManagerTest()
         {
             _storedDataServiceMock = new StoredDataServiceMock();
             _cryptoServiceMock = new CryptoServiceMock();
-            _registryServiceMock = new RegistryServiceMock();
         }
 
         private void Instance_OnLog(object sender, Events.LogEventArgs e)

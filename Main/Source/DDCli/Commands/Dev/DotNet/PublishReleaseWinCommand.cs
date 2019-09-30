@@ -32,9 +32,5 @@ namespace DDCli.Commands.Dev.DotNet
                 //manager.Run("dotnet publish -c Release -r win10-x64");
         }
 
-        private void PromptCommandManager_OnCommandPromptOutput(string output)
-        {
-            Log(output);
-        }
     }
 }
