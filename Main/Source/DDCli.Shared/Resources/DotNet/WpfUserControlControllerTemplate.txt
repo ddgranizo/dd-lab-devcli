@@ -18,8 +18,45 @@ using System.Windows.Shapes;
 namespace [[ViewNameSpace]]
 {
 
+$j$
+    public class [[j.EventName]]EventArgs : RoutedEventArgs
+    {
+        public [[j.EventArgsType]] Data { get; set; }
+    }
+$$
+
+
     public partial class [[ClassName]]View : UserControl
     {
+$j$
+		private delegate void[[j.EventName]]EventHandler(object sender, [[j.EventArgsType]] data);
+        private event [[j.EventName]]EventHandler On[[j.EventName]];
+        
+		public static readonly RoutedEvent [[j.EventName]]Event =
+                    EventManager.RegisterRoutedEvent(nameof([[j.EventName]]), RoutingStrategy.Bubble,
+                    typeof(RoutedEventHandler), typeof([[ClassName]]View));
+        
+		public event RoutedEventHandler [[j.EventName]]
+        {
+            add { AddHandler([[j.EventName]]Event, value); }
+            remove { RemoveHandler([[j.EventName]]Event, value); }
+        }
+
+		private void Raise[[j.EventName]]Event([[j.EventArgsType]] data)
+        {
+            RoutedEventArgs args = new [[j.EventName]]EventArgs()
+            {
+                Data = data
+            };
+            args.RoutedEvent = SelectedEvent;
+            RaiseEvent(args);
+        }
+
+		private void [[ClassName]]View_On[[j.EventName]](object sender,[[j.EventArgsType]]  data)
+        {
+            Raise[[j.EventName]]Event(data);
+        }
+$$
 
 
 $i$
@@ -40,33 +77,38 @@ $$
 $i$
 		public static readonly DependencyProperty [[i.PropertyName]]Property =
                       DependencyProperty.Register(
-                          "[[i.PropertyName]]",
+                          nameof([[i.PropertyName]]),
                           typeof([[i.PropertyType]]),
-                          typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnValueChanged))
+                          typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
 $$
 
-
-         [[ClassName]]ViewModel _viewModel = null;
+		private readonly [[ClassName]]ViewModel _viewModel = null;
 
         public [[ClassName]]View()
         {
             InitializeComponent();
+			_viewModel = new [[ClassName]]ViewModel(this);
 			this.DataContext = _viewModel;
             _viewModel.Initialize(this);
+
+$j$
+			On[[j.EventName]] += [[ClassName]]View_On[[j.EventName]];
+$$
+
         }
 
 
-        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 			[[ClassName]]View v = d as [[ClassName]]View;
 			if(false)
 			{
 			}
 $i$
-			else if (e.Property.Name == "[[i.PropertyName]]")
+			else if (e.Property.Name == nameof([[i.PropertyName]]))
             {
                 v.Set[[i.PropertyName]](([[i.PropertyType]])e.NewValue);
             }

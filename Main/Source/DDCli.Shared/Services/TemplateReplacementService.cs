@@ -80,12 +80,17 @@ namespace DDCli.Services
             return output;
         }
 
-        public Dictionary<string, List<Dictionary<string, string>>> AskForIterationInputParameters(IConsoleService consoleService, string iterationDescription, string iterationIdentifier, Dictionary<string, string> paramsDescription)
+
+        public List<Dictionary<string, string>> AskForIterationInputParameters(IConsoleService consoleService, string iterationDescription, Dictionary<string, string> paramsDescription)
         {
-            var output = new Dictionary<string, List<Dictionary<string, string>>>();
-            bool moreInputs;
             List<Dictionary<string, string>> iterations = new List<Dictionary<string, string>>();
-            consoleService.WriteLine(iterationDescription);
+            bool moreInputs;
+            consoleService.WriteLine($"\t{iterationDescription}. Would you like to add items? (yes/no)");
+            var addItems = consoleService.ReadLine();
+            if (!string.IsNullOrEmpty(addItems) && Definitions.AvailableTrueStrings.ToList().IndexOf(addItems.ToLowerInvariant()) == -1)
+            {
+                return iterations;
+            }
             do
             {
                 Dictionary<string, string> iteration = AskForInputParameters(consoleService, paramsDescription);
@@ -94,8 +99,7 @@ namespace DDCli.Services
                 string more = consoleService.ReadLine();
                 moreInputs = !string.IsNullOrEmpty(more) && Definitions.AvailableTrueStrings.ToList().IndexOf(more.ToLowerInvariant()) > -1;
             } while (moreInputs);
-            output.Add(iterationIdentifier, iterations);
-            return output;
+            return iterations;
         }
     }
 }

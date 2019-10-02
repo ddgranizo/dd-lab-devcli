@@ -20,7 +20,6 @@ namespace DDCli.Services
         }
 
 
-
         public string WriteFile(string path, string content, bool overwrite)
         {
             if (ExistsFile(path))
@@ -48,11 +47,16 @@ namespace DDCli.Services
             bool more;
             int counter = 0;
             var info = new FileInfo(path);
+            var basePath = info.Directory;
+            var fileName = info.Name;
+            var extension = info.Extension;
+            var fileWithoutExtension = fileName.Substring(0, fileName.Length - extension.Length);
             do
             {
                 newPath = counter == 0
                     ? newPath
-                    : $"{info.Name} ({counter++}){info.Extension}";
+                    : $"{basePath}\\{fileWithoutExtension} ({counter}){info.Extension}";
+                counter++;
                 more = ExistsFile(newPath);
             } while (more);
             return newPath;

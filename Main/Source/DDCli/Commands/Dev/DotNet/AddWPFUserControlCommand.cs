@@ -39,18 +39,29 @@ namespace DDCli.Commands.Dev.DotNet
                     { "ClassName", "Write the class name"}
                 });
 
-            var iterationReplacements = TemplateReplacementService
-                .AskForIterationInputParameters(ConsoleService, "Iteration for user control 'Props'", "i", new Dictionary<string, string>()
+            var iterationProperties = TemplateReplacementService
+                .AskForIterationInputParameters(ConsoleService, "Iteration for user control 'Props'",  new Dictionary<string, string>()
                 {
                     { "PropertyType", "Input parameter type" },
                     { "PropertyName", "Input parameter name" },
                 });
 
+            var iterationEvents = TemplateReplacementService
+               .AskForIterationInputParameters(ConsoleService, "Iteration for user control 'Events'", new Dictionary<string, string>()
+               {
+                    { "EventArgsType", "Event args type" },
+                    { "EventName", "Event name" },
+               });
+
+            var iterations = new Dictionary<string, List<Dictionary<string, string>>>();
+            iterations.Add("i", iterationProperties);
+            iterations.Add("j", iterationEvents);
+
             var className = replacements["ClassName"];
 
-            var contentController = TemplateReplacementService.Replace(ControllerTemplate, replacements, iterationReplacements);
-            var contentViewModel = TemplateReplacementService.Replace(ViewModelTemplate, replacements, iterationReplacements);
-            var contentView = TemplateReplacementService.Replace(ViewTemplate, replacements, iterationReplacements);
+            var contentController = TemplateReplacementService.Replace(ControllerTemplate, replacements, iterations);
+            var contentViewModel = TemplateReplacementService.Replace(ViewModelTemplate, replacements, iterations);
+            var contentView = TemplateReplacementService.Replace(ViewTemplate, replacements, iterations);
 
             var pathViewModel = FileService.GetAbsoluteCurrentPath($"{className}ViewModel.cs");
             var pathController = FileService.GetAbsoluteCurrentPath($"{className}View.xaml.cs");

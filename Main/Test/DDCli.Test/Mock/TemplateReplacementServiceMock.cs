@@ -20,17 +20,20 @@ namespace DDCli.Test.Mock
             return ReturnParameters;
         }
 
-        public Dictionary<string, List<Dictionary<string, string>>> ReturnIterationParameters { get; set; }
-        public Dictionary<string, List<Dictionary<string, string>>> AskForIterationInputParameters(IConsoleService consoleService, string iterationDescription, string iterationIdentifier, Dictionary<string, string> paramsDescription)
-        {
-            return ReturnIterationParameters;
-        }
+        
 
         public List<string> ReturnedContents { get; set; }
         public int ReturnedContentCounter { get; set; } 
         public string Replace(string embebedResource, Dictionary<string, string> replacements, Dictionary<string, List<Dictionary<string, string>>> iterationReplacements)
         {
             return ReturnedContents[ReturnedContentCounter++];
+        }
+
+
+        public List<Dictionary<string, string>> ReturnIterationParameters { get; set; }
+        public List<Dictionary<string, string>> AskForIterationInputParameters(IConsoleService consoleService, string iterationDescription, Dictionary<string, string> paramsDescription)
+        {
+            return ReturnIterationParameters;
         }
     }
 }
