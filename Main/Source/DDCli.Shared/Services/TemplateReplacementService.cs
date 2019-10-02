@@ -85,7 +85,7 @@ namespace DDCli.Services
         {
             List<Dictionary<string, string>> iterations = new List<Dictionary<string, string>>();
             bool moreInputs;
-            consoleService.WriteLine($"\t{iterationDescription}. Would you like to add items? (yes/no)");
+            consoleService.WriteLine($"\t (yes/no) {iterationDescription}. Would you like to add items?");
             var addItems = consoleService.ReadLine();
             if (!string.IsNullOrEmpty(addItems) && Definitions.AvailableTrueStrings.ToList().IndexOf(addItems.ToLowerInvariant()) == -1)
             {
@@ -95,7 +95,7 @@ namespace DDCli.Services
             {
                 Dictionary<string, string> iteration = AskForInputParameters(consoleService, paramsDescription);
                 iterations.Add(iteration);
-                consoleService.WriteLine("Add more inputs? (yes/no)");
+                consoleService.WriteLine("(yes/no) Add more inputs?");
                 string more = consoleService.ReadLine();
                 moreInputs = !string.IsNullOrEmpty(more) && Definitions.AvailableTrueStrings.ToList().IndexOf(more.ToLowerInvariant()) > -1;
             } while (moreInputs);

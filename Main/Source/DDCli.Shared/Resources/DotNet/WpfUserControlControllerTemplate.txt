@@ -48,7 +48,6 @@ $j$
             args.RoutedEvent = [[j.EventName]]Event;
             RaiseEvent(args);
         }
-
 $$
 
 
