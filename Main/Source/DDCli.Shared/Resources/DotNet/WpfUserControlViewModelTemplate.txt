@@ -24,7 +24,7 @@ $$
 
         public [[ClassName]]ViewModel([[ClassName]]View v)
         {
-			
+			_view = v;
         }
 
     }
