@@ -20,7 +20,7 @@ $i$
 		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value); } }
 $$
         
-		private [[ClassName]]View _view;
+		private readonly [[ClassName]]View _view;
 
         public [[ClassName]]ViewModel([[ClassName]]View v)
         {
