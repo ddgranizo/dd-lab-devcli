@@ -29,9 +29,6 @@ $$
     public partial class [[ClassName]]View : UserControl
     {
 $j$
-		private delegate void[[j.EventName]]EventHandler(object sender, [[j.EventArgsType]] data);
-        private event [[j.EventName]]EventHandler On[[j.EventName]];
-        
 		public static readonly RoutedEvent [[j.EventName]]Event =
                     EventManager.RegisterRoutedEvent(nameof([[j.EventName]]), RoutingStrategy.Bubble,
                     typeof(RoutedEventHandler), typeof([[ClassName]]View));
@@ -42,20 +39,16 @@ $j$
             remove { RemoveHandler([[j.EventName]]Event, value); }
         }
 
-		private void Raise[[j.EventName]]Event([[j.EventArgsType]] data)
+		public void Raise[[j.EventName]]Event([[j.EventArgsType]] data)
         {
             RoutedEventArgs args = new [[j.EventName]]EventArgs()
             {
                 Data = data
             };
-            args.RoutedEvent = SelectedEvent;
+            args.RoutedEvent = [[j.EventName]]Event;
             RaiseEvent(args);
         }
 
-		private void [[ClassName]]View_On[[j.EventName]](object sender,[[j.EventArgsType]]  data)
-        {
-            Raise[[j.EventName]]Event(data);
-        }
 $$
 
 
@@ -92,12 +85,6 @@ $$
             InitializeComponent();
 			_viewModel = new [[ClassName]]ViewModel(this);
 			this.DataContext = _viewModel;
-            _viewModel.Initialize(this);
-
-$j$
-			On[[j.EventName]] += [[ClassName]]View_On[[j.EventName]];
-$$
-
         }
 
 
