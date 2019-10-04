@@ -19,12 +19,19 @@ $i$
 		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value); } }
 $$
         
-		private readonly [[ClassName]]View _view;
+		private [[ClassName]]View _view;
 
-        public [[ClassName]]ViewModel([[ClassName]]View v)
+		public [[ClassName]]ViewModel()
+        {
+			
+        }
+
+        public void Initialize([[ClassName]]View v)
         {
 			_view = v;
         }
+
+		
 
     }
 }

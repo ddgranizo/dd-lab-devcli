@@ -25,7 +25,6 @@ $j$
     }
 $$
 
-
     public partial class [[ClassName]]View : UserControl
     {
 $j$
@@ -82,8 +81,8 @@ $$
         public [[ClassName]]View()
         {
             InitializeComponent();
-			_viewModel = new [[ClassName]]ViewModel(this);
-			this.DataContext = _viewModel;
+			_viewModel = Resources["ViewModel"] as [[ClassName]]ViewModel;
+			ViewModel.Initialize(this);
         }
 
 

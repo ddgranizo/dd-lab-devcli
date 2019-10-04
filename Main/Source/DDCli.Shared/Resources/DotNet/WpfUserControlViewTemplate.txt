@@ -3,8 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:[[ViewModelNameSpace]]"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="MainGrid">
+	<UserControl.Resources>
+        <vm:[[ClassName]]ViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
             
         </Grid.Resources>
