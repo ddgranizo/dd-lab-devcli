@@ -82,7 +82,7 @@ $$
         {
             InitializeComponent();
 			_viewModel = Resources["ViewModel"] as [[ClassName]]ViewModel;
-			ViewModel.Initialize(this);
+			_viewModel.Initialize(this);
         }
 
 
