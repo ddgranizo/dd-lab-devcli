@@ -79,8 +79,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringFormats.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlViewTemplate.txt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlViewModelTemplate.txt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControlControllerTemplate.txt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControl\WpfUserControlViewTemplate.txt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControl\WpfUserControlViewModelTemplate.txt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControl\WpfUserControlControllerTemplate.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Resources\DotNet\WpfUserControl\" />
   </ItemGroup>
 </Project>

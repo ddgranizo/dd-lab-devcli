@@ -10,9 +10,9 @@ namespace DDCli.Commands.Dev.DotNet
     public class AddWPFUserControlCommand : CommandBase
     {
         private const string HelpDefinition = "Create basic structure for WPF User control";
-        public const string ViewTemplate = "DDCli.Resources.DotNet.WpfUserControlViewTemplate";
-        public const string ViewModelTemplate = "DDCli.Resources.DotNet.WpfUserControlViewModelTemplate";
-        public const string ControllerTemplate = "DDCli.Resources.DotNet.WpfUserControlControllerTemplate";
+        public const string ViewTemplate = "DDCli.Resources.DotNet.WpfUserControl.WpfUserControlViewTemplate.txt";
+        public const string ViewModelTemplate = "DDCli.Resources.DotNet.WpfUserControl.WpfUserControlViewModelTemplate.txt";
+        public const string ControllerTemplate = "DDCli.Resources.DotNet.WpfUserControl.WpfUserControlControllerTemplate.txt";
 
         public AddWPFUserControlCommand(IFileService fileService, ITemplateReplacementService templateReplacementService)
             : base(typeof(AddWPFUserControlCommand).Namespace, nameof(AddWPFUserControlCommand), HelpDefinition)

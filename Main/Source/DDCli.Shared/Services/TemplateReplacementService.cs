@@ -19,7 +19,7 @@ namespace DDCli.Services
 
         public string Replace(string embebedResource, Dictionary<string, string> replacements, Dictionary<string, List<Dictionary<string, string>>> iterationReplacements)
         {
-            var templateContent = LoadResource($"{embebedResource}.txt");
+            var templateContent = LoadResource(embebedResource);
             foreach (var item in replacements)
             {
                 templateContent = templateContent.Replace($"[[{item.Key}]]", item.Value);
@@ -85,7 +85,7 @@ namespace DDCli.Services
         {
             List<Dictionary<string, string>> iterations = new List<Dictionary<string, string>>();
             bool moreInputs;
-            consoleService.WriteLine($"\t (yes/no) {iterationDescription}. Would you like to add items?");
+            consoleService.WriteLine($"(yes/no) {iterationDescription}. Would you like to add items?");
             var addItems = consoleService.ReadLine();
             if (!string.IsNullOrEmpty(addItems) && Definitions.AvailableTrueStrings.ToList().IndexOf(addItems.ToLowerInvariant()) == -1)
             {
