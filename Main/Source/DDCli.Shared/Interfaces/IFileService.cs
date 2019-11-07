@@ -60,6 +60,7 @@ namespace DDCli.Interfaces
         void UnZipPath(string path, string destinationFolder = null);
 
         byte[] ReadAllBytes(string path);
+        void WriteAllBytes(string path, byte[] bytes);
 
         void RenameFolder(string oldPath, string newPath);
 

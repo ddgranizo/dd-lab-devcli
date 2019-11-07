@@ -246,5 +246,10 @@ namespace DDCli.Test.Mock
             FilesWritten.Add(content);
             return path;
         }
+
+        public void WriteAllBytes(string path, byte[] bytes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

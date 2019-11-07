@@ -469,6 +469,9 @@ namespace DDCli.Services
             }
         }
 
-
+        public void WriteAllBytes(string path, byte[] bytes)
+        {
+            File.WriteAllBytes(path, bytes);
+        }
     }
 }

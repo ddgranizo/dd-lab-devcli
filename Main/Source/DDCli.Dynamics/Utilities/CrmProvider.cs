@@ -18,7 +18,8 @@ namespace DDCli.Dynamics.Utilities
             IOrganizationService serviceProxy = crmService.OrganizationWebProxyClient != null ?
                                                         crmService.OrganizationWebProxyClient :
                                                         (IOrganizationService)crmService.OrganizationServiceProxy;
-            return serviceProxy;
+            return serviceProxy ??
+                 throw new Exception("Can't initialize Service with provided string connection"); ;
         }
 
 
