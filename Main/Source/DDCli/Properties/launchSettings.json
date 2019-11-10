@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "addwpfusercontrol"
+      "commandLineArgs": "template -p \"C:\\Users\\daniel.diazg\\Google Drive\\Trabajo\\Documentos\\MyCatalog\\Templates\\DomainGenerator\\dd-lab-catalog\\DD.Lab.SecondApp.Domain\""
     }
   }
 }

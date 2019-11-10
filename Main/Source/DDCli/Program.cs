@@ -4,6 +4,7 @@ using DDCli.Models;
 using DDCli.Services;
 using DDCli.Utilities;
 using System;
+using System.Linq;
 
 namespace DDCli
 {
@@ -13,7 +14,8 @@ namespace DDCli
         private static CommandManager commandManager;
         static void Main(string[] args)
         {
-            var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
+
+            var argsV2 = StringFormats.StringToParams(string.Join(" ", args.Select(k => $"\"{k}\"")));
 
             var storedData = StoredDataManager.GetStoredData();
 
@@ -111,11 +113,11 @@ namespace DDCli
             {
                 ExceptionManager.RaiseException($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
-            catch (PipelineNameRepeatedException )
+            catch (PipelineNameRepeatedException)
             {
                 ExceptionManager.RaiseException($"Pipeline name repeated");
             }
-            catch (PipelineNotFoundException )
+            catch (PipelineNotFoundException)
             {
                 ExceptionManager.RaiseException($"Can't find any pipeline with this name");
             }

@@ -8,9 +8,7 @@ namespace DDCli.Utilities
 {
     public static class StringFormats
     {
-
         
-
         public static string[] StringToParams(string text)
         {
             return Regex.Matches(text, @"[\""].+?[\""]|[^ ]+")
@@ -18,6 +16,7 @@ namespace DDCli.Utilities
                         .Select(m => m.Value)
                         .Select(k => k.Trim('\"'))
                         .ToArray();
+
         }
         public static bool IsValidLogicalName(string text)
         {
