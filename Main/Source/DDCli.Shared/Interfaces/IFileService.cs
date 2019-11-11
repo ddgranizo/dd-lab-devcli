@@ -65,5 +65,7 @@ namespace DDCli.Interfaces
         void RenameFolder(string oldPath, string newPath);
 
         void MoveFolderContent(string sourceFolder, string destinationFolder, string filePattern);
+
+        string GetFilePath(string pathToFile);
     }
 }

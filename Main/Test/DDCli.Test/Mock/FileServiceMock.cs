@@ -251,5 +251,10 @@ namespace DDCli.Test.Mock
         {
             throw new NotImplementedException();
         }
+
+        public string GetFilePath(string pathToFile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

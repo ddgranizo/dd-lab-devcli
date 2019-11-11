@@ -64,7 +64,15 @@ namespace DDCli.Commands.Dev.Utils
             }
             else
             {
-                path = GetStringParameterValue(parameters, CommandPathParameter.Name);
+                var regardingPath = GetStringParameterValue(parameters, CommandPathParameter.Name);
+                if (FileService.IsFile(regardingPath))
+                {
+                    path = FileService.GetFilePath(regardingPath);
+                }
+                else
+                {
+                    path = regardingPath;
+                }
             }
             if (!FileService.ExistsDirectory(path))
             {
@@ -84,7 +92,6 @@ namespace DDCli.Commands.Dev.Utils
             {
                 throw new InvalidTemplateConfigFileException();
             }
-
 
             Log($"Set up for template '{templateConfig.TemplateName}'");
             Log($"Type destination folder:");

@@ -473,5 +473,10 @@ namespace DDCli.Services
         {
             File.WriteAllBytes(path, bytes);
         }
+
+        public string GetFilePath(string pathToFile)
+        {
+            return new FileInfo(pathToFile).Directory.FullName;
+        }
     }
 }
