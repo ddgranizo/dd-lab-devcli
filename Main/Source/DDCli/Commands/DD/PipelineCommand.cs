@@ -19,6 +19,7 @@ namespace DDCli.Commands.DD
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandNameParameter { get; set; }
         public List<CommandBase> RegisteredCommands { get; }
+        public ILoggerService LoggerService { get; }
         public IFileService FileService { get; }
         public IRegistryService RegistryService { get; }
         public ICryptoService CryptoService { get; }
@@ -26,6 +27,7 @@ namespace DDCli.Commands.DD
 
         public PipelineCommand(
             List<CommandBase> registeredCommands,
+            ILoggerService loggerService,
             IFileService fileService,
             IRegistryService registryService,
             ICryptoService cryptoService,
@@ -44,6 +46,7 @@ namespace DDCli.Commands.DD
             RegisterCommandParameter(CommandNameParameter);
 
             RegisteredCommands = registeredCommands ?? throw new ArgumentNullException(nameof(registeredCommands));
+            LoggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             RegistryService = registryService ?? throw new ArgumentNullException(nameof(registryService));
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
@@ -86,7 +89,7 @@ namespace DDCli.Commands.DD
             }
 
             var multipleCommandManager =
-                new CommandManager(StoredDataService, CryptoService, CommandManager.ExecutionModeTypes.Multiple);
+                new CommandManager(LoggerService ,StoredDataService, CryptoService, CommandManager.ExecutionModeTypes.Multiple);
             multipleCommandManager.RegisterCommands(RegisteredCommands);
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;

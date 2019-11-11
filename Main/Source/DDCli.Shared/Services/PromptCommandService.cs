@@ -79,7 +79,6 @@ namespace DDCli.Services
             }
             process.Start();
             string result = process.StandardOutput.ReadToEnd();
-            //Console.WriteLine(result);
             process.WaitForExit();
             return result;//return result;
         }

@@ -16,12 +16,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public AddPipelineCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -38,7 +39,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock() { ExistsFileReturn = true};
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -73,7 +74,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock() { ExistsFileReturn = true };
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -106,7 +107,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock() { ExistsFileReturn = false };
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -136,7 +137,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock() {ExistsFileReturn = true };
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -167,7 +168,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock();
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -194,7 +195,7 @@ namespace DDCli.Test.Commands.DD
             var fileService = new FileServiceMock();
             var commandDefinition = new AddPipelineCommand(storedDataService, fileService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

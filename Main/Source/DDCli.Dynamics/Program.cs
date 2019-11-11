@@ -14,17 +14,19 @@ namespace DDCli.Dynamics
     class Program
     {
         private static CommandManager commandManager;
+        private static ILoggerService _loggerService;
         static void Main(string[] args)
         {
             var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
 
             var storedData = StoredDataManager.GetStoredData();
 
+            _loggerService = new LoggerService();
             IRegistryService registryService = new RegistryService();
             ICryptoService cryptoService = new CryptoService(registryService);
             IStoredDataService storedDataService = new StoredDataService(storedData, cryptoService);
 
-            commandManager = new CommandManager(storedDataService, cryptoService);
+            commandManager = new CommandManager(_loggerService, storedDataService, cryptoService);
             commandManager.OnLog += CommandManager_OnLog;
 
             RegisterCommands(storedDataService, registryService, cryptoService);
@@ -34,19 +36,19 @@ namespace DDCli.Dynamics
                 var inputCommand = new InputRequest(argsV2);
                 commandManager.ExecuteInputRequest(inputCommand);
             }
-            catch(PathNotFoundException ex)
+            catch (PathNotFoundException ex)
             {
-                ExceptionManager.RaiseException($"Path '{ex.Message}' does not exists");
+                ExceptionManager.RaiseException(_loggerService, $"Path '{ex.Message}' does not exists");
             }
             catch (Exception ex)
             {
-                ExceptionManager.RaiseException($"Throwed uncatched exception: {ex.ToString()}");
+                ExceptionManager.RaiseException(_loggerService, $"Throwed uncatched exception: {ex.ToString()}");
             }
         }
 
         private static void CommandManager_OnLog(object sender, Events.LogEventArgs e)
         {
-            Console.WriteLine(e.Log);
+            _loggerService.Log(e.Log);
         }
 
         private static void RegisterCommands(

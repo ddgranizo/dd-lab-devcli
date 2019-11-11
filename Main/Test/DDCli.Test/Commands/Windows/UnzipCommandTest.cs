@@ -13,11 +13,12 @@ namespace DDCli.Test.Commands.Windows
     public class UnzipCommandTest
     {
         readonly ICryptoService _cryptoServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public UnzipCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -33,7 +34,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { IsDirectoryReturn = false };
             var commandDefinition = new ZipCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -63,7 +64,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { IsFileReturn = true};
             var commandDefinition = new UnzipCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -91,7 +92,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { IsFileReturn = false };
             var commandDefinition = new UnzipCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -119,7 +120,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock();
             var commandDefinition = new UnzipCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

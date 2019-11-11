@@ -7,14 +7,15 @@ namespace DDCli.Services
 {
     public class ConsoleService : IConsoleService
     {
-
+        public ILoggerService LoggerService { get; }
         public List<string> ReturnValues { get; }
         public bool IsInteractive { get; set; }
 
         private int returnCounter = 0;
 
-        public ConsoleService(List<string> returnValues)
+        public ConsoleService(ILoggerService loggerService, List<string> returnValues)
         {
+            LoggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
             ReturnValues = returnValues;
             IsInteractive = returnValues == null;
         }
@@ -30,7 +31,7 @@ namespace DDCli.Services
 
         public void WriteLine(string text)
         {
-            Console.WriteLine(text);
+            LoggerService.Log(text);
         }
     }
 }

@@ -16,12 +16,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public DeleteTemplateCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -37,7 +38,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock() { ExistsTemplateReturn = true };
             var commandDefinition = new DeleteTemplateCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -65,7 +66,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock() { ExistsTemplateReturn = false };
             var commandDefinition = new DeleteTemplateCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -91,7 +92,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock();
             var commandDefinition = new DeleteTemplateCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

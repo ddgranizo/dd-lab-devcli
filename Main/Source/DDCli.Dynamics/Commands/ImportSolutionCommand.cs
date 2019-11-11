@@ -73,8 +73,7 @@ namespace DDCli.Dynamics.Commands
         {
             var stringConnection = GetStringParameterValue(parameters, CommandStringConnectionParameter.Name);
             var solutionPath = GetStringParameterValue(parameters, CommandPathParameter.Name);
-            Console.WriteLine("stringConnection: " + stringConnection);
-            Console.WriteLine("solutionPath: " + solutionPath);
+            
             if (!FileService.ExistsFile(solutionPath))
             {
                 throw new PathNotFoundException(solutionPath);

@@ -16,12 +16,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public DeletePipelineCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -37,7 +38,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock() { ExistsPipelineReturn = true };
             var commandDefinition = new DeletePipelineCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -65,7 +66,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock() { ExistsPipelineReturn = false };
             var commandDefinition = new DeletePipelineCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -91,7 +92,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock();
             var commandDefinition = new DeletePipelineCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

@@ -14,12 +14,13 @@ namespace DDCli.Test.Commands.Windows
     {
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public MovePathCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
         [Fact]
@@ -35,7 +36,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { ExistsPathReturn = true, IsDirectoryReturn = false };
             var commandDefinition = new MovePathCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -68,7 +69,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { ExistsPathReturn = true, IsDirectoryReturn = true };
             var commandDefinition = new MovePathCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -103,7 +104,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock() { ExistsPathReturn = false };
             var commandDefinition = new MovePathCommand(fileServiceMock) ;
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -134,7 +135,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock();
             var commandDefinition = new MovePathCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -162,7 +163,7 @@ namespace DDCli.Test.Commands.Windows
 
             var fileServiceMock = new FileServiceMock();
             var commandDefinition = new MovePathCommand(fileServiceMock);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

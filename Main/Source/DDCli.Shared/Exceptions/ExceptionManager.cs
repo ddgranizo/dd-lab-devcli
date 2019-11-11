@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DDCli.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,11 +7,11 @@ namespace DDCli.Exceptions
 {
     public static class ExceptionManager
     {
-        public static void RaiseException(string message)
+        public static void RaiseException(ILoggerService loggerService, string message)
         {
-            RaiseException(new Exception(message)) ;
+            RaiseException(loggerService, new Exception(message)) ;
         }
-        public static void RaiseException(Exception ex)
+        public static void RaiseException(ILoggerService loggerService, Exception ex)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -22,7 +23,7 @@ namespace DDCli.Exceptions
             sb.AppendLine("################# ------ >>");
             sb.AppendLine($"Error message: {ex.Message}");
             sb.AppendLine("################# << ------");
-            Console.WriteLine(sb.ToString());
+            loggerService.Log(sb.ToString());
             throw ex;
         }
     }

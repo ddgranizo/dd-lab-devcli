@@ -16,12 +16,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public AddAliasCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
        
@@ -43,7 +44,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock(false);
 
             var mockCommand = new CommandMock(commandNamespace, commandName, commandDescription);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(mockCommand);
 
             var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
@@ -78,7 +79,7 @@ namespace DDCli.Test.Commands.DD
             string commandName = "mycommand";
             var storedDataService = new StoredDataServiceMock(true);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
 
             var commandDefinition = new AddAliasCommand(storedDataService, instance.Commands);
             instance.RegisterCommand(commandDefinition);
@@ -112,7 +113,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock(true);
 
             var mockCommand = new CommandMock(commandNamespace, commandName, commandDescription);
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(mockCommand);
 
 
@@ -147,7 +148,7 @@ namespace DDCli.Test.Commands.DD
             var registeredCommands = new List<CommandBase>();
             var commandDefinition = new AddAliasCommand(storedDataService, registeredCommands);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -175,7 +176,7 @@ namespace DDCli.Test.Commands.DD
             var registeredCommands = new List<CommandBase>();
             var commandDefinition = new AddAliasCommand(storedDataService, registeredCommands);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

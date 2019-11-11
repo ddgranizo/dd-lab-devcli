@@ -25,6 +25,7 @@ namespace DDCli
 
         public event OnLogHnadler OnLog;
         public List<CommandBase> Commands { get; set; }
+        public ILoggerService LoggerService { get; }
         public IStoredDataService StoredDataService { get; }
         public ICryptoService CryptoService { get; }
         public ExecutionModeTypes ExecutionMode { get; }
@@ -35,11 +36,13 @@ namespace DDCli
         private readonly List<string> _autoincrementParametersReplaced = new List<string>();
         public List<string> EncryptedResolved { get; set; }
         public CommandManager(
+            ILoggerService loggerService,
             IStoredDataService storedDataService,
             ICryptoService cryptoService,
             ExecutionModeTypes executionMode = ExecutionModeTypes.Single)
         {
             Commands = new List<CommandBase>();
+            LoggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
             StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
             ExecutionMode = executionMode;
@@ -148,11 +151,11 @@ namespace DDCli
                             ? _parameterManager.ResolveParameters(StoredDataService, commandsParameters)
                             : commandsParameters;
                     var timer = new Stopwatch(); timer.Start();
-                    command.ConsoleService = new ConsoleService(consoleInputs);
+                    command.ConsoleService = new ConsoleService(LoggerService, consoleInputs);
                     command.Execute(processedParameters);
                     var tab = ExecutionMode == ExecutionModeTypes.Single ? "" : "\t";
                     var time = StringFormats.MillisecondsToHumanTime(timer.ElapsedMilliseconds);
-                    Console.WriteLine($"{tab}Executed command in {time}");
+                    Log($"{tab}Executed command in {time}");
                 }
                 else
                 {
@@ -223,9 +226,13 @@ namespace DDCli
         private void Command_OnLog(object sender, LogEventArgs e)
         {
             var ofuscated = ObfuscateLogWithEncrypted(e.Log);
-            OnLog?.Invoke(sender, new LogEventArgs(ofuscated));
+            Log(ofuscated);
         }
 
+        private void Log(string text)
+        {
+            OnLog?.Invoke(this, new LogEventArgs(text));
+        }
 
         private string ObfuscateLogWithEncrypted(string log)
         {

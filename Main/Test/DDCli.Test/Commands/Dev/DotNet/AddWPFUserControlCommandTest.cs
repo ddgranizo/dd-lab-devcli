@@ -17,11 +17,12 @@ namespace DDCli.Test.Commands.DD
     {
 
         readonly ICryptoService _cryptoServiceMock;
-
+        readonly ILoggerService _loggerServiceMock;
 
         public AddWPFUserControlCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
    
@@ -40,7 +41,7 @@ namespace DDCli.Test.Commands.DD
 
             var storedDataService = new StoredDataServiceMock(false);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
 
             var fileService = new FileServiceMock() ;
 

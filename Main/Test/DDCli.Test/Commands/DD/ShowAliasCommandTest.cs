@@ -6,6 +6,7 @@ using DDCli.Models;
 using DDCli.Test.Mock;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -18,10 +19,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
+        readonly LoggerServiceMock _loggerServiceMock;
+
         public ShowAliasCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
        
@@ -42,7 +46,7 @@ namespace DDCli.Test.Commands.DD
             var aliasList = new List<string>() { myAliasDefinition1, myAliasDefinition2 };
             var storedDataService = new StoredDataServiceMock(aliasList);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.OnLog += Instance_OnLog;
             var commandDefinition = new ShowAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
@@ -55,7 +59,7 @@ namespace DDCli.Test.Commands.DD
             var expected = aliasList.ToDisplayList(
                 ShowAliasCommand.HeaderForListingAlias, 
                 ShowAliasCommand.FirstCharacterDefaultForListingAlias);
-            var actual = LastLog;
+            var actual = _loggerServiceMock.Logs.First();
 
             Assert.Equal(expected, actual);
         }
@@ -70,7 +74,7 @@ namespace DDCli.Test.Commands.DD
         {
             var storedDataService = new StoredDataServiceMock(new List<string>());
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.OnLog += Instance_OnLog;
             var commandDefinition = new ShowAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
@@ -81,14 +85,14 @@ namespace DDCli.Test.Commands.DD
             instance.ExecuteInputRequest(inputRequest);
 
             var expected = ShowAliasCommand.ZeroRegisteredMessage;
-            var actual = LastLog;
+            var actual = _loggerServiceMock.Logs.First();
 
             Assert.Equal(expected, actual);
         }
 
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
         {
-            LastLog = e.Log;
+            _loggerServiceMock.Log(e.Log);
         }
     }
 }

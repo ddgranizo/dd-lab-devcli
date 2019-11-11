@@ -46,6 +46,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IConsoleService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICryptoService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IFileService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILoggerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPromptCommandService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStoredDataService.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ConsoleService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CryptoService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LoggerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PromptCommandService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RegistryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StoredDataService.cs" />

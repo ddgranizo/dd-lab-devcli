@@ -30,15 +30,17 @@ namespace DDCli.Test
 
         readonly IStoredDataService _storedDataServiceMock;
         readonly ICryptoService _cryptoServiceMock;
+        readonly LoggerServiceMock _loggerServiceMock;
         public CommandManagerTest()
         {
             _storedDataServiceMock = new StoredDataServiceMock();
             _cryptoServiceMock = new CryptoServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
         {
-            LastLog = e.Log;
+            _loggerServiceMock.Log(e.Log);
         }
 
 
@@ -58,7 +60,7 @@ namespace DDCli.Test
 
 
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myInvalidGuidParamValue = "hellomoto";
@@ -84,7 +86,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionGuid());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             Guid myIntParamValue = Guid.NewGuid();
@@ -113,7 +115,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myIntParamValue = "hellomoto";
@@ -139,7 +141,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionDecimal());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const decimal myIntParamValue = 1.3M;
@@ -169,7 +171,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myInvalidIntParamValue = "hellomoto";
@@ -198,7 +200,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionInteger());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const int myIntParamValue = 1;
@@ -228,7 +230,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myBoolParamValue = "yes";
@@ -261,7 +263,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionBoolean());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const bool myBoolParamValue = true;
@@ -292,7 +294,7 @@ namespace DDCli.Test
 
             commandDefinition.CommandParametersDefinition.Add(GetGenericParameterDefinitionString());
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             const string myStringParamValue = "MyParamValue";
@@ -319,7 +321,7 @@ namespace DDCli.Test
                         CommandParameterDefinition.TypeValue.String,
                         GenericParameterDescription));
 
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
 
@@ -342,7 +344,7 @@ namespace DDCli.Test
         public void WhenExecutedCommandNotRegistered_CommandManager_ShouldThrowNotFoundException()
         {
             const string differentCommandName = "NotRegisteredCommand";
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(GenericNameSpace, differentCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
 
@@ -358,7 +360,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenExecutedCommandWithSameNamespace_CommandManager_ShouldThrowDuplicateException()
         {
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock($"{GenericNameSpace}1", GenericCompleteCommandName, GenericDescription));
             instance.RegisterCommand(new CommandMock($"{GenericNameSpace}2", GenericCompleteCommandName, GenericDescription));
             var inputRequest = new InputRequest(GenericCommandName.ToLowerInvariant());
@@ -373,7 +375,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenExecutedCommandHelp_CommandManager_ShouldReturnHelpData()
         {
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
             instance.RegisterCommand(new HelpCommand(instance.Commands));
             var inputRequest = new InputRequest(HelpCommandName.ToLowerInvariant());
@@ -385,7 +387,7 @@ namespace DDCli.Test
             var expected = instance.Commands
                     .OrderBy(k => k.GetInvocationCommandName())
                     .ToDisplayList((item) => { return item.GetInvocationCommandName(); }, "Available commands:", "#");
-            var actual = string.Join(Environment.NewLine, LastLog.Split(Environment.NewLine).Skip(1).SkipLast(1));
+            var actual = string.Join(Environment.NewLine, _loggerServiceMock.Logs.First().Split(Environment.NewLine).Skip(1).SkipLast(1));
 
             Assert.Equal(expected, actual);
         }
@@ -394,7 +396,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterInvalidCommand_CommandManager_ShouldThrowException()
         {
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             const string commandName = "MyCommandName";
             var nameSpace = string.Empty;
             var description = string.Empty;
@@ -410,7 +412,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenRegisterCommand_CommandManager_CommandShouldBeAddedWithinTheList()
         {
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
 
             instance.RegisterCommand(new CommandMock(GenericNameSpace, GenericCompleteCommandName, GenericDescription));
 
@@ -425,7 +427,7 @@ namespace DDCli.Test
         [Trait("TestCategory", "UnitTest"), Trait("TestCategory", "CommandManagerTest")]
         public void WhenInstanceOfCommandManager_CommandManager_ShouldInitializeCommandsList()
         {
-            var instance = new CommandManager(_storedDataServiceMock, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataServiceMock, _cryptoServiceMock);
             Assert.NotNull(instance.Commands);
         }
 

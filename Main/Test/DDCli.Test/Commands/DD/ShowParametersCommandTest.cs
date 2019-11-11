@@ -6,6 +6,7 @@ using DDCli.Models;
 using DDCli.Test.Mock;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -16,10 +17,13 @@ namespace DDCli.Test.Commands.DD
     {
 
         readonly ICryptoService _cryptoServiceMock;
+        readonly LoggerServiceMock _loggerServiceMock;
+
         public string LastLog { get; set; }
         public ShowParametersCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -36,7 +40,7 @@ namespace DDCli.Test.Commands.DD
             };
             var commandDefinition = new ShowParametersCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
             instance.OnLog += Instance_OnLog;
             var inputRequest = new InputRequest(
@@ -45,7 +49,7 @@ namespace DDCli.Test.Commands.DD
             instance.ExecuteInputRequest(inputRequest);
 
             var expected = ShowParametersCommand.ZeroRegisteredMessage;
-            var actual = LastLog;
+            var actual = _loggerServiceMock.Logs.First();
 
             Assert.Equal(expected, actual);
         }
@@ -73,7 +77,7 @@ namespace DDCli.Test.Commands.DD
             };
             var commandDefinition = new ShowParametersCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
             instance.OnLog += Instance_OnLog;
             var inputRequest = new InputRequest(
@@ -84,14 +88,14 @@ namespace DDCli.Test.Commands.DD
             var expected = listed.ToDisplayList(
                 ShowParametersCommand.ParameterListHeaderDisplay,
                 ShowParametersCommand.ParameterListFirstCharLine);
-            var actual = LastLog;
+            var actual = _loggerServiceMock.Logs.First();
 
             Assert.Equal(expected, actual);
         }
 
         private void Instance_OnLog(object sender, Events.LogEventArgs e)
         {
-            LastLog = e.Log;
+            _loggerServiceMock.Log(e.Log);
         }
     }
 }

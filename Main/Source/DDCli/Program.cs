@@ -3,6 +3,9 @@ using DDCli.Interfaces;
 using DDCli.Models;
 using DDCli.Services;
 using DDCli.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -10,20 +13,23 @@ namespace DDCli
 {
     class Program
     {
-
+        
         private static CommandManager commandManager;
+        private static ILoggerService _loggerService;
         static void Main(string[] args)
         {
+            _loggerService = new LoggerService();
 
+            LogRecievedArgs(args);
             var argsV2 = StringFormats.StringToParams(string.Join(" ", args.Select(k => $"\"{k}\"")));
-
+            LogProcessedArgs(argsV2);
             var storedData = StoredDataManager.GetStoredData();
 
             IRegistryService registryService = new RegistryService();
             ICryptoService cryptoService = new CryptoService(registryService);
             IStoredDataService storedDataService = new StoredDataService(storedData, cryptoService);
 
-            commandManager = new CommandManager(storedDataService, cryptoService);
+            commandManager = new CommandManager(_loggerService, storedDataService, cryptoService);
             commandManager.OnLog += CommandManager_OnLog;
 
             RegisterCommands(storedDataService, registryService, cryptoService);
@@ -35,102 +41,120 @@ namespace DDCli
             }
             catch (DuplicateCommandException ex)
             {
-                ExceptionManager.RaiseException($"Found {ex.Commands.Count} commands with the same name in different namespaces. In this case is necessary use the namespace for execute it. Commands: {string.Join(",", ex.Commands.ToArray())}");
+                ExceptionManager.RaiseException(_loggerService, $"Found {ex.Commands.Count} commands with the same name in different namespaces. In this case is necessary use the namespace for execute it. Commands: {string.Join(",", ex.Commands.ToArray())}");
             }
             catch (CommandNotFoundException)
             {
-                ExceptionManager.RaiseException($"Command not found. Use 'help' for check the available commands");
+                ExceptionManager.RaiseException(_loggerService, $"Command not found. Use 'help' for check the available commands");
             }
             catch (InvalidParamsException)
             {
-                ExceptionManager.RaiseException($"This command cannot be executed with this combination of parameters");
+                ExceptionManager.RaiseException(_loggerService, $"This command cannot be executed with this combination of parameters");
             }
             catch (InvalidParamNameException ex)
             {
-                ExceptionManager.RaiseException($"Invalid parameter name '{ex.Message}'");
+                ExceptionManager.RaiseException(_loggerService, $"Invalid parameter name '{ex.Message}'");
             }
             catch (NotArgumentsException)
             {
-                ExceptionManager.RaiseException($"Check all the params with 'help' command");
+                ExceptionManager.RaiseException(_loggerService, $"Check all the params with 'help' command");
             }
             catch (NotValidCommandNameException ex)
             {
-                ExceptionManager.RaiseException($"Invalid command name '{ex.Message}'");
+                ExceptionManager.RaiseException(_loggerService, $"Invalid command name '{ex.Message}'");
             }
             catch (AliasRepeatedException ex)
             {
-                ExceptionManager.RaiseException($"Alias '{ex.Message}' is already used");
+                ExceptionManager.RaiseException(_loggerService, $"Alias '{ex.Message}' is already used");
             }
             catch (AliasNotFoundException ex)
             {
-                ExceptionManager.RaiseException($"Alias '{ex.Message}' is not registered");
+                ExceptionManager.RaiseException(_loggerService, $"Alias '{ex.Message}' is not registered");
             }
             catch (ParameterRepeatedException ex)
             {
-                ExceptionManager.RaiseException($"Parameter '{ex.Message}' is already used");
+                ExceptionManager.RaiseException(_loggerService, $"Parameter '{ex.Message}' is already used");
             }
             catch (ParameterNotFoundException ex)
             {
-                ExceptionManager.RaiseException($"Parameter '{ex.Message}' is not registered");
+                ExceptionManager.RaiseException(_loggerService, $"Parameter '{ex.Message}' is not registered");
             }
             catch (InvalidParamException ex)
             {
-                ExceptionManager.RaiseException($"Cannot resolver parameter {ex.Message}");
+                ExceptionManager.RaiseException(_loggerService, $"Cannot resolver parameter {ex.Message}");
             }
             catch (PathNotFoundException ex)
             {
-                ExceptionManager.RaiseException($"Path '{ex.Message}' does not exists");
+                ExceptionManager.RaiseException(_loggerService, $"Path '{ex.Message}' does not exists");
             }
             catch (TemplateConfigFileNotFoundException)
             {
-                ExceptionManager.RaiseException($"Can't find '{Definitions.TemplateConfigFilename}' file in path");
+                ExceptionManager.RaiseException(_loggerService, $"Can't find '{Definitions.TemplateConfigFilename}' file in path");
             }
             catch (InvalidTemplateConfigFileException ex)
             {
-                ExceptionManager.RaiseException($"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
+                ExceptionManager.RaiseException(_loggerService, $"Config file '{Definitions.TemplateConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
             catch (InvalidStringFormatException ex)
             {
-                ExceptionManager.RaiseException($"Invalid string format. {ex.Message}");
+                ExceptionManager.RaiseException(_loggerService, $"Invalid string format. {ex.Message}");
             }
             catch (TemplateNameRepeatedException)
             {
-                ExceptionManager.RaiseException($"Template name repeated");
+                ExceptionManager.RaiseException(_loggerService, $"Template name repeated");
             }
             catch (TemplateNotFoundException)
             {
-                ExceptionManager.RaiseException($"Can't find any template with this name");
+                ExceptionManager.RaiseException(_loggerService, $"Can't find any template with this name");
             }
             catch (RepositoryNotFoundException)
             {
-                ExceptionManager.RaiseException($"Can't find any repository with this name");
+                ExceptionManager.RaiseException(_loggerService, $"Can't find any repository with this name");
             }
             catch (PipelineConfigFileNotFoundException)
             {
-                ExceptionManager.RaiseException($"Can't find '{Definitions.PipelineConfigFilename}' file in path");
+                ExceptionManager.RaiseException(_loggerService, $"Can't find '{Definitions.PipelineConfigFilename}' file in path");
             }
             catch (InvalidPipelineConfigFileException ex)
             {
-                ExceptionManager.RaiseException($"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
+                ExceptionManager.RaiseException(_loggerService, $"Config file '{Definitions.PipelineConfigFilename}' is invalid. Error parsing: {ex.Message}");
             }
             catch (PipelineNameRepeatedException)
             {
-                ExceptionManager.RaiseException($"Pipeline name repeated");
+                ExceptionManager.RaiseException(_loggerService, $"Pipeline name repeated");
             }
             catch (PipelineNotFoundException)
             {
-                ExceptionManager.RaiseException($"Can't find any pipeline with this name");
+                ExceptionManager.RaiseException(_loggerService, $"Can't find any pipeline with this name");
             }
             catch (Exception ex)
             {
-                ExceptionManager.RaiseException($"Throwed uncatched exception: {ex.ToString()}");
+                ExceptionManager.RaiseException(_loggerService, $"Throwed uncatched exception: {ex.ToString()}");
             }
 
         }
 
+        private static void LogProcessedArgs(string[] argsV2)
+        {
+            _loggerService.Log("ArgsV2:");
+            foreach (var item in argsV2)
+            {
+                _loggerService.Log($"\t|{item}|");
+            }
+        }
+
+        private static void LogRecievedArgs(string[] args)
+        {
+            _loggerService.Log("Retrieved args:");
+            foreach (var item in args)
+            {
+                _loggerService.Log($"\t|{item}|");
+            }
+        }
+
         private static void CommandManager_OnLog(object sender, Events.LogEventArgs e)
         {
-            Console.WriteLine(e.Log);
+            _loggerService.Log(e.Log);
         }
 
         private static void RegisterCommands(
@@ -176,7 +200,7 @@ namespace DDCli
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 
-            Register(new Commands.DD.PipelineCommand(commandManager.Commands, fileService, registryService, cryptoService, storedDataService));
+            Register(new Commands.DD.PipelineCommand(commandManager.Commands, _loggerService, fileService, registryService, cryptoService, storedDataService));
             Register(new Commands.HelpCommand(commandManager.Commands));
         }
 

@@ -17,11 +17,14 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
+        readonly ILoggerService _loggerServiceMock;
+
         public string LastLog { get; set; }
         public WindowCmdCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -40,7 +43,7 @@ namespace DDCli.Test.Commands.DD
 
             var commandDefinition = new WindowsCmdCommand(promtpService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -70,7 +73,7 @@ namespace DDCli.Test.Commands.DD
 
             var commandDefinition = new WindowsCmdCommand(promtpService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

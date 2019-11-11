@@ -14,10 +14,13 @@ namespace DDCli.Test.Commands.Dev.Utils
 
         readonly ICryptoService _cryptoServiceMock;
         readonly IStoredDataService _storedDataService;
+        readonly ILoggerService _loggerServiceMock;
+
         public TemplateCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _storedDataService = new StoredDataServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -67,7 +70,7 @@ namespace DDCli.Test.Commands.Dev.Utils
 
             var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
-            var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -101,7 +104,7 @@ namespace DDCli.Test.Commands.Dev.Utils
             var fileService = new FileServiceMock() { ExistsTemplateConfigFileReturn = false, ExistsDirectoryReturn = true };
             var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
-            var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -128,7 +131,7 @@ namespace DDCli.Test.Commands.Dev.Utils
             var fileService = new FileServiceMock() { ExistsDirectoryReturn = false };
             var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
-            var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
@@ -153,7 +156,7 @@ namespace DDCli.Test.Commands.Dev.Utils
             var fileService = new FileServiceMock();
             var commandDefinition = new TemplateCommand(fileService, _storedDataService);
 
-            var instance = new CommandManager(_storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, _storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(

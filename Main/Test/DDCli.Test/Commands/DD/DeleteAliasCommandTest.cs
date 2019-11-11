@@ -16,11 +16,13 @@ namespace DDCli.Test.Commands.DD
 
         ICryptoService _cryptoServiceMock;
         IRegistryService _registryServiceMock;
+        readonly ILoggerService _loggerServiceMock;
 
         public DeleteAliasCommandTest()
         {
             _cryptoServiceMock = new CryptoServiceMock();
             _registryServiceMock = new RegistryServiceMock();
+            _loggerServiceMock = new LoggerServiceMock();
         }
 
 
@@ -38,7 +40,7 @@ namespace DDCli.Test.Commands.DD
 
             var storedDataService = new StoredDataServiceMock(true);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(new CommandMock(commandNamespace, commandName, commandDescription));
 
             var commandDefinition = new DeleteAliasCommand(storedDataService);
@@ -67,7 +69,7 @@ namespace DDCli.Test.Commands.DD
             string aliasName = "myalias";
             var storedDataService = new StoredDataServiceMock(false);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
 
             var commandDefinition = new DeleteAliasCommand(storedDataService);
             instance.RegisterCommand(commandDefinition);
@@ -95,7 +97,7 @@ namespace DDCli.Test.Commands.DD
             var storedDataService = new StoredDataServiceMock(false);
             var commandDefinition = new DeleteAliasCommand(storedDataService);
 
-            var instance = new CommandManager(storedDataService, _cryptoServiceMock);
+            var instance = new CommandManager(_loggerServiceMock, storedDataService, _cryptoServiceMock);
             instance.RegisterCommand(commandDefinition);
 
             var inputRequest = new InputRequest(
