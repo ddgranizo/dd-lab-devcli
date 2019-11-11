@@ -8,12 +8,14 @@ namespace DDCli.Services
 {
     public class LoggerService : ILoggerService
     {
+        private const string LogPath = "C:\\Temp\\Logs\\DDCli";
+
         public LoggerService(bool interactive = true)
         {
             Interactive = interactive;
-            if (!Directory.Exists("Logs"))
+            if (!Directory.Exists(LogPath))
             {
-                Directory.CreateDirectory("Logs");
+                Directory.CreateDirectory(LogPath);
             }
         }
 
@@ -27,7 +29,7 @@ namespace DDCli.Services
             }
             var filename = $"dd_{DateTime.Now.ToString("yyyyMMdd")}.log";
             var content = $"{DateTime.Now.ToString("yyyyMMdd hh:mm:ss:ffff")} - {text}";
-            File.AppendAllLines($"Logs\\{filename}", new List<string>() { content });
+            File.AppendAllLines($"{LogPath}\\{filename}", new List<string>() { content });
         }
     }
 }

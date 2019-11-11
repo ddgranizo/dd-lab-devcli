@@ -70,7 +70,7 @@ namespace DDCli.Installer
             {
                 zipStream.CopyTo(zipFile);
             }
-            
+
 
             Console.WriteLine("Unzipping artifactor...");
             ZipFile.ExtractToDirectory(FilePath, ArtifactorExtractionFolder);
@@ -79,15 +79,21 @@ namespace DDCli.Installer
 
             Console.WriteLine("Unzipping assemblies...");
 
-            
+
             DeleteDirectory(AssemblyCliExtractionFolder);
             DeleteDirectory(AssemblyCliDynamicsExtractionFolder);
 
             ZipFile.ExtractToDirectory(assemblyCliZipFileName, AssemblyCliExtractionFolder);
             ZipFile.ExtractToDirectory(assemblyCliDynamicsZipFileName, AssemblyCliDynamicsExtractionFolder);
             Console.WriteLine("Installing files in folder...");
-            Directory.Delete(InstallCliFolder, true);
-            Directory.Delete(InstallCliDynamicsFolder, true);
+            if (Directory.Exists(InstallCliFolder))
+            {
+                Directory.Delete(InstallCliFolder, true);
+            }
+            if (Directory.Exists(InstallCliDynamicsFolder))
+            {
+                Directory.Delete(InstallCliDynamicsFolder, true);
+            }
             Directory.Move(AssemblyCliExtractionFolder, InstallCliFolder);
             Directory.Move(AssemblyCliDynamicsExtractionFolder, InstallCliDynamicsFolder);
             Console.WriteLine("Installation complete");
@@ -139,7 +145,7 @@ namespace DDCli.Installer
             {
                 var workitem = await witClient.GetBuildAsync(new Guid("7cc85a15-7f9c-4e84-b42e-68d1452c3afa"), 151);
 
-               
+
             }
             catch (AggregateException aex)
             {
