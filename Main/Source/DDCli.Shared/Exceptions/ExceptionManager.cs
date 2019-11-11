@@ -16,13 +16,9 @@ namespace DDCli.Exceptions
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("###########################");
-            sb.AppendLine("###########################");
             sb.AppendLine("####      ERROR!      #####");
             sb.AppendLine("###########################");
-            sb.AppendLine("###########################");
-            sb.AppendLine("################# ------ >>");
             sb.AppendLine($"Error message: {ex.Message}");
-            sb.AppendLine("################# << ------");
             loggerService.Log(sb.ToString());
             throw ex;
         }

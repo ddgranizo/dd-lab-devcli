@@ -20,7 +20,8 @@ namespace DDCli
             _loggerService = new LoggerService();
             _loggerService.Log("###### INITIALIZED CLI ######");
             LogRecievedArgs(args);
-            var argsV2 = StringFormats.StringToParams(string.Join(" ", args.Select(k => $"\"{k}\"")));
+            bool isRecursive = args.Any(k => k.Length > 0 && k.First() == '\"');
+            var argsV2 = isRecursive ? StringFormats.StringToParams(string.Join(" ", args)) : args;
             LogProcessedArgs(argsV2);
             var storedData = StoredDataManager.GetStoredData();
 
