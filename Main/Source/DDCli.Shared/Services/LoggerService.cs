@@ -23,7 +23,7 @@ namespace DDCli.Services
         {
             if (Interactive)
             {
-                Console.WriteLine();
+                Console.WriteLine(text);
             }
             var filename = $"dd_{DateTime.Now.ToString("yyyyMMdd")}.log";
             var content = $"{DateTime.Now.ToString("yyyyMMdd hh:mm:ss:ffff")} - {text}";
