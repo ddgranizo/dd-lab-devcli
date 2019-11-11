@@ -18,18 +18,20 @@ namespace DDCli.Commands.Dev.Utils
 
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandNameParameter { get; set; }
+        public CommandParameterDefinition DestinationPathParameter { get; set; }
+        public CommandParameterDefinition ValuesParameter { get; set; }
         public IFileService FileService { get; }
         public IStoredDataService StoredDataService { get; }
         public List<ReplacePairValue> UserTemplateSetupReplaceStrings { get; set; }
         public TemplateCommand(
-            IFileService directoryService, 
+            IFileService directoryService,
             IStoredDataService storedDataService)
              : base(typeof(TemplateCommand).Namespace, nameof(TemplateCommand), HelpDefinition)
         {
             CommandPathParameter = new CommandParameterDefinition(
                 "path",
                 CommandParameterDefinition.TypeValue.String,
-                "path for clone with ddtemplate.json",
+                "Path for clone with ddtemplate.json",
                 "p");
 
             CommandNameParameter = new CommandParameterDefinition(
@@ -38,11 +40,25 @@ namespace DDCli.Commands.Dev.Utils
                 "Name of the registered template",
                 "n");
 
+            DestinationPathParameter = new CommandParameterDefinition(
+               "destinationpath",
+               CommandParameterDefinition.TypeValue.String,
+               "Destination path for place the cloned template",
+               "d");
+
+            ValuesParameter = new CommandParameterDefinition(
+              "values",
+              CommandParameterDefinition.TypeValue.String,
+              "Values for replace in template. Use pairs like \"Key1=Value 1;Key2=Value 2;...\"",
+              "v");
+
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
             StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
             RegisterCommandParameter(CommandPathParameter);
             RegisterCommandParameter(CommandNameParameter);
+            RegisterCommandParameter(DestinationPathParameter);
+            RegisterCommandParameter(ValuesParameter);
             UserTemplateSetupReplaceStrings = new List<ReplacePairValue>();
         }
 
@@ -50,7 +66,7 @@ namespace DDCli.Commands.Dev.Utils
         {
             return (IsParamOk(parameters, CommandPathParameter.Name)
                     || IsParamOk(parameters, CommandNameParameter.Name))
-                    && !(IsParamOk(parameters, CommandPathParameter.Name) 
+                    && !(IsParamOk(parameters, CommandPathParameter.Name)
                             && IsParamOk(parameters, CommandNameParameter.Name));
         }
 
@@ -93,17 +109,41 @@ namespace DDCli.Commands.Dev.Utils
                 throw new InvalidTemplateConfigFileException();
             }
 
-            Log($"Set up for template '{templateConfig.TemplateName}'");
-            Log($"Type destination folder:");
-            var destinationPath = ConsoleService.ReadLine();
-            
-            Log($"Complete the paris for replace in the base project");
-            foreach (var pair in templateConfig.ReplacePairs)
+
+            var destinationPathRequest = GetStringParameterValue(parameters, DestinationPathParameter.Name);
+            var destinationPath = string.Empty;
+            if (string.IsNullOrEmpty(destinationPathRequest))
             {
-                Log($"\t{pair.ReplaceDescription}: (Old value = {pair.OldValue})");
-                var value = ConsoleService.ReadLine();
-                var replacedPair = new ReplacePairValue(pair, value);
-                UserTemplateSetupReplaceStrings.Add(replacedPair);
+                Log($"Set up for template '{templateConfig.TemplateName}'");
+                Log($"Type destination folder:");
+                destinationPath = ConsoleService.ReadLine();
+            }
+            else
+            {
+                destinationPath = destinationPathRequest;
+            }
+            var valuesRequest = GetStringParameterValue(parameters, ValuesParameter.Name);
+            if (string.IsNullOrEmpty(valuesRequest))
+            {
+                Log($"Complete the paris for replace in the base project");
+                foreach (var pair in templateConfig.ReplacePairs)
+                {
+                    Log($"\t{pair.ReplaceDescription}: (Old value = {pair.OldValue})");
+                    var value = ConsoleService.ReadLine();
+                    var replacedPair = new ReplacePairValue(pair, value);
+                    UserTemplateSetupReplaceStrings.Add(replacedPair);
+                }
+            }
+            else
+            {
+                UserTemplateSetupReplaceStrings.AddRange(valuesRequest.Split(';').Select(k =>
+                {
+                    var keyValue = k.Split('=');
+                    var key = keyValue[0];
+                    var value = keyValue[1];
+                    var pair = templateConfig.ReplacePairs.First(l => l.OldValue == key);
+                    return new ReplacePairValue(pair, value);
+                }));
             }
 
             var absoluteDestionPath = FileService.GetAbsoluteCurrentPath(destinationPath);
@@ -130,7 +170,7 @@ namespace DDCli.Commands.Dev.Utils
                 {
                     FileService.ReplaceAllFilesName(rootPath, oldValue, newValue);
                 }
-                if(replaceString.ReplacedPair.ApplyForFileContents)
+                if (replaceString.ReplacedPair.ApplyForFileContents)
                 {
                     FileService.ReplaceFilesContents(rootPath, oldValue, newValue, pattern);
                 }
