@@ -5,7 +5,6 @@ using DDCli.Services;
 using DDCli.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using System;
 using System.Linq;
 

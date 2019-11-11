@@ -1,17 +1,20 @@
 ﻿using DDCli.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DDCli.Services
 {
     public class LoggerService : ILoggerService
     {
-        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-
         public LoggerService(bool interactive = true)
         {
             Interactive = interactive;
+            if (!Directory.Exists("Logs"))
+            {
+                Directory.CreateDirectory("Logs");
+            }
         }
 
         public bool Interactive { get; }
@@ -22,7 +25,9 @@ namespace DDCli.Services
             {
                 Console.WriteLine();
             }
-            _logger.Info(text);
+            var filename = $"dd_{DateTime.Now.ToString("yyyyMMdd")}.log";
+            var content = $"{DateTime.Now.ToString("yyyyMMdd hh:mm:ss:ffff")} - {text}";
+            File.AppendAllLines($"Logs\\{filename}", new List<string>() { content });
         }
     }
 }
