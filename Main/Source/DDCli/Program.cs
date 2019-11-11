@@ -18,7 +18,7 @@ namespace DDCli
         static void Main(string[] args)
         {
             _loggerService = new LoggerService();
-
+            _loggerService.Log("###### INITIALIZED CLI ######");
             LogRecievedArgs(args);
             var argsV2 = StringFormats.StringToParams(string.Join(" ", args.Select(k => $"\"{k}\"")));
             LogProcessedArgs(argsV2);
@@ -129,6 +129,10 @@ namespace DDCli
             catch (Exception ex)
             {
                 ExceptionManager.RaiseException(_loggerService, $"Throwed uncatched exception: {ex.ToString()}");
+            }
+            finally
+            {
+                _loggerService.Log("###### FINISHED! ######");
             }
 
         }
