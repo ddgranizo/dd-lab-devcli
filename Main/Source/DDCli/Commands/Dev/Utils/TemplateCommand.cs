@@ -138,10 +138,23 @@ namespace DDCli.Commands.Dev.Utils
             {
                 UserTemplateSetupReplaceStrings.AddRange(valuesRequest.Split(';').Select(k =>
                 {
+                    if (k.IndexOf("=") == -1)
+                    {
+                        throw new Exception("Invalid pair param=value");
+                    }
                     var keyValue = k.Split('=');
                     var key = keyValue[0];
                     var value = keyValue[1];
-                    var pair = templateConfig.ReplacePairs.First(l => l.OldValue == key);
+                    if (string.IsNullOrEmpty(key)
+                            || string.IsNullOrEmpty(value))
+                    {
+                        throw new Exception("Invalid pair param=value");
+                    }
+                    var pair = templateConfig.ReplacePairs.FirstOrDefault(l => l.OldValue == key);
+                    if (pair == null)
+                    {
+                        throw new Exception($"Param '{key}' is not defined in the template.json");
+                    }
                     return new ReplacePairValue(pair, value);
                 }));
             }
