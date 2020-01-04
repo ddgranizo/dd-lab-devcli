@@ -70,10 +70,7 @@ $i$
                       DependencyProperty.Register(
                           nameof([[i.PropertyName]]),
                           typeof([[i.PropertyType]]),
-                          typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
+                          typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 $$
 
 		private readonly [[ClassName]]ViewModel _viewModel = null;
