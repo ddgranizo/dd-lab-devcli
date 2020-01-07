@@ -17,7 +17,13 @@ namespace DDCli.Dynamics
         private static ILoggerService _loggerService;
         static void Main(string[] args)
         {
-            var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
+            //var argsV2 = StringFormats.StringToParams(string.Join(" ", args));
+            _loggerService = new LoggerService();
+            _loggerService.Log("###### INITIALIZED DYNAMICS CLI ######");
+            LogRecievedArgs(args);
+            bool isRecursive = args.Any(k => k.Length > 0 && k.First() == '\"');
+            var argsV2 = isRecursive ? StringFormats.StringToParams(string.Join(" ", args)) : args;
+            LogProcessedArgs(argsV2);
 
             var storedData = StoredDataManager.GetStoredData();
 
@@ -49,6 +55,25 @@ namespace DDCli.Dynamics
         private static void CommandManager_OnLog(object sender, Events.LogEventArgs e)
         {
             _loggerService.Log(e.Log);
+        }
+
+
+        private static void LogProcessedArgs(string[] argsV2)
+        {
+            _loggerService.Log("ArgsV2:");
+            foreach (var item in argsV2)
+            {
+                _loggerService.Log($"\t|{item}|");
+            }
+        }
+
+        private static void LogRecievedArgs(string[] args)
+        {
+            _loggerService.Log("Retrieved args:");
+            foreach (var item in args)
+            {
+                _loggerService.Log($"\t|{item}|");
+            }
         }
 
         private static void RegisterCommands(

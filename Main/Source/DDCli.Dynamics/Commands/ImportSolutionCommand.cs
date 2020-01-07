@@ -26,6 +26,8 @@ namespace DDCli.Dynamics.Commands
         public CommandParameterDefinition CommandMigrateAsHoldParameter { get; set; }
 
         public CommandParameterDefinition CommandPublishWorkflowsParameter { get; set; }
+
+        public CommandParameterDefinition ImportAsyncParameter { get; set; }
         public IFileService FileService { get; }
 
         public ImportSolutionCommand(IFileService fileService)
@@ -52,11 +54,18 @@ namespace DDCli.Dynamics.Commands
                 CommandParameterDefinition.TypeValue.Boolean,
                 "Publish workflows", "pw");
 
+            ImportAsyncParameter = new CommandParameterDefinition("async",
+               CommandParameterDefinition.TypeValue.Boolean,
+               "Import solution async", "a");
+
+        
+
             RegisterCommandParameter(CommandPathParameter);
             RegisterCommandParameter(CommandStringConnectionParameter);
             RegisterCommandParameter(CommandOverwriteUnmanagedCustomizationsParameter);
             RegisterCommandParameter(CommandMigrateAsHoldParameter);
             RegisterCommandParameter(CommandPublishWorkflowsParameter);
+            RegisterCommandParameter(ImportAsyncParameter);
 
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
@@ -80,20 +89,23 @@ namespace DDCli.Dynamics.Commands
             }
 
             IOrganizationService service = CrmProvider.GetService(stringConnection);
-            var data = FileService.ReadAllBytes(solutionPath);
+            var completePath = FileService.GetAbsoluteCurrentPath(solutionPath);
+            var data = FileService.ReadAllBytes(completePath);
 
             bool migrateAsHold = GetBoolParameterValue(parameters, CommandMigrateAsHoldParameter.Name, false);
             bool overwriteUnmanagedCustomizations = GetBoolParameterValue(parameters, CommandOverwriteUnmanagedCustomizationsParameter.Name, true);
             bool publishWorkflows = GetBoolParameterValue(parameters, CommandPublishWorkflowsParameter.Name, true);
+            bool async = GetBoolParameterValue(parameters, ImportAsyncParameter.Name, false);
 
-            ImportSolutionRequest importRequest = new ImportSolutionRequest()
+            if (async)
             {
-                CustomizationFile = data,
-                OverwriteUnmanagedCustomizations = overwriteUnmanagedCustomizations,
-                HoldingSolution = migrateAsHold,
-                PublishWorkflows = publishWorkflows,
-            };
-            service.Execute(importRequest);
+                CrmProvider.ImportSolutionsAsync(service, data, overwriteUnmanagedCustomizations, migrateAsHold, publishWorkflows);
+            }
+            else
+            {
+                CrmProvider.ImportSolutions(service, data, overwriteUnmanagedCustomizations, migrateAsHold, publishWorkflows);
+            }
+
         }
     }
 }
