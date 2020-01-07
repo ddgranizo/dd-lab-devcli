@@ -18,6 +18,15 @@ using System.Windows.Shapes;
 namespace [[ViewNameSpace]]
 {
 
+#UseWrappedProperties#
+    public class [[ClassName]]InputData : RoutedEventArgs
+    {
+$i$
+        public [[i.PropertyType]] [[i.PropertyName]] { get; set; }
+$$
+    }
+##
+
 $j$
     public class [[j.EventName]]EventArgs : RoutedEventArgs
     {
@@ -50,6 +59,28 @@ $j$
 $$
 
 
+#UseWrappedProperties#
+        public [[ClassName]]InputData [[ClassName]]InputData
+        {
+            get
+            {
+                return ([[ClassName]]InputData)GetValue([[ClassName]]InputDataProperty);
+            }
+            set
+            {
+                SetValue([[ClassName]]InputDataProperty, value);
+            }
+        }
+
+		public static readonly DependencyProperty [[ClassName]]InputDataProperty =
+                      DependencyProperty.Register(
+                          nameof([[ClassName]]InputData),
+                          typeof([[ClassName]]InputData),
+                          typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+##
+
+
+#!UseWrappedProperties#
 $i$
         public [[i.PropertyType]] [[i.PropertyName]]
         {
@@ -64,7 +95,6 @@ $i$
         }
 $$
 
-
 $i$
 		public static readonly DependencyProperty [[i.PropertyName]]Property =
                       DependencyProperty.Register(
@@ -72,6 +102,9 @@ $i$
                           typeof([[i.PropertyType]]),
                           typeof([[ClassName]]View), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 $$
+##
+
+
 
 		private readonly [[ClassName]]ViewModel _viewModel = null;
 
@@ -86,23 +119,41 @@ $$
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 			[[ClassName]]View v = d as [[ClassName]]View;
+#!UseWrappedProperties#
 			if(false)
 			{
 			}
+
 $i$
 			else if (e.Property.Name == nameof([[i.PropertyName]]))
             {
                 v.Set[[i.PropertyName]](([[i.PropertyType]])e.NewValue);
             }
 $$
+##
+#UseWrappedProperties#
+            if (e.Property.Name == nameof([[ClassName]]InputData))
+            {
+                v.Set[[ClassName]]InputData(([[ClassName]]InputData)e.NewValue);
+            }
+##
         }
 
+#!UseWrappedProperties#
 $i$
 		private void Set[[i.PropertyName]]([[i.PropertyType]] data)
         {
             _viewModel.[[i.PropertyName]] = data;
         }
 $$
+##
+
+#UseWrappedProperties#
+        private void Set[[ClassName]]InputData([[ClassName]]InputData data)
+        {
+            _viewModel.[[ClassName]]InputData = data;
+        }
+##
 		
     }
 }

@@ -15,9 +15,15 @@ namespace [[ViewModelNameSpace]]
     public class [[ClassName]]ViewModel : BaseViewModel
     {
 
+#UseWrappedProperties#
+        public [[ClassName]]InputData [[ClassName]]InputData { get { return GetValue<[[ClassName]]InputData>(); } set { SetValue(value); } }
+##
+
+#!UseWrappedProperties#
 $i$
 		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value); } }
 $$
+##
         
 		private [[ClassName]]View _view;
 

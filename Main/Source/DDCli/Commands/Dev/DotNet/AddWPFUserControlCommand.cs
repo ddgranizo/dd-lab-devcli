@@ -40,7 +40,7 @@ namespace DDCli.Commands.Dev.DotNet
                 });
 
             var iterationProperties = TemplateReplacementService
-                .AskForIterationInputParameters(ConsoleService, "Iteration for user control 'Props'",  new Dictionary<string, string>()
+                .AskForIterationInputParameters(ConsoleService, "Iteration for user control 'Props'", new Dictionary<string, string>()
                 {
                     { "PropertyType", "Input parameter type" },
                     { "PropertyName", "Input parameter name" },
@@ -57,18 +57,26 @@ namespace DDCli.Commands.Dev.DotNet
             iterations.Add("i", iterationProperties);
             iterations.Add("j", iterationEvents);
 
+            var conditionals = new Dictionary<string, bool>();
+            if (iterationProperties != null && iterationProperties.Count > 0)
+            {
+                var conditionalWrappProperties = TemplateReplacementService.AskForConditional(ConsoleService, "Do you want wrap the input properties with a composed class?");
+                conditionals.Add("UseWrappedProperties", conditionalWrappProperties);
+            }
+
+
             var className = replacements["ClassName"];
 
-            var contentController = TemplateReplacementService.Replace(ControllerTemplate, replacements, iterations);
-            var contentViewModel = TemplateReplacementService.Replace(ViewModelTemplate, replacements, iterations);
-            var contentView = TemplateReplacementService.Replace(ViewTemplate, replacements, iterations);
+            var contentController = TemplateReplacementService.Replace(ControllerTemplate, conditionals, replacements, iterations);
+            var contentViewModel = TemplateReplacementService.Replace(ViewModelTemplate, conditionals, replacements, iterations);
+            var contentView = TemplateReplacementService.Replace(ViewTemplate, conditionals, replacements, iterations);
 
             var pathViewModel = FileService.GetAbsoluteCurrentPath($"{className}ViewModel.cs");
             var pathController = FileService.GetAbsoluteCurrentPath($"{className}View.xaml.cs");
             var pathView = FileService.GetAbsoluteCurrentPath($"{className}View.xaml");
 
             var createdControllerFile = FileService.WriteFile(pathController, contentController, false);
-            var createdViewModelFile = FileService.WriteFile(pathViewModel, contentViewModel,false);
+            var createdViewModelFile = FileService.WriteFile(pathViewModel, contentViewModel, false);
             var createdViewFile = FileService.WriteFile(pathView, contentView, false);
 
             var filesCreated = string.Join("\r\n", new string[] { createdViewFile, createdControllerFile, createdViewModelFile });

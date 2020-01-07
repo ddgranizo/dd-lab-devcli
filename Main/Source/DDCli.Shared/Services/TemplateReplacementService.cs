@@ -12,14 +12,45 @@ namespace DDCli.Services
     public class TemplateReplacementService : ITemplateReplacementService
     {
         private const string _iterationPattern = "\\${0}\\$(.*?)\\$\\$";
+        private const string _conditionalTruePattern = "#{0}#(.*?)##";
+        private const string _conditionalFalsePattern = "#!{0}#(.*?)##";
 
         public TemplateReplacementService()
         {
         }
 
-        public string Replace(string embebedResource, Dictionary<string, string> replacements, Dictionary<string, List<Dictionary<string, string>>> iterationReplacements)
+        public string Replace(string embebedResource, Dictionary<string, bool> conditionals, Dictionary<string, string> replacements, Dictionary<string, List<Dictionary<string, string>>> iterationReplacements)
         {
             var templateContent = LoadResource(embebedResource);
+            foreach (var conditional in conditionals)
+            {
+                var conditionalIdentifier = conditional.Key;
+                var isVisible = conditional.Value;
+
+                var truePattern = string.Format(_conditionalTruePattern, conditionalIdentifier);
+                var trueConditionals = Regex.Matches(templateContent, truePattern, RegexOptions.Singleline)
+                       .Cast<Match>();
+                foreach (var conditionalModel in trueConditionals)
+                {
+                    var completedIterationModel = conditionalModel.Groups[0].Value;
+                    var innerIterationModelValue = conditionalModel.Groups[1].Value;
+                    templateContent = templateContent.Replace(completedIterationModel, isVisible ? innerIterationModelValue : string.Empty);
+
+                }
+
+                var falsePattern = string.Format(_conditionalFalsePattern, conditionalIdentifier);
+                var falseConditionals = Regex.Matches(templateContent, falsePattern, RegexOptions.Singleline)
+                       .Cast<Match>();
+                foreach (var conditionalModel in falseConditionals)
+                {
+                    var completedIterationModel = conditionalModel.Groups[0].Value;
+                    var innerIterationModelValue = conditionalModel.Groups[1].Value;
+                    templateContent = templateContent.Replace(completedIterationModel, isVisible ? string.Empty: innerIterationModelValue);
+                }
+            }
+
+
+
             foreach (var item in replacements)
             {
                 templateContent = templateContent.Replace($"[[{item.Key}]]", item.Value);
@@ -100,6 +131,17 @@ namespace DDCli.Services
                 moreInputs = !string.IsNullOrEmpty(more) && Definitions.AvailableTrueStrings.ToList().IndexOf(more.ToLowerInvariant()) > -1;
             } while (moreInputs);
             return iterations;
+        }
+
+        public bool AskForConditional(IConsoleService consoleService, string iterationDescription)
+        {
+            consoleService.WriteLine($"(yes/no) {iterationDescription}");
+            var conditional = consoleService.ReadLine();
+            if (!string.IsNullOrEmpty(conditional) && Definitions.AvailableTrueStrings.ToList().IndexOf(conditional.ToLowerInvariant()) > -1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
