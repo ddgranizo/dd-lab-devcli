@@ -19,7 +19,7 @@ namespace [[ViewNameSpace]]
 {
 
 #UseWrappedProperties#
-    public class [[ClassName]]InputData : RoutedEventArgs
+    public class [[ClassName]]InputData
     {
 $i$
         public [[i.PropertyType]] [[i.PropertyName]] { get; set; }

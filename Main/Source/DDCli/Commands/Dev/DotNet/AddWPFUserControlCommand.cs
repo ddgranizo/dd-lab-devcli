@@ -71,7 +71,7 @@ namespace DDCli.Commands.Dev.DotNet
             var contentViewModel = TemplateReplacementService.Replace(ViewModelTemplate, conditionals, replacements, iterations);
             var contentView = TemplateReplacementService.Replace(ViewTemplate, conditionals, replacements, iterations);
 
-            var pathViewModel = FileService.GetAbsoluteCurrentPath($"{className}ViewModel.cs");
+            var pathViewModel = FileService.GetAbsoluteCurrentPath($"{className}Viewmodel.cs");
             var pathController = FileService.GetAbsoluteCurrentPath($"{className}View.xaml.cs");
             var pathView = FileService.GetAbsoluteCurrentPath($"{className}View.xaml");
 
