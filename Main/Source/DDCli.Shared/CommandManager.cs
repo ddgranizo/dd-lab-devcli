@@ -80,7 +80,7 @@ namespace DDCli
 
             if (commands.Count == 0)
             {
-                throw new CommandNotFoundException($"{inputRequest.CommandNamespace}.{inputRequest.CommandName}");
+                throw new CommandNotFoundException($"{inputRequest.CommandNamespace}.{inputRequest.CommandName} is not registered");
             }
 
             var command = commands[0];
@@ -162,7 +162,7 @@ namespace DDCli
                     command.ExecuteHelp();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

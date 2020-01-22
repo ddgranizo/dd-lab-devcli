@@ -17,6 +17,19 @@ namespace DDCli.Dynamics.Utilities
 {
     public static class CrmProvider
     {
+        
+        public static void CloneUsdConfiguration(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to, bool includeOptions)
+        {
+            UsdConfigurationProvider.CloneUsdConfiguration(loggerHandler, from, to, includeOptions);
+        }
+
+        public static string GetServiceDisplayName(string stringConnection)
+        {
+            CrmServiceClient crmService = new CrmServiceClient(stringConnection);
+            var uri = crmService.CrmConnectOrgUriActual;
+            return $"{uri.Host}/{crmService.ConnectedOrgUniqueName}";
+        }
+
         public static IOrganizationService GetService(string stringConnection)
         {
             CrmServiceClient crmService = new CrmServiceClient(stringConnection);
