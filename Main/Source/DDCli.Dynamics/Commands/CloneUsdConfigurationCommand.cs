@@ -70,19 +70,16 @@ namespace DDCli.Dynamics.Commands
             var displayFrom = CrmProvider.GetServiceDisplayName(composedFrom);
             var displayTo = CrmProvider.GetServiceDisplayName(composedTo);
 
-            CrmProvider.CloneUsdConfiguration((string text) => { ConsoleService.WriteLine(text); }, serviceFrom, serviceTo, includeOptions);
-
-
-            //ConsoleService.WriteLine($"You are cloning USD configuration from '{displayFrom}' to '{displayTo}'. The configuration in '{displayTo}' will be modified and the operation cannot be undone. Confirm? (Y/N)");
-            //var response = ConsoleService.ReadLine();
-            //if (!string.IsNullOrEmpty(response))
-            //{
-            //    var input = response.ToLowerInvariant();
-            //    if (input == "y" || input == "yes")
-            //    {
-            //        CrmProvider.CloneUsdConfiguration((string text) => { ConsoleService.WriteLine(text); }, serviceFrom, serviceTo, includeOptions);
-            //    }
-            //}
+            ConsoleService.WriteLine($"You are cloning USD configuration from '{displayFrom}' to '{displayTo}'. The configuration in '{displayTo}' will be modified and the operation cannot be undone. Confirm? (Y/N)");
+            var response = ConsoleService.ReadLine();
+            if (!string.IsNullOrEmpty(response))
+            {
+                var input = response.ToLowerInvariant();
+                if (input == "y" || input == "yes")
+                {
+                    CrmProvider.CloneUsdConfiguration((string text) => { ConsoleService.WriteLine(text); }, serviceFrom, serviceTo, includeOptions);
+                }
+            }
         }
     }
 }
