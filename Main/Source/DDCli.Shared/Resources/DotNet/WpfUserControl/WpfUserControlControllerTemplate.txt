@@ -105,14 +105,14 @@ $$
 ##
 
 
+        public [[ClassName]]ViewModel ViewModel { get; }
 
-		private readonly [[ClassName]]ViewModel _viewModel = null;
 
         public [[ClassName]]View()
         {
             InitializeComponent();
-			_viewModel = Resources["ViewModel"] as [[ClassName]]ViewModel;
-			_viewModel.Initialize(this);
+			ViewModel = Resources["ViewModel"] as [[ClassName]]ViewModel;
+			ViewModel.Initialize(this);
         }
 
 
@@ -143,7 +143,7 @@ $$
 $i$
 		private void Set[[i.PropertyName]]([[i.PropertyType]] data)
         {
-            _viewModel.[[i.PropertyName]] = data;
+            ViewModel.[[i.PropertyName]] = data;
         }
 $$
 ##
@@ -151,7 +151,7 @@ $$
 #UseWrappedProperties#
         private void Set[[ClassName]]InputData([[ClassName]]InputData data)
         {
-            _viewModel.[[ClassName]]InputData = data;
+            ViewModel.[[ClassName]]InputData = data;
         }
 ##
 		

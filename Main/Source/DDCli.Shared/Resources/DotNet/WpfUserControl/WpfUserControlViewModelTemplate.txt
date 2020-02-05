@@ -21,7 +21,7 @@ namespace [[ViewModelNameSpace]]
 
 #!UseWrappedProperties#
 $i$
-		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value); } }
+		public [[i.PropertyType]] [[i.PropertyName]] { get { return GetValue<[[i.PropertyType]]>(); } set { SetValue(value, Updated[[i.PropertyName]]); } }
 $$
 ##
         
@@ -37,7 +37,19 @@ $$
 			_view = v;
         }
 
-		
-
+#UseWrappedProperties#
+        private void Updated[[ClassName]]InputData([[ClassName]]InputData data)
+        {
+        
+        }
+##
+#!UseWrappedProperties#
+$i$
+		private void Updated[[i.PropertyName]]([[i.PropertyType]] data)
+        {
+        
+        }
+$$
+##
     }
 }
