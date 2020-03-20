@@ -39,5 +39,15 @@ namespace DDCli.Test.Mock
         {
             return ReturnedConditional;
         }
+
+        public string Replace(string embebedResource, Dictionary<string, bool> conditionals, Dictionary<string, string> replacements)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Replace(string embebedResource, Dictionary<string, string> replacements)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
