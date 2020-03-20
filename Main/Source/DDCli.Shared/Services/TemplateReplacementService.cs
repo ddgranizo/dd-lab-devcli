@@ -87,6 +87,16 @@ namespace DDCli.Services
             return templateContent;
         }
 
+        public string Replace(string embebedResource, Dictionary<string, bool> conditionals, Dictionary<string, string> replacements)
+        {
+            return Replace(embebedResource, conditionals, replacements, new Dictionary<string, List<Dictionary<string, string>>>());
+        }
+
+        public string Replace(string embebedResource, Dictionary<string, string> replacements)
+        {
+            return Replace(embebedResource, new Dictionary<string, bool>(), replacements, new Dictionary<string, List<Dictionary<string, string>>>());
+        }
+
         private static string LoadResource(string embebedResource)
         {
             string templateContent;
@@ -143,5 +153,7 @@ namespace DDCli.Services
             }
             return false;
         }
+
+       
     }
 }

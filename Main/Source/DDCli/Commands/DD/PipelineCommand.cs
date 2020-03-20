@@ -18,6 +18,8 @@ namespace DDCli.Commands.DD
 
         public CommandParameterDefinition CommandPathParameter { get; set; }
         public CommandParameterDefinition CommandNameParameter { get; set; }
+        public CommandParameterDefinition DebugParameter { get; set; }
+
         public List<CommandBase> RegisteredCommands { get; }
         public ILoggerService LoggerService { get; }
         public IFileService FileService { get; }
@@ -41,9 +43,15 @@ namespace DDCli.Commands.DD
                 "name",
                 CommandParameterDefinition.TypeValue.String,
                 "Name of the registered pipeline", "n");
+            DebugParameter = new CommandParameterDefinition(
+                 "debug",
+                 CommandParameterDefinition.TypeValue.Boolean,
+                 "Initialize in debug mode. Will stop after every steps",
+                 "debug");
 
             RegisterCommandParameter(CommandPathParameter);
             RegisterCommandParameter(CommandNameParameter);
+            RegisterCommandParameter(DebugParameter);
 
             RegisteredCommands = registeredCommands ?? throw new ArgumentNullException(nameof(registeredCommands));
             LoggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
@@ -73,6 +81,9 @@ namespace DDCli.Commands.DD
                 path = GetStringParameterValue(parameters, CommandPathParameter.Name);
             }
 
+            var debugMode = GetBoolParameterValue(parameters, DebugParameter.Name, false); ;
+
+
             if (!FileService.ExistsFile(path))
             {
                 throw new PathNotFoundException(path);
@@ -89,7 +100,7 @@ namespace DDCli.Commands.DD
             }
 
             var multipleCommandManager =
-                new CommandManager(LoggerService ,StoredDataService, CryptoService, CommandManager.ExecutionModeTypes.Multiple);
+                new CommandManager(LoggerService, StoredDataService, CryptoService, CommandManager.ExecutionModeTypes.Multiple);
             multipleCommandManager.RegisterCommands(RegisteredCommands);
             multipleCommandManager.OnLog += MultipleCommandManager_OnLog;
             multipleCommandManager.OnReplacedAutoIncrementInCommand += MultipleCommandManager_OnReplacedAutoIncrementInSubCommand;
@@ -106,7 +117,7 @@ namespace DDCli.Commands.DD
                 var commandName = string.IsNullOrEmpty(commandDefinition.Alias) ? "" : commandDefinition.Alias;
                 if (commandDefinition.IsDisabled)
                 {
-                    Log($"### [{currentCounter}/{totalCommandsCound}] {commandName} | Skip command. Reason: Disabled");
+                    Log($"### [{currentCounter + 1}/{totalCommandsCound}] {commandName} | Skip command. Reason: Disabled");
                 }
                 else
                 {
@@ -135,9 +146,17 @@ namespace DDCli.Commands.DD
                     }
 
                 }
+                if (debugMode)
+                {
+                    Console.WriteLine("---- ENABLED DEBUG MODE ----");
+                    Console.WriteLine("---- Type any character for continue... ");
+                    Console.WriteLine("---- ENABLED DEBUG MODE ----");
+                    Console.ReadLine();
+                }
             }
             var time = StringFormats.MillisecondsToHumanTime(sb.ElapsedMilliseconds);
             Log($"## Completed pipeline {pipelineConfig.PipelineName} in {time}");
+
         }
 
         private void ExecuteIterationCommand(
@@ -150,7 +169,7 @@ namespace DDCli.Commands.DD
             string commandAlias,
             PipeLineCommandDefinition commandDefinition)
         {
-           
+
             int iteration = 0;
             if (commandDefinition.IterationType == PipelineIterator.StringArray)
             {
@@ -202,13 +221,13 @@ namespace DDCli.Commands.DD
             var args = GetCommandArgs(replacedCommand);
             if (iteration != null)
             {
-                Log($"### [{currentCounter}/{totalCommandCount} i={iteration++}] {commandAlias} | Executing iteration command {replacedCommand}...");
+                Log($"### [{currentCounter + 1}/{totalCommandCount} i={iteration++}] {commandAlias} | Executing iteration command {replacedCommand}...");
             }
             else
             {
-                Log($"### [{currentCounter}/{totalCommandCount}] {commandAlias} | Executing command {replacedCommand}...");
+                Log($"### [{currentCounter + 1}/{totalCommandCount}] {commandAlias} | Executing command {replacedCommand}...");
             }
-            
+
             var inputCommand = new InputRequest(args);
             multipleCommandManager.ExecuteInputRequest(inputCommand, consoleInputs);
         }

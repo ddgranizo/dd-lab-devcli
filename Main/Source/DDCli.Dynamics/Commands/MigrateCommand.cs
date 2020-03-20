@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 
 namespace DDCli.Dynamics.Commands
 {
-    public class MigrateCommand : CommandBase
+    public class CloneUsdConfigurationCommand : CommandBase
     {
-        private const string HelpDefinition = "Migrate entities from one environment to other";
+        private const string HelpDefinition = "Clone USD configuration from one environment to other";
 
         public CommandParameterDefinition CommandStringConnectionFromMasterParameter { get; set; }
         public CommandParameterDefinition CommandStringConnectionFromSlaveParameter { get; set; }
 
-        public CommandParameterDefinition CommandEntitiesParameter { get; set; }
+        public CommandParameterDefinition EntitiesParameter { get; set; }
 
 
 
-        public MigrateCommand()
-                : base(typeof(MigrateCommand).Namespace, nameof(MigrateCommand), HelpDefinition)
+        public CloneUsdConfigurationCommand()
+                : base(typeof(CloneUsdConfigurationCommand).Namespace, nameof(CloneUsdConfigurationCommand), HelpDefinition)
         {
 
             CommandStringConnectionFromMasterParameter = new CommandParameterDefinition("stringconnectionfrom",
@@ -36,14 +36,14 @@ namespace DDCli.Dynamics.Commands
                CommandParameterDefinition.TypeValue.String,
                "String connection for Dynamics for the slave environment where the data will be written", "to");
 
-            CommandEntitiesParameter = new CommandParameterDefinition("entities",
+            EntitiesParameter = new CommandParameterDefinition("entities",
                 CommandParameterDefinition.TypeValue.String,
-                "Entities for migrate splitted by ; (ie. contact;account). Include entity intersection for associate", "e");
+                "Entities splitted by comma ','. Remember include also intersections", "e");
 
 
             RegisterCommandParameter(CommandStringConnectionFromMasterParameter);
             RegisterCommandParameter(CommandStringConnectionFromSlaveParameter);
-            RegisterCommandParameter(CommandEntitiesParameter);
+            RegisterCommandParameter(EntitiesParameter);
 
         }
 
@@ -52,32 +52,33 @@ namespace DDCli.Dynamics.Commands
         public override bool CanExecute(List<CommandParameter> parameters)
         {
             return IsParamOk(parameters, CommandStringConnectionFromMasterParameter.Name)
-                && IsParamOk(parameters, CommandStringConnectionFromSlaveParameter.Name);
+                && IsParamOk(parameters, CommandStringConnectionFromSlaveParameter.Name)
+                && IsParamOk(parameters, EntitiesParameter.Name);
         }
 
         public override void Execute(List<CommandParameter> parameters)
         {
             var stringConnectionFrom = GetStringParameterValue(parameters, CommandStringConnectionFromMasterParameter.Name);
             var stringConnectionTo = GetStringParameterValue(parameters, CommandStringConnectionFromSlaveParameter.Name);
-            var includeOptions = GetBoolParameterValue(parameters, CommandEntitiesParameter.Name, false);
+            var entities = GetStringParameterValue(parameters, EntitiesParameter.Name);
 
             var composedTo = $"{stringConnectionTo};RequireNewInstance=true";
             var composedFrom = $"{stringConnectionFrom};RequireNewInstance=true";
-
+            var entitiesList = entities.Split(',');
             var serviceFrom = CrmProvider.GetService(composedFrom);
             var serviceTo = CrmProvider.GetService(composedTo);
 
             var displayFrom = CrmProvider.GetServiceDisplayName(composedFrom);
             var displayTo = CrmProvider.GetServiceDisplayName(composedTo);
 
-            ConsoleService.WriteLine($"You are migrating data from '{displayFrom}' to '{displayTo}'. The data in '{displayTo}' will be modified and the operation cannot be undone. Confirm? (Y/N)");
+            ConsoleService.WriteLine($"You are migrating data from '{displayFrom}' to '{displayTo}'. There will be operations of create, update and delete in the destionation environemtn '{displayTo}' and the operation cannot be undone. Confirm? (Y/N)");
             var response = ConsoleService.ReadLine();
             if (!string.IsNullOrEmpty(response))
             {
                 var input = response.ToLowerInvariant();
                 if (input == "y" || input == "yes")
                 {
-                    CrmProvider.CloneUsdConfiguration((string text) => { ConsoleService.WriteLine(text); }, serviceFrom, serviceTo, includeOptions);
+                    MigrationProvider.Migrate((string text) => { ConsoleService.WriteLine(text); }, serviceFrom, serviceTo, entitiesList);
                 }
             }
         }

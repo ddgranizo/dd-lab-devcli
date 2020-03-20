@@ -1,0 +1,28 @@
+﻿
+using [[InterfacesNamespace]];
+
+namespace [[ImplementationsNamespace]]
+{
+    public class Create[[EntityName]]Service : ICreate[[EntityName]]Service
+    {
+        private readonly I[[EntityName]]Repository repository;
+
+        public Create[[EntityName]]Service(I[[EntityName]]Repository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public async Task<ObjectServiceResponse<Guid>> Execute([[EntityName]]Dto data)
+        {
+            try
+            {
+                return new ObjectServiceResponse<Guid>()
+                    .Ok(await repository.Create(data));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectServiceResponse<Guid>().Exception(ex);
+            }
+        }
+    }
+}

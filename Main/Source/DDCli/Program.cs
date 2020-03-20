@@ -201,6 +201,8 @@ namespace DDCli
             Register(new Commands.DD.ConfirmCommand());
 
             Register(new Commands.Dev.DotNet.AddWPFUserControlCommand(fileService, templateReplacementService));
+            Register(new Commands.Dev.DotNet.AddCRUDDomainServicesCommand(fileService, templateReplacementService));
+
             //Last commands for register
             Register(new Commands.DD.AddAliasCommand(storedDataService, commandManager.Commands));
 

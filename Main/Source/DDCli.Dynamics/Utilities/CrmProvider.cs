@@ -17,7 +17,12 @@ namespace DDCli.Dynamics.Utilities
 {
     public static class CrmProvider
     {
-        
+
+        public static void MigrateEntities(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to, string[] entities)
+        {
+            MigrationProvider.Migrate(loggerHandler, from, to, entities);
+        }
+
         public static void CloneUsdConfiguration(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to, bool includeOptions)
         {
             UsdConfigurationProvider.CloneUsdConfiguration(loggerHandler, from, to, includeOptions);

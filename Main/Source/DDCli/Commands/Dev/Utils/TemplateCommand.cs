@@ -20,6 +20,7 @@ namespace DDCli.Commands.Dev.Utils
         public CommandParameterDefinition CommandNameParameter { get; set; }
         public CommandParameterDefinition DestinationPathParameter { get; set; }
         public CommandParameterDefinition ValuesParameter { get; set; }
+
         public IFileService FileService { get; }
         public IStoredDataService StoredDataService { get; }
         public List<ReplacePairValue> UserTemplateSetupReplaceStrings { get; set; }
@@ -51,6 +52,7 @@ namespace DDCli.Commands.Dev.Utils
               CommandParameterDefinition.TypeValue.String,
               "Values for replace in template. Use pairs like \"Key1=Value 1;Key2=Value 2;...\"",
               "v");
+           
 
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
@@ -59,6 +61,7 @@ namespace DDCli.Commands.Dev.Utils
             RegisterCommandParameter(CommandNameParameter);
             RegisterCommandParameter(DestinationPathParameter);
             RegisterCommandParameter(ValuesParameter);
+
             UserTemplateSetupReplaceStrings = new List<ReplacePairValue>();
         }
 

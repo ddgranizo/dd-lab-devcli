@@ -1,0 +1,5 @@
+﻿
+namespace [[InterfacesNamespace]]
+{
+    public interface ICreate[[EntityName]]Service : ICreateService<[[EntityName]]Dto> { }
+}

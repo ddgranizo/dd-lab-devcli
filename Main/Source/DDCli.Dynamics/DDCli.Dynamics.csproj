@@ -128,6 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\GetTokenCommand.cs" />
     <Compile Include="Commands\DownloadAssemblyCommand.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\CrmProvider.cs" />
+    <Compile Include="Utilities\MigrationProvider.cs" />
     <Compile Include="Utilities\UsdConfigurationProvider.cs" />
   </ItemGroup>
   <ItemGroup>

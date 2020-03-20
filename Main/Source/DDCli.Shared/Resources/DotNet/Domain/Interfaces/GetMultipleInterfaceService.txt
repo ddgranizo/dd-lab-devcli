@@ -1,0 +1,5 @@
+﻿
+namespace [[InterfacesNamespace]]
+{
+    public interface IGetMultiple[[EntityName]]Service: IGetMultipleService<[[EntityName]]Dto> { }
+}

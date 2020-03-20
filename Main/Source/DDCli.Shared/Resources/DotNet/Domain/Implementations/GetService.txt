@@ -1,0 +1,28 @@
+﻿
+using [[InterfacesNamespace]];
+
+namespace [[ImplementationsNamespace]]
+{
+    public class Get[[EntityName]]Service : IGet[[EntityName]]Service
+    {
+        private readonly I[[EntityName]]Repository repository;
+
+        public Get[[EntityName]]Service(I[[EntityName]]Repository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public async Task<ObjectServiceResponse<[[EntityName]]Dto>> Execute(Guid id)
+        {
+            try
+            {
+                return new ObjectServiceResponse<[[EntityName]]Dto>()
+                    .Ok(await repository.Get(id));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectServiceResponse<[[EntityName]]Dto>().Exception(ex);
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+﻿
+namespace [[InterfacesNamespace]]
+{
+    public interface IDelete[[EntityName]]Service: IDeleteService { }
+}

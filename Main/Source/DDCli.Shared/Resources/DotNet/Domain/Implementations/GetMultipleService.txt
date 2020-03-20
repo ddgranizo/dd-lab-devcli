@@ -1,0 +1,29 @@
+﻿
+using [[InterfacesNamespace]];
+
+namespace [[ImplementationsNamespace]]
+{
+    
+    public class GetMultiple[[EntityName]]Service : IGetMultiple[[EntityName]]Service
+    {
+        private readonly I[[EntityName]]Repository repository;
+
+        public GetMultiple[[EntityName]]Service(I[[EntityName]]Repository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public async Task<ObjectServiceResponse<DataSetResponse<[[EntityName]]Dto>>> Execute(Pagination pagination)
+        {
+            try
+            {
+                return new ObjectServiceResponse<DataSetResponse<[[EntityName]]Dto>>()
+                    .Ok(await repository.Get(pagination));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectServiceResponse<DataSetResponse<[[EntityName]]Dto>>().Exception(ex);
+            }
+        }
+    }
+}

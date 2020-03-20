@@ -1,0 +1,28 @@
+﻿
+using [[InterfacesNamespace]];
+
+namespace [[ImplementationsNamespace]]
+{
+    public class Update[[EntityName]]Service : IUpdate[[EntityName]]Service
+    {
+        private readonly I[[EntityName]]Repository repository;
+
+        public Update[[EntityName]]Service(I[[EntityName]]Repository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public async Task<ServiceResponse> Execute([[EntityName]]Dto data)
+        {
+            try
+            {
+                await repository.Update(data);
+                return new ServiceResponse().Ok();
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse().Exception(ex);
+            }
+        }
+    }
+}

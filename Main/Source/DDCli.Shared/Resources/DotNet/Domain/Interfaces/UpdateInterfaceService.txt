@@ -1,0 +1,6 @@
+﻿
+
+namespace [[InterfacesNamespace]]
+{
+    public interface IUpdate[[EntityName]]Service: IUpdateService<[[EntityName]]Dto> { }
+}

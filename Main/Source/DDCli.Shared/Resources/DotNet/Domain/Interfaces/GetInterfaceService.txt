@@ -1,0 +1,5 @@
+﻿
+namespace [[InterfacesNamespace]]
+{
+    public interface IGet[[EntityName]]Service: IGetService<[[EntityName]]Dto> { }
+}
