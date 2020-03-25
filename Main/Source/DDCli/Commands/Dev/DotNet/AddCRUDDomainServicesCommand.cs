@@ -18,9 +18,9 @@ namespace DDCli.Commands.Dev.DotNet
 
         public const string CreateInterface = "DDCli.Resources.DotNet.Domain.Interfaces.CreateInterfaceService.txt";
         public const string DeleteInterface = "DDCli.Resources.DotNet.Domain.Interfaces.DeleteInterfaceService.txt";
-        public const string UpdateInterface = "DDCli.Resources.DotNet.Domain.Interfaces.GetInterfaceService.txt";
-        public const string GetInterface = "DDCli.Resources.DotNet.Domain.Interfaces.GetMultipleInterfaceService.txt";
-        public const string GetMultipleInterface = "DDCli.Resources.DotNet.Domain.Interfaces.UpdateInterfaceService.txt";
+        public const string UpdateInterface = "DDCli.Resources.DotNet.Domain.Interfaces.UpdateInterfaceService.txt";
+        public const string GetInterface = "DDCli.Resources.DotNet.Domain.Interfaces.GetInterfaceService.txt";
+        public const string GetMultipleInterface = "DDCli.Resources.DotNet.Domain.Interfaces.GetMultipleInterfaceService.txt";
 
         public AddCRUDDomainServicesCommand(IFileService fileService, ITemplateReplacementService templateReplacementService)
             : base(typeof(AddCRUDDomainServicesCommand).Namespace, nameof(AddCRUDDomainServicesCommand), HelpDefinition)
