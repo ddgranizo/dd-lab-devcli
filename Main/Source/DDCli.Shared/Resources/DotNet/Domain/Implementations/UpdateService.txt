@@ -16,7 +16,7 @@ namespace [[ImplementationsNamespace]]
         {
             try
             {
-                await repository.Update(data);
+                await repository.Update(data.Id, data);
                 return new ServiceResponse().Ok();
             }
             catch (Exception ex)
