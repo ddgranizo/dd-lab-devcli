@@ -18,6 +18,36 @@ namespace DDCli.Dynamics.Utilities
     public static class CrmProvider
     {
 
+        public static Guid UploadWebResource(IOrganizationService service, byte[] data, string webResourceName)
+        {
+            var qe = new QueryByAttribute("webresource");
+            qe.AddAttributeValue("name", webResourceName);
+            var resources = service.RetrieveMultiple(qe).Entities;
+            if (resources.Count == 0)
+            {
+                throw new Exception($"Can't find webresource with name {webResourceName}");
+            }
+            var resource = resources.First();
+            var updated = new Entity("webresource");
+            updated.Id = resource.Id;
+            updated["content"] = Convert.ToBase64String(data);
+            service.Update(updated);
+            return updated.Id;
+        }
+
+        public static void PublishWebResouce(IOrganizationService service, Guid webResourceId)
+        {
+            PublishXmlRequest publishxmlrequest = new PublishXmlRequest
+            {
+                ParameterXml = @"<importexportxml>
+                                     <webresources>
+                                      <webresource>{" + webResourceId.ToString() + @"}</webresource>
+                                     </webresources>
+                                    </importexportxml>"
+            };
+            service.Execute(publishxmlrequest);
+        }
+
         public static void MigrateEntities(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to, string[] entities)
         {
             MigrationProvider.Migrate(loggerHandler, from, to, entities);

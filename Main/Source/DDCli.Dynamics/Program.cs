@@ -90,7 +90,10 @@ namespace DDCli.Dynamics
             Register(new Commands.GetTokenCommand());
             Register(new Commands.DownloadAssemblyCommand(fileService));
             Register(new Commands.CloneUsdConfigurationCommand());
+            Register(new Commands.ImportWebResourceCommand(fileService));
+
             Register(new Commands.HelpCommand(commandManager.Commands));
+            
         }
 
         private static void Register(CommandBase command)
