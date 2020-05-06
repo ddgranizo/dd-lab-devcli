@@ -129,11 +129,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ImportWebResourceCommand.cs" />
-    <Compile Include="Commands\MigrateCommand.cs" />
+    <Compile Include="Commands\CloneUsdConfigurationCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\GetTokenCommand.cs" />
     <Compile Include="Commands\DownloadAssemblyCommand.cs" />
-    <Compile Include="Commands\CloneUsdConfigurationCommand.cs" />
+    <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\ImportSolutionCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

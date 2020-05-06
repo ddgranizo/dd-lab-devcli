@@ -68,7 +68,6 @@ namespace DDCli
             }
         }
 
-
         public void ExecuteInputRequest(InputRequest inputRequest, List<string> consoleInputs = null)
         {
             List<CommandBase> commands = SearchCommandAndAlias(inputRequest);
@@ -106,7 +105,6 @@ namespace DDCli
                         commandsParameters.Add(parameter);
                     }
                 }
-
             }
 
             if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))
@@ -134,7 +132,7 @@ namespace DDCli
             }
             else
             {
-                throw new InvalidParamsException();
+                throw new InvalidParamsException("Cannot execute this command with this parameters");
             }
         }
 

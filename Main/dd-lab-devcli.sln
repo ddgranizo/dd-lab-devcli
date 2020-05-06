@@ -21,6 +21,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Source\DDCli.Shared\DDCli.Shared.projitems*{15551ef3-85b0-425e-a8ee-e12e8299823c}*SharedItemsImports = 4
 		Source\DDCli.Shared\DDCli.Shared.projitems*{3dd27314-d4cf-49a0-82ec-3b39b7ebb55b}*SharedItemsImports = 13
+		Source\DDCli.Shared\DDCli.Shared.projitems*{8bd78447-f49f-400d-8d73-bcc4ab3dc972}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
