@@ -10,6 +10,7 @@ namespace DDCli.Models
         public List<CliParameter> Parameters { get; set; }
         public List<RegisteredTemplate> RegisteredTemplates { get; set; }
         public List<RegisteredPipeline> RegisteredPipelines { get; set; }
+        public List<HistoricalCommand> HistoricalCommands { get; set; }
 
         public StoredCliData()
         {
@@ -17,6 +18,7 @@ namespace DDCli.Models
             Parameters = new List<CliParameter>();
             RegisteredTemplates = new List<RegisteredTemplate>();
             RegisteredPipelines = new List<RegisteredPipeline>();
+            HistoricalCommands = new List<HistoricalCommand>();
         }
     }
 }

@@ -13,6 +13,8 @@ namespace DDCli.Models
         public string CommandNamespace { get; set; }
 
         public List<InputParameter> InputParameters { get; set; }
+        public string[] Args { get; }
+
         public InputRequest(params string[] args)
         {
             InputParameters = new List<InputParameter>();
@@ -33,6 +35,7 @@ namespace DDCli.Models
             {
                 InputParameters = GetInputParameters(parametersArr);
             }
+            Args = args;
         }
 
         private List<InputParameter> GetInputParameters(string[] parameterArr)

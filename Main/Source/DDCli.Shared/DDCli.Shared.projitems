@@ -59,6 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandParameterDefinition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DDPipelineConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DDTemplateConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\HistoricalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InputRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RegisteredPipeline.cs" />

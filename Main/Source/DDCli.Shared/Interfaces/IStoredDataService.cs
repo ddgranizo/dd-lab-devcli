@@ -81,11 +81,7 @@ namespace DDCli.Interfaces
 
         string GetTemplatePath(string templateName);
 
-
         void UpdateAutoIncrements(List<string> autoincrementParameters);
-
-
-
 
         bool ExistsPipeline(string pipelineName);
 
@@ -95,7 +91,10 @@ namespace DDCli.Interfaces
 
         List<RegisteredPipeline> GetPipelines();
 
-
         string GetPipelinePath(string pipelineName);
+
+        void AddCommandToHistorical(HistoricalCommand command);
+
+        List<HistoricalCommand> GetCommandsFromHistorical(int count = 10);
     }
 }

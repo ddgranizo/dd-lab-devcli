@@ -48,7 +48,6 @@ namespace DDCli.Dynamics.Commands
         }
 
 
-
         public override bool CanExecute(List<CommandParameter> parameters)
         {
             return IsParamOk(parameters, CommandStringConnectionFromMasterParameter.Name)

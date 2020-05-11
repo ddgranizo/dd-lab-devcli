@@ -109,12 +109,17 @@ namespace DDCli
 
             if (command.CanExecute(commandsParameters) || command.IsHelpCommand(commandsParameters))
             {
+
                 _parameterManager.OnReplacedEncrypted += _parameterManager_OnReplacedEncrypted;
                 _parameterManager.OnReplacedAutoIncrement += _parameterManager_OnReplacedAutoIncrement;
 
                 try
                 {
                     ExecuteCommand(command, commandsParameters, consoleInputs);
+                    if (command.CommandName != "ShowComandsHistoryCommand")
+                    {
+                        StoredDataService.AddCommandToHistorical(new HistoricalCommand(inputRequest));
+                    }
                 }
                 catch (Exception)
                 {

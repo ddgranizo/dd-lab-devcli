@@ -207,5 +207,15 @@ namespace DDCli.Test.Mock
         {
             return PipelinePathReturn;
         }
+
+        public void AddCommandToHistorical(HistoricalCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<HistoricalCommand> GetCommandsFromHistorical(int count = 10)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

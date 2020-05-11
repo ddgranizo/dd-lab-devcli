@@ -184,5 +184,20 @@ namespace DDCli.Services
         {
             return StoredCliData.RegisteredPipelines.First(k => k.PipelineName == pipelineName).Path;
         }
+
+        public void AddCommandToHistorical(HistoricalCommand command)
+        {
+            StoredCliData.HistoricalCommands.Add(command);
+            SaveContext();
+        }
+
+        public List<HistoricalCommand> GetCommandsFromHistorical(int count = 10)
+        {
+            return StoredCliData
+                .HistoricalCommands
+                .OrderByDescending(k => k.ExecutedOn)
+                .Take(count)
+                .ToList();
+        }
     }
 }
