@@ -197,6 +197,8 @@ namespace DDCli
             Register(new Commands.DD.AddPipelineCommand(storedDataService, fileService));
             Register(new Commands.DD.DeletePipelineCommand(storedDataService));
             Register(new Commands.DD.ShowPipelinesCommand(storedDataService));
+            Register(new Commands.DD.ShowComandsHistoryCommand(storedDataService));
+
             Register(new Commands.Windows.MovePathCommand(fileService));
             Register(new Commands.DD.ConfirmCommand());
 

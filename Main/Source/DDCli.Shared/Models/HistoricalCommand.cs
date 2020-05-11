@@ -14,6 +14,7 @@ namespace DDCli.Models
         {
 
         }
+
         public HistoricalCommand(InputRequest inputRequest)
         {
             InputRequest = inputRequest ?? throw new ArgumentNullException(nameof(inputRequest));
