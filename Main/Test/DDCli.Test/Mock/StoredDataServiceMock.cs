@@ -210,12 +210,12 @@ namespace DDCli.Test.Mock
 
         public void AddCommandToHistorical(HistoricalCommand command)
         {
-            throw new NotImplementedException();
+            
         }
 
         public List<HistoricalCommand> GetCommandsFromHistorical(int count = 10)
         {
-            throw new NotImplementedException();
+            return new List<HistoricalCommand>();
         }
     }
 }
