@@ -15,6 +15,12 @@ namespace DDCli.Models
         public List<InputParameter> InputParameters { get; set; }
         public string[] Args { get; }
 
+        public InputRequest()
+        {
+
+        }
+
+
         public InputRequest(params string[] args)
         {
             InputParameters = new List<InputParameter>();

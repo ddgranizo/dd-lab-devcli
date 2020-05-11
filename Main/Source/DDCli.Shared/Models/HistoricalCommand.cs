@@ -10,6 +10,10 @@ namespace DDCli.Models
         public DateTime ExecutedOn { get; set; }
         public InputRequest InputRequest { get; }
 
+        public HistoricalCommand()
+        {
+
+        }
         public HistoricalCommand(InputRequest inputRequest)
         {
             InputRequest = inputRequest ?? throw new ArgumentNullException(nameof(inputRequest));

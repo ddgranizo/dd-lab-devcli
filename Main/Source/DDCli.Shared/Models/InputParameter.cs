@@ -14,6 +14,10 @@ namespace DDCli.Models
 
         public bool IsOnlyOne { get; set; }
 
+        public InputParameter()
+        {
+
+        }
         public InputParameter(string parameter, string rawStringValue, bool isShortCut = false)
         {
             if (string.IsNullOrEmpty(parameter))
