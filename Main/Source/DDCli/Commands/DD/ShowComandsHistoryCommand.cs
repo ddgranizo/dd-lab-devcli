@@ -30,6 +30,8 @@ namespace DDCli.Commands.DD
             CountParameter = new CommandParameterDefinition("count",
                 CommandParameterDefinition.TypeValue.Integer,
                 "Count of records. Default value Count=10", "c");
+
+            RegisterCommandParameter(CountParameter);
         }
 
         public override bool CanExecute(List<CommandParameter> parameters)
