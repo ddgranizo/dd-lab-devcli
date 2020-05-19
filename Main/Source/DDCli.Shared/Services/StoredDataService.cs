@@ -187,6 +187,13 @@ namespace DDCli.Services
 
         public void AddCommandToHistorical(HistoricalCommand command)
         {
+            var allComands = StoredCliData
+                .HistoricalCommands;
+            var repeated = allComands.FirstOrDefault(k => k.Command == command.Command);
+            if (repeated != null)
+            {
+                allComands.Remove(repeated);
+            }
             StoredCliData.HistoricalCommands.Add(command);
             SaveContext();
         }
