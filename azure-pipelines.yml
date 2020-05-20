@@ -58,12 +58,12 @@ steps:
 
 ###### UNIT TEST ########
 
-- task: DotNetCoreCLI@2
-  displayName: 'Unit tests...'
-  inputs:
-    command: test
-    projects: '**/*.sln'
-    publishTestResults: true
+#- task: DotNetCoreCLI@2
+#  displayName: 'Unit tests...'
+#  inputs:
+#    command: test
+#    projects: '**/*.sln'
+#    publishTestResults: true
 
 ###### CODE COVERAGE ########
 
