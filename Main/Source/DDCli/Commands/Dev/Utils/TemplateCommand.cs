@@ -75,7 +75,7 @@ namespace DDCli.Commands.Dev.Utils
 
         public override void Execute(List<CommandParameter> parameters)
         {
-            string path = string.Empty;
+            string path = string.Empty; 
             if (IsParamOk(parameters, CommandNameParameter.Name))
             {
                 var templateName = GetStringParameterValue(parameters, CommandNameParameter.Name);
