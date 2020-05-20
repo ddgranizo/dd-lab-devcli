@@ -132,37 +132,80 @@ namespace DDCli.Services
             string destinationFolder,
             List<string> ignorePathPatterns)
         {
-            var allFiles = Directory.EnumerateFiles
-                (sourceFolder, "*.*", SearchOption.AllDirectories);
-            var ignoredFiles = new List<string>();
-            foreach (var pattern in ignorePathPatterns)
-            {
-                var ignored = Directory.EnumerateFiles
-                    (sourceFolder, pattern, SearchOption.AllDirectories);
-                ignoredFiles.AddRange(ignored);
-            }
-            var filesForClone = new List<string>();
-            foreach (var file in allFiles)
-            {
-                if (ignoredFiles.IndexOf(file) == -1)
-                {
-                    filesForClone.Add(file.Substring(sourceFolder.Length));
-                }
-            }
-            var destinationClonedFiles = new List<string>();
-            foreach (var file in filesForClone)
-            {
-                var sourceCompletePath = string.Format("{0}{1}", sourceFolder, file);
-                var destionationCompletePath = string.Format("{0}{1}", destinationFolder, file);
-                destinationClonedFiles.Add(destionationCompletePath);
-                if (!Directory.Exists(Path.GetDirectoryName(destionationCompletePath)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(destionationCompletePath));
-                }
-                File.Copy(sourceCompletePath, destionationCompletePath, true);
-            }
-            return destinationClonedFiles;
+
+            DirectoryInfo infoSource = new DirectoryInfo(sourceFolder);
+            DirectoryInfo infoTarget = new DirectoryInfo(destinationFolder);
+            return CopyAll(infoSource, infoTarget, ignorePathPatterns);
+            //var allFiles = Directory.EnumerateFiles
+            //    (sourceFolder, "*.*", SearchOption.AllDirectories);
+            //var ignoredFiles = new List<string>();
+            //foreach (var pattern in ignorePathPatterns)
+            //{
+            //    var ignored = Directory.EnumerateFiles
+            //        (sourceFolder, pattern, SearchOption.AllDirectories);
+            //    ignoredFiles.AddRange(ignored);
+            //}
+            //var filesForClone = new List<string>();
+            //foreach (var file in allFiles)
+            //{
+            //    if (ignoredFiles.IndexOf(file) == -1)
+            //    {
+            //        filesForClone.Add(file.Substring(sourceFolder.Length));
+            //    }
+            //}
+            //var destinationClonedFiles = new List<string>();
+            //foreach (var file in filesForClone)
+            //{
+            //    var sourceCompletePath = string.Format("{0}{1}", sourceFolder, file);
+            //    var destionationCompletePath = string.Format("{0}{1}", destinationFolder, file);
+            //    destinationClonedFiles.Add(destionationCompletePath);
+            //    if (!Directory.Exists(Path.GetDirectoryName(destionationCompletePath)))
+            //    {
+            //        Directory.CreateDirectory(Path.GetDirectoryName(destionationCompletePath));
+            //    }
+            //    File.Copy(sourceCompletePath, destionationCompletePath, true);
+            //}
+            //return destinationClonedFiles;
         }
+
+        public static List<string> CopyAll(DirectoryInfo source, DirectoryInfo target, List<string> excludePatterns)
+        {
+            var copiedFiles = new List<string>();
+            Directory.CreateDirectory(target.FullName);
+
+            var excludeFiles = new List<FileInfo>();
+            foreach (var item in excludePatterns)
+            {
+                excludeFiles.AddRange(source.GetFiles(item));
+            }
+            var excludeFolders = new List<DirectoryInfo>();
+            foreach (var item in excludePatterns)
+            {
+                excludeFolders.AddRange(source.GetDirectories(item));
+            }
+            
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                if (!excludeFiles.ToList().Any(k => k.FullName == fi.FullName))
+                {
+                    var destinationFile = Path.Combine(target.FullName, fi.Name);
+                    fi.CopyTo(destinationFile, true);
+                    copiedFiles.Add(destinationFile);
+                }
+            }
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                if (!excludeFolders.ToList().Any(k => k.FullName == diSourceSubDir.FullName))
+                {
+                    DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                    var createdSubFiles = CopyAll(diSourceSubDir, nextTargetSubDir, excludePatterns);
+                    copiedFiles.AddRange(createdSubFiles);
+                }
+            }
+            return copiedFiles;
+        }
+
 
         public string GetAbsoluteCurrentPath(string absoluteRelativePath)
         {

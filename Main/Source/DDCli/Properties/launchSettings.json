@@ -2,7 +2,7 @@
   "profiles": {
     "DDCli": {
       "commandName": "Project",
-      "commandLineArgs": "AddCRUDDomainServices"
+      "commandLineArgs": "template -p \"C:\\Users\\daniel.diazg\\Google Drive\\Trabajo\\Documentos\\Dws\\Buffer\\dws-template-domain-common\" -d \"C:\\Users\\daniel.diazg\\Google Drive\\Trabajo\\Documentos\\Dws\\Generations\\1.0.0.0\\dws-test-domain-common\" -v \"dws-template=dws-test;Dws.Template=Dws.Test\""
     }
   }
 }

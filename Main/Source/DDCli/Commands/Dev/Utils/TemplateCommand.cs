@@ -52,7 +52,7 @@ namespace DDCli.Commands.Dev.Utils
               CommandParameterDefinition.TypeValue.String,
               "Values for replace in template. Use pairs like \"Key1=Value 1;Key2=Value 2;...\"",
               "v");
-           
+
 
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
@@ -165,7 +165,10 @@ namespace DDCli.Commands.Dev.Utils
             var absoluteDestionPath = FileService.GetAbsoluteCurrentPath(destinationPath);
 
             Log($"The template will be cloned at '{absoluteDestionPath}'");
-            FileService.CreateDirectory(absoluteDestionPath, true);
+            if (!FileService.ExistsDirectory(absoluteDestionPath))
+            {
+                FileService.CreateDirectory(absoluteDestionPath, true);
+            }
             Log($"Cloning files...");
             var clonedFiles = FileService.CloneDirectory(path, absoluteDestionPath, templateConfig.IgnorePathPatterns);
             Log(clonedFiles.ToDisplayList($"Cloned {clonedFiles.Count} files:", "", false));
