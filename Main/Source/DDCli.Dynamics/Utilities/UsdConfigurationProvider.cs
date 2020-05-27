@@ -16,7 +16,7 @@ namespace DDCli.Dynamics.Utilities
         public static readonly string[] _entities = { "msdyusd_configuration",  "msdyusd_ucisettings", "uii_hostedapplication", "uii_nonhostedapplication",  "uii_action", "msdyusd_toolbarstrip", "msdyusd_toolbarbutton", "msdyusd_search", "msdyusd_entitysearch", "msdyusd_agentscripttaskcategory",
                 "msdyusd_auditanddiagnosticssetting", "msdyusd_tracesourcesetting",  "msdyusd_scripttasktrigger", "msdyusd_uiievent", "msdyusd_actioncallworkflow", "uii_workflow", "msdyusd_form",
                 "msdyusd_sessioninformation", "msdyusd_agentscriptaction", "msdyusd_languagemodule",  "uii_workflowstep", "msdyusd_windowroute", "msdyusd_answer",
-                "msdyusd_scriptlet", "msdyusd_task","msdyusd_sessiontransfer"};
+                "msdyusd_scriptlet", "msdyusd_task","msdyusd_sessiontransfer", "msdyusd_entityassignment"};
 
         public static readonly string[] _entitiesOptions = { "msdyusd_usersettings" };
 

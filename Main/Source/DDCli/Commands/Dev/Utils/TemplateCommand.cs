@@ -53,10 +53,11 @@ namespace DDCli.Commands.Dev.Utils
               "Values for replace in template. Use pairs like \"Key1=Value 1;Key2=Value 2;...\"",
               "v");
 
-
             FileService = directoryService
                 ?? throw new ArgumentNullException(nameof(directoryService));
-            StoredDataService = storedDataService ?? throw new ArgumentNullException(nameof(storedDataService));
+            StoredDataService = storedDataService 
+                ?? throw new ArgumentNullException(nameof(storedDataService));
+
             RegisterCommandParameter(CommandPathParameter);
             RegisterCommandParameter(CommandNameParameter);
             RegisterCommandParameter(DestinationPathParameter);
