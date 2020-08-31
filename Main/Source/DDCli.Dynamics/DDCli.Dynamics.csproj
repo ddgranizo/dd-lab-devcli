@@ -128,6 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ExecutePeriodicallyWorkflowOnFetchCommand.cs" />
     <Compile Include="Commands\ImportWebResourceCommand.cs" />
     <Compile Include="Commands\CloneUsdConfigurationCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />

@@ -256,5 +256,10 @@ namespace DDCli.Test.Mock
         {
             throw new NotImplementedException();
         }
+
+        public string ReadAllText(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

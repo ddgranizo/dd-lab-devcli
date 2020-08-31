@@ -521,5 +521,10 @@ namespace DDCli.Services
         {
             return new FileInfo(pathToFile).Directory.FullName;
         }
+
+        public string ReadAllText(string path)
+        {
+            return File.ReadAllText(path);
+        }
     }
 }

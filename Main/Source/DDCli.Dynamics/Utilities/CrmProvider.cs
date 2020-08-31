@@ -18,6 +18,22 @@ namespace DDCli.Dynamics.Utilities
     public static class CrmProvider
     {
 
+
+        public static void ExecuteWorkflowOnRecord(IOrganizationService service, Guid workflowId, Guid recordId)
+        {
+            ExecuteWorkflowRequest request = new ExecuteWorkflowRequest()
+            {
+                EntityId = recordId,
+                WorkflowId = workflowId,
+            };
+            service.Execute(request);
+        }
+
+        public static List<Guid> GetIdsFromFetch(IOrganizationService service, string xml)
+        {
+            return service.RetrieveMultiple(new FetchExpression(xml)).Entities.Select(k => k.Id).ToList();
+        }
+
         public static Guid UploadWebResource(IOrganizationService service, byte[] data, string webResourceName)
         {
             var qe = new QueryByAttribute("webresource");

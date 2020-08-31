@@ -91,7 +91,7 @@ namespace DDCli.Dynamics
             Register(new Commands.DownloadAssemblyCommand(fileService));
             Register(new Commands.CloneUsdConfigurationCommand());
             Register(new Commands.ImportWebResourceCommand(fileService));
-
+            Register(new Commands.ExecutePeriodicallyWorkflowOnFetchCommand(fileService));
             Register(new Commands.HelpCommand(commandManager.Commands));
             
         }
