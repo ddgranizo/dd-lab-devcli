@@ -29,6 +29,12 @@ namespace DDCli.Dynamics.Utilities
             service.Execute(request);
         }
 
+        public static Guid GetRegardingQueueItemIncidentId(IOrganizationService service, Guid queueItemId)
+        {
+            var queueItem = service.Retrieve("queueitem", queueItemId, new ColumnSet("objectid"));
+            return queueItem.GetAttributeValue<EntityReference>("objectid").Id;
+        }
+
         public static List<Guid> GetIdsFromFetch(IOrganizationService service, string xml)
         {
             return service.RetrieveMultiple(new FetchExpression(xml)).Entities.Select(k => k.Id).ToList();

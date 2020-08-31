@@ -19,8 +19,8 @@ namespace DDCli.Dynamics.Commands
 
         private const string HelpDefinition = "Execute workflow under fetch results periodically";
 
-        public CommandParameterDefinition CommandAssemblyIdParameter { get; set; }
-        public CommandParameterDefinition CommandAssemblyNameParameter { get; set; }
+        public CommandParameterDefinition CommandWorkflowIdParameter { get; set; }
+        public CommandParameterDefinition CommandWorkflowNameParameter { get; set; }
         public CommandParameterDefinition CommandStringConnectionParameter { get; set; }
         public CommandParameterDefinition FetchFilePathParameter { get; set; }
         public CommandParameterDefinition PeriodParameter { get; set; }
@@ -35,11 +35,11 @@ namespace DDCli.Dynamics.Commands
                CommandParameterDefinition.TypeValue.String,
                "String connection for Dynamics", "s");
 
-            CommandAssemblyIdParameter = new CommandParameterDefinition("id",
+            CommandWorkflowIdParameter = new CommandParameterDefinition("id",
                 CommandParameterDefinition.TypeValue.Guid,
                 "Assembly id in CRM", "i");
 
-            CommandAssemblyNameParameter = new CommandParameterDefinition("name",
+            CommandWorkflowNameParameter = new CommandParameterDefinition("name",
                 CommandParameterDefinition.TypeValue.String,
                 "Assembly name in CRM", "n");
 
@@ -51,9 +51,9 @@ namespace DDCli.Dynamics.Commands
                CommandParameterDefinition.TypeValue.Integer,
                "Seconds for wait before execute a new fetch", "p");
 
-            RegisterCommandParameter(CommandAssemblyIdParameter);
+            RegisterCommandParameter(CommandWorkflowIdParameter);
             RegisterCommandParameter(CommandStringConnectionParameter);
-            RegisterCommandParameter(CommandAssemblyNameParameter);
+            RegisterCommandParameter(CommandWorkflowNameParameter);
             RegisterCommandParameter(FetchFilePathParameter);
             RegisterCommandParameter(PeriodParameter);
 
@@ -65,8 +65,8 @@ namespace DDCli.Dynamics.Commands
         public override bool CanExecute(List<CommandParameter> parameters)
         {
             return IsParamOk(parameters, CommandStringConnectionParameter.Name)
-                && (IsParamOk(parameters, CommandAssemblyIdParameter.Name)
-                        || IsParamOk(parameters, CommandAssemblyNameParameter.Name))
+                && (IsParamOk(parameters, CommandWorkflowIdParameter.Name)
+                        || IsParamOk(parameters, CommandWorkflowNameParameter.Name))
                 && IsParamOk(parameters, FetchFilePathParameter.Name)
                 && IsParamOk(parameters, PeriodParameter.Name);
 
@@ -75,8 +75,8 @@ namespace DDCli.Dynamics.Commands
         public override void Execute(List<CommandParameter> parameters)
         {
             var stringConnection = GetStringParameterValue(parameters, CommandStringConnectionParameter.Name);
-            var assemblyId = GetGuidParameterValue(parameters, CommandAssemblyIdParameter.Name);
-            var assemblyName = GetStringParameterValue(parameters, CommandAssemblyNameParameter.Name);
+            var assemblyId = GetGuidParameterValue(parameters, CommandWorkflowIdParameter.Name);
+            var assemblyName = GetStringParameterValue(parameters, CommandWorkflowNameParameter.Name);
             var fetchFile = GetStringParameterValue(parameters, FetchFilePathParameter.Name);
             var period = GetIntParameterValue(parameters, PeriodParameter.Name);
 
@@ -90,8 +90,10 @@ namespace DDCli.Dynamics.Commands
             }
             else if (!string.IsNullOrEmpty(assemblyName))
             {
-                QueryByAttribute qe = new QueryByAttribute("pluginassembly");
+                QueryByAttribute qe = new QueryByAttribute("workflow");
                 qe.AddAttributeValue("name", assemblyName);
+                qe.AddAttributeValue("type", 1);
+
                 var response = service.RetrieveMultiple(qe);
                 if (response.Entities.Count == 0)
                 {
@@ -116,8 +118,9 @@ namespace DDCli.Dynamics.Commands
                 Log($"Retrieved {records.Count} from fetch");
                 foreach (var recordId in records)
                 {
-                    CrmProvider.ExecuteWorkflowOnRecord(service, id, recordId);
-                    Log($"Executed workflow for recordId={recordId}");
+                    var incidentId = CrmProvider.GetRegardingQueueItemIncidentId(service, recordId);
+                    CrmProvider.ExecuteWorkflowOnRecord(service, id, incidentId);
+                    Log($"Executed workflow for incidentId={incidentId}");
                 }
                 Log($"Waiting {period} seconds...");
                 System.Threading.Thread.Sleep(period * 1000);

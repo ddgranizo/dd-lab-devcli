@@ -32,13 +32,14 @@ namespace DDCli.Installer
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
 
             IConfigurationRoot configuration = builder.Build();
 
 
             Console.WriteLine("Retrieving token from key vault...");
-            var devOpsToken = GetKeyVaultDevOpsToken(configuration);
+            var devOpsToken = configuration["AzureDevOpsInstallerToken"];
 
             var devOpsSettingSection = configuration.GetSection("DevOpsEnvironmentSettings");
 
@@ -134,6 +135,20 @@ namespace DDCli.Installer
 
             return password;
         }
+
+        private static string GetDevOpsToken(IConfigurationRoot configuration)
+        {
+            var keyVaultSettings = configuration.GetSection("KeyVaultSettings");
+
+            var keyVaultName = keyVaultSettings.GetSection("Name").Value;
+            var keyVaultSecret = keyVaultSettings.GetSection("SecretName").Value;
+            var keyVaultService = new KeyVaultService();
+
+            var password = keyVaultService.GetValueSecretFromKeyVault(keyVaultName, keyVaultSecret);
+
+            return password;
+        }
+
 
 
 
