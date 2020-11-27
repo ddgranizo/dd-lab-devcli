@@ -23,17 +23,17 @@ namespace DDCli.Dynamics.Utilities
         public static readonly string[] _intersections = { "msdyusd_answer_agentscriptaction", "msdyusd_auditdiag_tracesourcesetting", "msdyusd_configuration_actioncalls", "msdyusd_configuration_agentscript",
                 "msdyusd_configuration_entitysearch", "msdyusd_configuration_event", "msdyusd_configuration_form", "msdyusd_configuration_hostedcontrol",
                 "msdyusd_configuration_scriptlet", "msdyusd_configuration_sessionlines", "msdyusd_configuration_toolbar", "msdyusd_configuration_windowroute", "msdyusd_customizationfiles_configuration",
-                "msdyusd_form_hostedapplication", "msdyusd_subactioncalls", "msdyusd_task_agentscriptaction", "msdyusd_task_answer", "msdyusd_toolbarbutton_agentscriptaction",
+                "msdyusd_form_hostedapplication",  "msdyusd_task_agentscriptaction", "msdyusd_task_answer", "msdyusd_toolbarbutton_agentscriptaction",
                 "msdyusd_toolbarstrip_uii_hostedapplication", "msdyusd_tracesourcesetting_hostedcontrol", "msdyusd_uiievent_agentscriptaction", "msdyusd_windowroute_agentscriptaction",
                 "msdyusd_windowroute_ctisearch"};
 
-        public static readonly string[] _intersectionsOptions = { "msdyusd_configuration_option" };
+        public static readonly string[] _reflexiveIntersections = { "msdyusd_subactioncalls" };
 
+        public static readonly string[] _intersectionsOptions = { "msdyusd_configuration_option" };
 
         public static readonly string[] _excludedComparasionAttributes = { "createdon", "modifiedon", "createdby", "modifiedby", "ownerid", "owninguser",
                 "owningbusinessunit", "createdonbehalfby", "modifiedonbehalfby" };
         public static readonly string[] _stateAttributes = { "statecode", "statuscode" };
-
 
 
 
@@ -43,10 +43,11 @@ namespace DDCli.Dynamics.Utilities
             int completedOperations = 0;
             var timer = new Stopwatch();
             timer.Start();
+            var completedEntities = new List<string>();
             do
             {
-                loggerHandler($"Trying round {counter}...");
-                completedOperations = DoCloneRound(loggerHandler, from, to);
+                loggerHandler($"Trying round {counter++}...");
+                completedOperations = DoCloneRound(loggerHandler, from, to, completedEntities);
             } while (completedOperations > 0);
 
             TimeSpan t = TimeSpan.FromMilliseconds(timer.ElapsedMilliseconds);
@@ -58,7 +59,7 @@ namespace DDCli.Dynamics.Utilities
             loggerHandler($"Migration completed in {answer}");
         }
 
-        private static int DoCloneRound(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to)
+        private static int DoCloneRound(Action<string> loggerHandler, IOrganizationService from, IOrganizationService to, List<string> completedEntities)
         {
 
             var createdCounterAll = 0;
@@ -67,7 +68,8 @@ namespace DDCli.Dynamics.Utilities
             var disassociatedCounterAll = 0;
             var deletedCounterAll = 0;
             var errorCounterAll = 0;
-            foreach (var entity in _entities)
+            var entitiesForCheck = _entities.Where(k => completedEntities.IndexOf(k) == -1);
+            foreach (var entity in entitiesForCheck)
             {
                 var createdCounter = 0;
                 var updatedCounter = 0;
@@ -105,7 +107,7 @@ namespace DDCli.Dynamics.Utilities
                             DeleteEntity(to, toRecord);
                             loggerHandler($"\tDeleted record {++deletedCounter} with Id={toRecord.Id}");
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             errorCounter++;
                             loggerHandler($"\tError deleting record {++deletedCounter} with Id={toRecord.Id}");
@@ -140,14 +142,18 @@ namespace DDCli.Dynamics.Utilities
                         loggerHandler($"\tError. Record with Id={fromRecord.Id} should be already created in destination");
                     }
                 }
+                if (errorCounter == 0)
+                {
+                    completedEntities.Add(entity);
+                }
                 createdCounterAll += createdCounter;
                 updatedCounterAll += updatedCounter;
                 deletedCounterAll += deletedCounter;
                 errorCounterAll += errorCounter;
             }
 
-
-            foreach (var intersection in _intersections)
+            var intersectionsForCheck = _intersections.Where(k => completedEntities.IndexOf(k) == -1);
+            foreach (var intersection in intersectionsForCheck)
             {
                 loggerHandler($"Checking intersection {intersection}...");
                 var associatedCounter = 0;
@@ -210,6 +216,81 @@ namespace DDCli.Dynamics.Utilities
                 errorCounterAll += errorCounter;
                 associatedCounterAll += associatedCounter;
                 disassociatedCounterAll += disassociatedCounter;
+
+                if (errorCounter == 0)
+                {
+                    completedEntities.Add(intersection);
+                }
+            }
+
+            var reflexiveIntersectionsForCheck = _reflexiveIntersections.Where(k => completedEntities.IndexOf(k) == -1);
+            foreach (var intersection in reflexiveIntersectionsForCheck)
+            {
+                loggerHandler($"Checking reflexive intersection {intersection}...");
+                var associatedCounter = 0;
+                var disassociatedCounter = 0;
+                var errorCounter = 0;
+                var fromRecords = RetrieveAllRecords(from, intersection);
+                var toRecords = RetrieveAllRecords(to, intersection);
+                var metadata = GetRelationshipMetadata(from, intersection); ;
+                foreach (var fromRecord in fromRecords)
+                {
+                    var isRecordInDestionationWithSameId =
+                        IsRecordWithSameIntersection(
+                            fromRecord,
+                            toRecords,
+                            metadata.Entity1IntersectAttribute,
+                            metadata.Entity2IntersectAttribute);
+                    if (!isRecordInDestionationWithSameId)
+                    {
+                        try
+                        {
+                            var firstId = (Guid)fromRecord.Attributes[metadata.Entity1IntersectAttribute];
+                            var secondId = (Guid)fromRecord.Attributes[metadata.Entity2IntersectAttribute];
+
+                            AssociateReflexive(to, intersection, metadata.Entity1LogicalName, firstId, metadata.Entity2LogicalName, secondId);
+                            loggerHandler($"\tAssociated reflexive record {++associatedCounter} with Id={fromRecord.Id}");
+                        }
+                        catch (Exception ex)
+                        {
+                            errorCounter++;
+                            loggerHandler($"\tError associating reflexive record {++associatedCounter} with Id={fromRecord.Id}. Error: {ex.Message}");
+                        }
+                    }
+                }
+
+                foreach (var toRecord in toRecords)
+                {
+                    var isRecordInSourceWithSameId =
+                        IsRecordWithSameIntersection(
+                            toRecord,
+                            fromRecords,
+                            metadata.Entity1IntersectAttribute,
+                            metadata.Entity2IntersectAttribute);
+                    if (!isRecordInSourceWithSameId)
+                    {
+                        try
+                        {
+                            var firstId = (Guid)toRecord.Attributes[metadata.Entity1IntersectAttribute];
+                            var secondId = (Guid)toRecord.Attributes[metadata.Entity2IntersectAttribute];
+
+                            DisassociateReflexive(to, intersection, metadata.Entity1LogicalName, firstId, metadata.Entity2LogicalName, secondId);
+                            loggerHandler($"\tDisassociated reflexive record {++disassociatedCounter} with Id={toRecord.Id}");
+                        }
+                        catch (Exception ex)
+                        {
+                            errorCounter++;
+                            loggerHandler($"\tError disassociating reflexive record {++disassociatedCounter} with Id={toRecord.Id}. Error: {ex.Message}");
+                        }
+                    }
+                }
+                errorCounterAll += errorCounter;
+                associatedCounterAll += associatedCounter;
+                disassociatedCounterAll += disassociatedCounter;
+                if (errorCounter == 0)
+                {
+                    completedEntities.Add(intersection);
+                }
             }
 
             loggerHandler($"\tRound information:");
@@ -220,12 +301,12 @@ namespace DDCli.Dynamics.Utilities
             loggerHandler($"\t\tDisassociated records: {disassociatedCounterAll}");
             loggerHandler($"\t\tError records: {errorCounterAll}");
 
-            var totalOperations = 
-                createdCounterAll + 
-                updatedCounterAll + 
-                deletedCounterAll + 
-                associatedCounterAll + 
-                disassociatedCounterAll + 
+            var totalOperations =
+                createdCounterAll +
+                updatedCounterAll +
+                deletedCounterAll +
+                associatedCounterAll +
+                disassociatedCounterAll +
                 errorCounterAll;
 
             loggerHandler($"\t\tTotal operations records: {totalOperations}");
@@ -240,6 +321,32 @@ namespace DDCli.Dynamics.Utilities
             Guid secondEntityId)
         {
             service.Disassociate(firstEntity, firstEntityId, new Relationship(schemaName),
+                new EntityReferenceCollection() { { new EntityReference(secondEntity, secondEntityId) } });
+        }
+
+        public static void DisassociateReflexive(IOrganizationService service,
+            string schemaName,
+            string firstEntity,
+            Guid firstEntityId,
+            string secondEntity,
+            Guid secondEntityId)
+        {
+            var relationship = new Relationship(schemaName);
+            relationship.PrimaryEntityRole = EntityRole.Referencing;
+            service.Disassociate(firstEntity, firstEntityId, relationship,
+                new EntityReferenceCollection() { { new EntityReference(secondEntity, secondEntityId) } });
+        }
+
+        public static void AssociateReflexive(IOrganizationService service,
+            string schemaName,
+            string firstEntity,
+            Guid firstEntityId,
+            string secondEntity,
+            Guid secondEntityId)
+        {
+            var relationship = new Relationship(schemaName);
+            relationship.PrimaryEntityRole = EntityRole.Referencing;
+            service.Associate(firstEntity, firstEntityId, relationship,
                 new EntityReferenceCollection() { { new EntityReference(secondEntity, secondEntityId) } });
         }
 
